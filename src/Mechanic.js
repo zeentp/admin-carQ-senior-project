@@ -22,6 +22,12 @@ import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import { Grid } from "@mui/material";
 
 function createData(name, status, email, telephone) {
   return {
@@ -38,12 +44,6 @@ const rows = [
   // createData("Eclair", 262, "avaliable", 24, 6.0),
   // createData("Frozen yoghurt", 159, "avaliable", 24, 4.0),
   // createData("Gingerbread", 356, 16.0, 49, 3.9),
-  // createData("Honeycomb", 408, 3.2, 87, 6.5),
-  // createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  // createData("Jelly Bean", 375, 0.0, 94, 0.0),
-  // createData("KitKat", 518, 26.0, 65, 7.0),
-  // createData("Lollipop", 392, 0.2, 98, 0.0),
-  // createData("Marshmallow", 318, 0, 81, 2.0),
   createData("Saran Manzano", 'avaliable', 'saranxpromethazine@gmail.com', "089-999-9999"),
   createData("A Manzano", 'avaliable', 'saranxpromethazine@gmail.com', "089-999-9999"),
   createData("B Manzano", 'avaliable', 'saranxpromethazine@gmail.com', "089-999-9999"),
@@ -54,15 +54,6 @@ const rows = [
   createData("G Manzano", 'avaliable', 'saranxpromethazine@gmail.com', "089-999-9999"),
   createData("H Manzano", 'unavaliable', 'saranxpromethazine@gmail.com', "089-999-9999"),
   createData("I Manzano", 'unavaliable', 'saranxpromethazine@gmail.com', "089-999-9999"),
-
-
-
-
-
-
-
-
- 
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -193,8 +184,14 @@ EnhancedTableHead.propTypes = {
 };
 
 const EnhancedTableToolbar = (props) => {
+  const [open, setOpen] = React.useState(false);
   const { numSelected } = props;
-
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
     <Toolbar
       sx={{
@@ -209,6 +206,28 @@ const EnhancedTableToolbar = (props) => {
         }),
       }}
     >
+       <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Accepting an appointment card"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Let Google help apps determine location. This means sending anonymous
+            location data to Google, even when no apps are running.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Disagree</Button>
+          <Button onClick={handleClose} autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
       {numSelected > 0 ? (
         <Typography
           sx={{ flex: "1 1 100%" }}
@@ -243,8 +262,8 @@ const EnhancedTableToolbar = (props) => {
         //     <FilterListIcon />
         //   </IconButton>
         // </Tooltip>
-         <Button justifyContent="flex-end" sx={{width:80}} variant="contained">Add +</Button> 
-
+      
+         <Button justifyContent="flex-end" sx={{width:80}} variant="contained"onClick={handleClickOpen}>Add +</Button>
       )}
     </Toolbar>
   );
@@ -255,6 +274,7 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function EnhancedTable() {
+
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
@@ -399,10 +419,13 @@ export default function EnhancedTable() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+      
       {/* <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
       /> */}
+        
     </Box>
+    
   );
 }

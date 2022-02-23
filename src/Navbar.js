@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import DriveEtaIcon from '@mui/icons-material/DriveEta';
 import EventNoteIcon from '@mui/icons-material/EventNote';
+import EngineeringIcon from '@mui/icons-material/Engineering';
 
 const drawerWidth = 240;
 
@@ -90,7 +91,7 @@ export default function Navbar() {
                     {listMenuTitle.map((text, index) => (
                         <ListItem button key={text} onClick={() => changePage(text)} >
                             <ListItemIcon>
-                                {index === 0 ? <HomeIcon sx={{ color: "white" }} /> : <EventNoteIcon sx={{ color: "white" }} />}
+                                {index === 0 ? <HomeIcon sx={{ color: "white" }} /> : <EngineeringIcon sx={{ color: "white" }} />}
 
                             </ListItemIcon>
                             <ListItemText primary={text} />
