@@ -203,15 +203,16 @@ const EnhancedTableToolbar = (props) => {
     setOpen(false);
   };
   const handlePostData = () => {
+    handleClose()
     const data = {
-      id: "55555555",
-      status: false,
-      firstName: "1234",
-      lastName: "54545",
-      telephone: "085-555-555",
-      email: "janedoe@gmail.com",
-      gender: "female",
-      age: 20,
+      id: "XDujKGpNWRNOSIUhsYJY",
+      status: true,
+      firstName: "paul",
+      lastName: "doe",
+      telephone: "084-444-4444",
+      email: "pauldoe@hotmail.com",
+      gender: "male",
+      age: 22,
     };
     axios.post(url + "/create", data).then((res) => {
       console.log(res);
@@ -239,7 +240,7 @@ const EnhancedTableToolbar = (props) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Accepting an appointment card"}
+          {"Adding new members to the crew"}
         </DialogTitle>
         <Divider />
         <DialogContent>
@@ -290,7 +291,8 @@ const EnhancedTableToolbar = (props) => {
             </Grid>
             <Grid item xs={6}>
               <TextField
-                id="Age3"
+              fullWidth
+                id="Age"
                 label="Age"
                 type="number"
                 InputLabelProps={{
@@ -298,12 +300,29 @@ const EnhancedTableToolbar = (props) => {
                 }}
               />
             </Grid>
+            <Grid item xs={6}>
+              <TextField
+              fullWidth
+                id="Telephone"
+                label="Telephone"
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+              fullWidth
+                id="Gender"
+                label="Gender"
+                variant="outlined"
+              />
+            </Grid>
           </Grid>
         </DialogContent>
+        <Divider />
         <DialogActions>
-          <Button onClick={handleClose}>Disagree</Button>
+          <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handlePostData} autoFocus>
-            Agree
+            Confirm
           </Button>
         </DialogActions>
       </Dialog>
@@ -453,8 +472,8 @@ export default function EnhancedTable() {
   //   })
 
   return (
-    <Box sx={{ pl: 40, pt: 15 }} className={classes.box}>
-      <Paper sx={{ mb: 2 }} className={classes.paper}>
+    <Box sx={{ pl: 40, pt: 15 }} width={"95%"}>
+      <Paper sx={{ mb: 2 }} width={"100%"}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
