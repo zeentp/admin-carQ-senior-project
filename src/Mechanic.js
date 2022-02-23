@@ -2,7 +2,7 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import Divider from '@mui/material/Divider';
+import Divider from "@mui/material/Divider";
 import TextField from "@mui/material/TextField";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -12,7 +12,7 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
-import Grid from '@mui/material/Grid';
+import Grid from "@mui/material/Grid";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
@@ -23,23 +23,32 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { visuallyHidden } from "@mui/utils";
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import { makeStyles } from '@mui/styles';
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import { makeStyles } from "@mui/styles";
+import { useEffect, useState } from "react";
 
+const axios = require("axios");
+const url = "http://192.168.1.53:8080";
 
+// axios
+//   .get("http://192.168.1.53:8080/v1/get?id=mechanic_1")
+//   .then(function (response) {
+//     // handle success
+//     // console.log(response);
+//   });
 const useStyles = makeStyles((theme) => ({
   box: {
-    width: '100%',
+    width: "100%",
     [theme.breakpoints.down("md")]: {
       width: "80%",
     },
   },
   paper: {
-    width: '100%',
+    width: "100%",
     [theme.breakpoints.down("md")]: {
       width: "80%",
     },
@@ -61,16 +70,66 @@ const rows = [
   // createData("Eclair", 262, "avaliable", 24, 6.0),
   // createData("Frozen yoghurt", 159, "avaliable", 24, 4.0),
   // createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Saran Manzano", 'avaliable', 'saranxpromethazine@gmail.com', "089-999-9999"),
-  createData("A Manzano", 'avaliable', 'saranxpromethazine@gmail.com', "089-999-9999"),
-  createData("B Manzano", 'avaliable', 'saranxpromethazine@gmail.com', "089-999-9999"),
-  createData("C Manzano", 'avaliable', 'saranxpromethazine@gmail.com', "089-999-9999"),
-  createData("D Manzano", 'avaliable', 'saranxpromethazine@gmail.com', "089-999-9999"),
-  createData("E Manzano", 'avaliable', 'saranxpromethazine@gmail.com', "089-999-9999"),
-  createData("F Manzano", 'avaliable', 'saranxpromethazine@gmail.com', "089-999-9999"),
-  createData("G Manzano", 'avaliable', 'saranxpromethazine@gmail.com', "089-999-9999"),
-  createData("H Manzano", 'unavaliable', 'saranxpromethazine@gmail.com', "089-999-9999"),
-  createData("I Manzano", 'unavaliable', 'saranxpromethazine@gmail.com', "089-999-9999"),
+  createData(
+    "Saran Manzano",
+    "avaliable",
+    "saranxpromethazine@gmail.com",
+    "089-999-9999"
+  ),
+  createData(
+    "A Manzano",
+    "avaliable",
+    "saranxpromethazine@gmail.com",
+    "089-999-9999"
+  ),
+  createData(
+    "B Manzano",
+    "avaliable",
+    "saranxpromethazine@gmail.com",
+    "089-999-9999"
+  ),
+  createData(
+    "C Manzano",
+    "avaliable",
+    "saranxpromethazine@gmail.com",
+    "089-999-9999"
+  ),
+  createData(
+    "D Manzano",
+    "avaliable",
+    "saranxpromethazine@gmail.com",
+    "089-999-9999"
+  ),
+  createData(
+    "E Manzano",
+    "avaliable",
+    "saranxpromethazine@gmail.com",
+    "089-999-9999"
+  ),
+  createData(
+    "F Manzano",
+    "avaliable",
+    "saranxpromethazine@gmail.com",
+    "089-999-9999"
+  ),
+  createData(
+    "G Manzano",
+    "avaliable",
+    "saranxpromethazine@gmail.com",
+    "089-999-9999"
+  ),
+  createData(
+    "H Manzano",
+    "unavaliable",
+    "saranxpromethazine@gmail.com",
+    "089-999-9999"
+  ),
+  createData(
+    "I Manzano",
+    "unavaliable",
+    "saranxpromethazine@gmail.com",
+    "089-999-9999"
+  ),
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -150,7 +209,6 @@ function EnhancedTableHead(props) {
   };
 
   return (
-    
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox"></TableCell>
@@ -180,11 +238,16 @@ function EnhancedTableHead(props) {
                   : null}
               </TableSortLabel>
             </TableCell>
-            
-          ) : <TableCell 
-          key={headCell.id}
-          align={headCell.numeric ? "right" : "left"}
-          padding={headCell.disablePadding ? "none" : "normal"}> {headCell.label}</TableCell>
+          ) : (
+            <TableCell
+              key={headCell.id}
+              align={headCell.numeric ? "right" : "left"}
+              padding={headCell.disablePadding ? "none" : "normal"}
+            >
+              {" "}
+              {headCell.label}
+            </TableCell>
+          )
         )}
       </TableRow>
     </TableHead>
@@ -209,6 +272,23 @@ const EnhancedTableToolbar = (props) => {
   const handleClose = () => {
     setOpen(false);
   };
+  const handlePostData = () =>{
+    const k = {
+      "id": "123456",
+      "status": false,
+      "firstName": "1234",
+      "lastName": "54545",
+      "telephone": "085-555-555",
+      "email": "janedoe@gmail.com",
+      "gender": "female",
+      "age": 20
+      }
+      axios.post(url+'/create',k)
+      .then(res => {
+          console.log(res);
+          // window.location.href= "/"
+      })
+  };
   return (
     <Toolbar
       sx={{
@@ -223,7 +303,7 @@ const EnhancedTableToolbar = (props) => {
         }),
       }}
     >
-       <Dialog
+      <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
@@ -238,16 +318,59 @@ const EnhancedTableToolbar = (props) => {
             Let Google help apps determine location. This means sending anonymous
             location data to Google, even when no apps are running.
           </DialogContentText> */}
-          <Grid item xs={6}>
+          {/* <Grid container spacing={{ xl: 2, md: 3 }}>
+          <Grid  item xl={6}>
           <TextField id="outlined-basic" label="Outlined" variant="outlined" />
+          <TextField id="outlined-basic" label="Outlined" variant="outlined" />
+
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xl={6}>
           <TextField id="outlined-basic" label="Outlined" variant="outlined" />
+
+          </Grid>
+          </Grid> */}
+          <Grid
+            container
+            rowSpacing={1}
+            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+          >
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                id="outlined-basic"
+                label="Outlined"
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                id="outlined-basic"
+                label="Outlined"
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={6}>
+            <TextField
+                fullWidth
+                id="outlined-basic"
+                label="Outlined"
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={6}>
+            <TextField
+                fullWidth
+                id="outlined-basic"
+                label="Outlined"
+                variant="outlined"
+              />
+            </Grid>
           </Grid>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Disagree</Button>
-          <Button onClick={handleClose} autoFocus>
+          <Button onClick={handlePostData} autoFocus>
             Agree
           </Button>
         </DialogActions>
@@ -267,15 +390,13 @@ const EnhancedTableToolbar = (props) => {
           variant="h6"
           id="tableTitle"
           component="div"
-        >
-        </Typography>
+        ></Typography>
         // <Button justifyContent="flex-end" variant="contained">Add +</Button>
       )}
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton>
-            
             <DeleteIcon />
           </IconButton>
         </Tooltip>
@@ -286,8 +407,15 @@ const EnhancedTableToolbar = (props) => {
         //     <FilterListIcon />
         //   </IconButton>
         // </Tooltip>
-      
-         <Button justifyContent="flex-end" sx={{width:80}} variant="contained"onClick={handleClickOpen}>Add +</Button>
+
+        <Button
+          justifyContent="flex-end"
+          sx={{ width: 80 }}
+          variant="contained"
+          onClick={handleClickOpen}
+        >
+          Add +
+        </Button>
       )}
     </Toolbar>
   );
@@ -299,7 +427,6 @@ EnhancedTableToolbar.propTypes = {
 
 export default function EnhancedTable() {
   const classes = useStyles();
-
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
@@ -315,7 +442,7 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
+      const newSelecteds = listOfMechanic.map((n) =>  n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -351,19 +478,55 @@ export default function EnhancedTable() {
     setPage(0);
   };
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-  };
-
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+  const [listOfMechanic, setListOfMechanic] = useState(
+    []
+    // id: "",
+    // firstName: "",
+    // lastName: "",
+    // email: "",
+    // gender: "",
+    // age: "",
+    // status: "",
+    // telephone: "",
+  );
+  useEffect(() => {
+
+    //Get All Trip
+        axios.get(url+'/mechanics').then(res => {
+            console.log(res.data);
+            const list = res.data.map((d)=> d)
+            setListOfMechanic(list)
+    })
+
+        
+    }, [])
+  // const getdata = async () => {
+  //   const url = "http://192.168.1.53:8080/mechanics";
+  //   //   const await axios.get(url).then(res => {
+  //   //       console.log(res.data);
+  //   //       const datas = res.data.map((d)=> d)
+  //   //       setData(datas)
+
+  //   // })
+  //   const a =await axios({
+  //     method: "get",
+  //     url: url,
+  //   }).then(async (res) => {
+  //     await setListOfMechanic([res.data]);
+  //   }).then(()=>{
+  //     console.log(listOfMechanic);
+  //   })
+
+  
   return (
-    <Box sx={{pl:40,pt:15 }} className={classes.box}>
-      <Paper sx={{ mb: 2 }}  className={classes.paper}>
+    <Box sx={{ pl: 40, pt: 15 }} className={classes.box}>
+      <Paper sx={{ mb: 2 }} className={classes.paper}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
@@ -382,20 +545,22 @@ export default function EnhancedTable() {
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(listOfMechanic, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.firstName);
                   const labelId = `enhanced-table-checkbox-${index}`;
-
+                  // const b = listOfMechanic.map((l) => {
+                  //   console.log(listOfMechanic);
+                  // });
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) => handleClick(event, row.firstName)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.firstName}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -413,9 +578,10 @@ export default function EnhancedTable() {
                         scope="row"
                         padding="none"
                       >
-                        {row.name}
+                        {/* {console.log(row.firstName)} */}
+                        {row.firstName+"\t"+row.lastName}
                       </TableCell>
-                      <TableCell align="right">{row.status}</TableCell>
+                      <TableCell align="right">{row.status===true ? "avaliable": "unavaliable "}</TableCell>
                       <TableCell align="right">{row.email}</TableCell>
                       {/* <TableCell align="right">{row.protein}</TableCell> */}
                       <TableCell align="right">{row.telephone}</TableCell>
@@ -444,13 +610,11 @@ export default function EnhancedTable() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      
+
       {/* <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
       /> */}
-        
     </Box>
-    
   );
 }

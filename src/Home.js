@@ -4,8 +4,7 @@ import { Typography } from "@mui/material";
 
 export default function Booking() {
     const axios = require('axios');
-
-    axios.get('https://pokeapi.co/api/v2/pokemon/ditto')
+    axios.get('http://192.168.1.53:8080/v1/get?id=mechanic_1')
   .then(function (response) {
     // handle success
     console.log(response);
