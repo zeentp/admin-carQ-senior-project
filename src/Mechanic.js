@@ -2,6 +2,8 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
+import Divider from '@mui/material/Divider';
+import TextField from "@mui/material/TextField";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -10,6 +12,7 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
+import Grid from '@mui/material/Grid';
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
@@ -17,17 +20,31 @@ import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
-import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Grid } from "@mui/material";
+import { makeStyles } from '@mui/styles';
+
+
+const useStyles = makeStyles((theme) => ({
+  box: {
+    width: '100%',
+    [theme.breakpoints.down("md")]: {
+      width: "80%",
+    },
+  },
+  paper: {
+    width: '100%',
+    [theme.breakpoints.down("md")]: {
+      width: "80%",
+    },
+  },
+}));
 
 function createData(name, status, email, telephone) {
   return {
@@ -215,11 +232,18 @@ const EnhancedTableToolbar = (props) => {
         <DialogTitle id="alert-dialog-title">
           {"Accepting an appointment card"}
         </DialogTitle>
+        <Divider />
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          {/* <DialogContentText id="alert-dialog-description">
             Let Google help apps determine location. This means sending anonymous
             location data to Google, even when no apps are running.
-          </DialogContentText>
+          </DialogContentText> */}
+          <Grid item xs={6}>
+          <TextField id="outlined-basic" label="Outlined" variant="outlined" />
+          </Grid>
+          <Grid item xs={6}>
+          <TextField id="outlined-basic" label="Outlined" variant="outlined" />
+          </Grid>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Disagree</Button>
@@ -274,6 +298,7 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function EnhancedTable() {
+  const classes = useStyles();
 
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
@@ -337,8 +362,8 @@ export default function EnhancedTable() {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
-    <Box sx={{ width: "80%",pl:40,pt:15 }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
+    <Box sx={{pl:40,pt:15 }} className={classes.box}>
+      <Paper sx={{ mb: 2 }}  className={classes.paper}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
