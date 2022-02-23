@@ -70,66 +70,6 @@ const rows = [
   // createData("Eclair", 262, "avaliable", 24, 6.0),
   // createData("Frozen yoghurt", 159, "avaliable", 24, 4.0),
   // createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData(
-    "Saran Manzano",
-    "avaliable",
-    "saranxpromethazine@gmail.com",
-    "089-999-9999"
-  ),
-  createData(
-    "A Manzano",
-    "avaliable",
-    "saranxpromethazine@gmail.com",
-    "089-999-9999"
-  ),
-  createData(
-    "B Manzano",
-    "avaliable",
-    "saranxpromethazine@gmail.com",
-    "089-999-9999"
-  ),
-  createData(
-    "C Manzano",
-    "avaliable",
-    "saranxpromethazine@gmail.com",
-    "089-999-9999"
-  ),
-  createData(
-    "D Manzano",
-    "avaliable",
-    "saranxpromethazine@gmail.com",
-    "089-999-9999"
-  ),
-  createData(
-    "E Manzano",
-    "avaliable",
-    "saranxpromethazine@gmail.com",
-    "089-999-9999"
-  ),
-  createData(
-    "F Manzano",
-    "avaliable",
-    "saranxpromethazine@gmail.com",
-    "089-999-9999"
-  ),
-  createData(
-    "G Manzano",
-    "avaliable",
-    "saranxpromethazine@gmail.com",
-    "089-999-9999"
-  ),
-  createData(
-    "H Manzano",
-    "unavaliable",
-    "saranxpromethazine@gmail.com",
-    "089-999-9999"
-  ),
-  createData(
-    "I Manzano",
-    "unavaliable",
-    "saranxpromethazine@gmail.com",
-    "089-999-9999"
-  ),
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -226,16 +166,6 @@ function EnhancedTableHead(props) {
                 onClick={createSortHandler(headCell.id)}
               >
                 Name{" "}
-                {orderBy === headCell.id
-                  ? (console.log(headCell.label + "55555555555555"),
-                    (
-                      <Box component="span" sx={visuallyHidden}>
-                        {order === "desc"
-                          ? "sorted descending"
-                          : "sorted ascending"}
-                      </Box>
-                    ))
-                  : null}
               </TableSortLabel>
             </TableCell>
           ) : (
@@ -272,23 +202,22 @@ const EnhancedTableToolbar = (props) => {
   const handleClose = () => {
     setOpen(false);
   };
-  const handlePostData = () =>{
-    const k = {
-      "id": "123456",
-      "status": false,
-      "firstName": "1234",
-      "lastName": "54545",
-      "telephone": "085-555-555",
-      "email": "janedoe@gmail.com",
-      "gender": "female",
-      "age": 20
-      }
-      axios.post(url+'/create',k)
-      .then(res => {
-          console.log(res);
-          // window.location.href= "/"
-      })
+  const handlePostData = () => {
+    const data = {
+      id: "55555555",
+      status: false,
+      firstName: "1234",
+      lastName: "54545",
+      telephone: "085-555-555",
+      email: "janedoe@gmail.com",
+      gender: "female",
+      age: 20,
+    };
+    axios.post(url + "/create", data).then((res) => {
+      console.log(res);
+    });
   };
+
   return (
     <Toolbar
       sx={{
@@ -337,33 +266,36 @@ const EnhancedTableToolbar = (props) => {
             <Grid item xs={6}>
               <TextField
                 fullWidth
-                id="outlined-basic"
-                label="Outlined"
+                id="Fristname"
+                label="FristName"
+                variant="outlined"
+                // onChange={handleFirstNameChange}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                id="Lastname"
+                label="Lastname"
                 variant="outlined"
               />
             </Grid>
             <Grid item xs={6}>
               <TextField
                 fullWidth
-                id="outlined-basic"
-                label="Outlined"
+                id="Email"
+                label="Email"
                 variant="outlined"
               />
             </Grid>
             <Grid item xs={6}>
-            <TextField
-                fullWidth
-                id="outlined-basic"
-                label="Outlined"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={6}>
-            <TextField
-                fullWidth
-                id="outlined-basic"
-                label="Outlined"
-                variant="outlined"
+              <TextField
+                id="Age3"
+                label="Age"
+                type="number"
+                InputLabelProps={{
+                  shrink: true,
+                }}
               />
             </Grid>
           </Grid>
@@ -442,7 +374,7 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = listOfMechanic.map((n) =>  n.name);
+      const newSelecteds = listOfMechanic.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -496,16 +428,13 @@ export default function EnhancedTable() {
     // telephone: "",
   );
   useEffect(() => {
-
     //Get All Trip
-        axios.get(url+'/mechanics').then(res => {
-            console.log(res.data);
-            const list = res.data.map((d)=> d)
-            setListOfMechanic(list)
-    })
-
-        
-    }, [])
+    axios.get(url + "/mechanics").then((res) => {
+      console.log(res.data);
+      const list = res.data.map((d) => d);
+      setListOfMechanic(list);
+    });
+  }, []);
   // const getdata = async () => {
   //   const url = "http://192.168.1.53:8080/mechanics";
   //   //   const await axios.get(url).then(res => {
@@ -523,7 +452,6 @@ export default function EnhancedTable() {
   //     console.log(listOfMechanic);
   //   })
 
-  
   return (
     <Box sx={{ pl: 40, pt: 15 }} className={classes.box}>
       <Paper sx={{ mb: 2 }} className={classes.paper}>
@@ -540,7 +468,7 @@ export default function EnhancedTable() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={listOfMechanic.length}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
@@ -550,6 +478,7 @@ export default function EnhancedTable() {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.firstName);
                   const labelId = `enhanced-table-checkbox-${index}`;
+
                   // const b = listOfMechanic.map((l) => {
                   //   console.log(listOfMechanic);
                   // });
@@ -579,9 +508,11 @@ export default function EnhancedTable() {
                         padding="none"
                       >
                         {/* {console.log(row.firstName)} */}
-                        {row.firstName+"\t"+row.lastName}
+                        {row.firstName + "\t" + row.lastName}
                       </TableCell>
-                      <TableCell align="right">{row.status===true ? "avaliable": "unavaliable "}</TableCell>
+                      <TableCell align="right">
+                        {row.status === true ? "avaliable" : "unavaliable "}
+                      </TableCell>
                       <TableCell align="right">{row.email}</TableCell>
                       {/* <TableCell align="right">{row.protein}</TableCell> */}
                       <TableCell align="right">{row.telephone}</TableCell>
@@ -603,7 +534,7 @@ export default function EnhancedTable() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={listOfMechanic.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
