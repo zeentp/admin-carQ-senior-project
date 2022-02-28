@@ -20,6 +20,7 @@ import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { visuallyHidden } from "@mui/utils";
@@ -32,7 +33,7 @@ import { makeStyles } from "@mui/styles";
 import { useEffect, useState } from "react";
 
 const axios = require("axios");
-const url = "http://192.168.1.53:8080";
+const url = "http://192.168.2.71:8080";
 
 // axios
 //   .get("http://192.168.1.53:8080/v1/get?id=mechanic_1")
@@ -535,6 +536,10 @@ export default function EnhancedTable() {
                       <TableCell align="right">{row.email}</TableCell>
                       {/* <TableCell align="right">{row.protein}</TableCell> */}
                       <TableCell align="right">{row.telephone}</TableCell>
+                      <ButtonGroup color="primary" aria-label="outlined primary button group">
+                      <Button >Edit</Button>
+                      <Button>Del</Button>
+                    </ButtonGroup>
                     </TableRow>
                   );
                 })}

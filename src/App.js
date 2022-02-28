@@ -4,8 +4,16 @@ import Navbar from './Navbar';
 import Mechanic from './Mechanic';
 import Home from './Home';
 import Login from './Login';
+import Dashboard from './Dashboard';
+import UserUpdate from './UserUpdate';
+import TestTable from './TestTable';
+import Create from './Create';
+
+
+
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { Update } from '@mui/icons-material';
 
 const theme = createTheme({
  
@@ -21,7 +29,12 @@ function App() {
     <Routes>
         <Route path="/" element={<Login />} />
         <Route path="Home" element={<Home />} />
+        <Route path="TestTable" element={<TestTable />} />
         <Route path="mechanic" element={<Mechanic />} />
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="create" element={<Create />} />
+        <Route path='/update/:id' element={<UserUpdate/>} />
+
       </Routes>
       </ThemeProvider>
     </div>

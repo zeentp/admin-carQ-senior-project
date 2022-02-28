@@ -21,7 +21,7 @@ const drawerWidth = 240;
 
 export default function Navbar() {
     const [menu, setMenu] = React.useState("");
-    const listMenuTitle = ['Home', 'Crew',]
+    const listMenuTitle = ['Home', 'Crew', 'Dashboard']
     let navigate = useNavigate();
 
     function changePage(page) {
@@ -32,6 +32,9 @@ export default function Navbar() {
                 break;
             case "Crew":
                 navigate("mechanic");
+                break;
+            case "Dashboard":
+                navigate("testtable");
                 break;
             default:
                 navigate("/");
