@@ -1,77 +1,42 @@
-import * as React from "react";
-import PropTypes from "prop-types";
-import { alpha } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
-import TextField from "@mui/material/TextField";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
-import TableSortLabel from "@mui/material/TableSortLabel";
-import Grid from "@mui/material/Grid";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
-import Checkbox from "@mui/material/Checkbox";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import ButtonGroup from '@mui/material/ButtonGroup';
-import Button from "@mui/material/Button";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { visuallyHidden } from "@mui/utils";
+import * as React from 'react';
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { makeStyles } from "@mui/styles";
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import Divider from "@mui/material/Divider";
+import FormControl from '@mui/material/FormControl';
+import PropTypes from 'prop-types';
+import { alpha } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TablePagination from '@mui/material/TablePagination';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Button from "@mui/material/Button";
+import TableRow from '@mui/material/TableRow';
+import TableSortLabel from '@mui/material/TableSortLabel';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
+import Checkbox from '@mui/material/Checkbox';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import DeleteIcon from '@mui/icons-material/Delete';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import { visuallyHidden } from '@mui/utils';
 import { useEffect, useState } from "react";
 
-const axios = require("axios");
-const url = "http://localhost:8080";
-
-// axios
-//   .get("http://192.168.1.53:8080/v1/get?id=mechanic_1")
-//   .then(function (response) {
-//     // handle success
-//     // console.log(response);
-//   });
-const useStyles = makeStyles((theme) => ({
-  box: {
-    width: "100%",
-    [theme.breakpoints.down("md")]: {
-      width: "80%",
-    },
-  },
-  paper: {
-    width: "100%",
-    [theme.breakpoints.down("md")]: {
-      width: "80%",
-    },
-  },
-}));
-
-function createData(name, status, email, telephone) {
-  return {
-    name,
-    status,
-    email,
-    telephone,
-  };
-}
-
-const rows = [
-  // createData("Cupcake", 305, "avaliable", 67, 4.3),
-  // createData("Donut", 452, "avaliable", 51, 4.9),
-  // createData("Eclair", 262, "avaliable", 24, 6.0),
-  // createData("Frozen yoghurt", 159, "avaliable", 24, 4.0),
-  // createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -84,7 +49,7 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
-  return order === "desc"
+  return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
@@ -105,46 +70,40 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "name",
+    id: 'firstName',
     numeric: false,
     disablePadding: true,
-    label: "name",
+    label: 'Name',
   },
   {
-    id: "status",
+    id: 'status',
     numeric: true,
     disablePadding: false,
-    label: "status",
+    label: 'Status',
   },
   {
-    id: "carbs",
+    id: 'email',
     numeric: true,
     disablePadding: false,
-    label: "email",
+    label: 'Email',
   },
-  // {
-  //   id: "protein",
-  //   numeric: true,
-  //   disablePadding: false,
-  //   label: "Protein (g)",
-  // },
   {
-    id: "telephone",
+    id: 'telephone',
     numeric: true,
     disablePadding: false,
-    label: "Telephone",
+    label: 'Telephone',
+  },
+  {
+    id: 'action',
+    numeric: true,
+    disablePadding: false,
+    label: 'action',
   },
 ];
 
 function EnhancedTableHead(props) {
-  const {
-    onSelectAllClick,
-    order,
-    orderBy,
-    numSelected,
-    rowCount,
-    onRequestSort,
-  } = props;
+  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+    props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -152,34 +111,38 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox"></TableCell>
-        {headCells.map((headCell) =>
-          headCell.label === "name" ? (
-            <TableCell
-              key={headCell.id}
-              align={headCell.numeric ? "right" : "left"}
-              padding={headCell.disablePadding ? "none" : "normal"}
-              sortDirection={orderBy === headCell.id ? order : false}
+        <TableCell padding="checkbox">
+          {/* <Checkbox
+              color="primary"
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              checked={rowCount > 0 && numSelected === rowCount}
+              onChange={onSelectAllClick}
+              inputProps={{
+                'aria-label': 'select all desserts',
+              }}
+            /> */}
+        </TableCell>
+        {headCells.map((headCell) => (
+          <TableCell
+            key={headCell.id}
+            align={headCell.numeric ? 'right' : 'left'}
+            padding={headCell.disablePadding ? 'none' : 'normal'}
+            sortDirection={orderBy === headCell.id ? order : false}
+          >
+            <TableSortLabel
+              active={orderBy === headCell.id}
+              direction={orderBy === headCell.id ? order : 'asc'}
+              onClick={createSortHandler(headCell.id)}
             >
-              <TableSortLabel
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : "asc"}
-                onClick={createSortHandler(headCell.id)}
-              >
-                Name{" "}
-              </TableSortLabel>
-            </TableCell>
-          ) : (
-            <TableCell
-              key={headCell.id}
-              align={headCell.numeric ? "right" : "left"}
-              padding={headCell.disablePadding ? "none" : "normal"}
-            >
-              {" "}
               {headCell.label}
-            </TableCell>
-          )
-        )}
+              {orderBy === headCell.id ? (
+                <Box component="span" sx={visuallyHidden}>
+                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                </Box>
+              ) : null}
+            </TableSortLabel>
+          </TableCell>
+        ))}
       </TableRow>
     </TableHead>
   );
@@ -189,35 +152,74 @@ EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(["asc", "desc"]).isRequired,
+  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
 };
 
 const EnhancedTableToolbar = (props) => {
-  const [open, setOpen] = React.useState(false);
   const { numSelected } = props;
+  const [open, setOpen] = React.useState(false);
+  const [fname, setFname] = useState('');
+  const [lname, setLname] = useState('');
+  const [telephone, setTelephone] = useState('');
+  const [gender, setGender] = useState('');
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [avatar, setAvatar] = useState('');
+  const [disableApplyButton, setDisableApplyButton] = React.useState(false);
+  const url = "http://192.168.1.53:8080";
+  const axios = require("axios");
+
+  useEffect(() => {
+    if (fname !== '' && lname !== '' && email !== ''&& telephone !== '') {
+      setDisableApplyButton(false)
+    } else {
+      setDisableApplyButton(true)
+    }
+  }, [fname, lname,email,telephone]);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    var data = {
+      id: "XDujKGpNWRNOSIUhsYJY",
+      status: true,
+      firstName: fname,
+      lastName: lname,
+      telephone: telephone,
+      email: email,
+      gender: gender,
+      age: 22,
+    }
+    axios.post(url + "/m/create", data).then((res) => {
+      console.log(res);
+      window.location.href = '/mechanic';
+    });
+    // fetch('https://www.mecallapi.com/api/users/create', {
+    //   method: 'POST',
+    //   headers: {
+    //     Accept: 'application/form-data',
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(data),
+    // })
+    // .then(res => res.json())
+    // .then(
+    //   (result) => {
+    //     alert(result['message'])
+    //     if (result['status'] === 'ok') {
+    //       window.location.href = '/home';
+    //     }
+    //   }
+    // )
+  };
+  const handleChange = (event) => {
+    setGender(event.target.value);    
+  };
   const handleClickOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
-  };
-  const handlePostData = () => {
-    handleClose()
-    const data = {
-      id: "XDujKGpNWRNOSIUhsYJY",
-      status: true,
-      firstName: "paul",
-      lastName: "doe",
-      telephone: "084-444-4444",
-      email: "pauldoe@hotmail.com",
-      gender: "male",
-      age: 22,
-    };
-    axios.post(url + "/create", data).then((res) => {
-      console.log(res);
-    });
   };
 
   return (
@@ -227,51 +229,46 @@ const EnhancedTableToolbar = (props) => {
         pr: { xs: 1, sm: 1 },
         ...(numSelected > 0 && {
           bgcolor: (theme) =>
-            alpha(
-              theme.palette.primary.main,
-              theme.palette.action.activatedOpacity
-            ),
+            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
         }),
       }}
     >
+      <Typography
+        sx={{ flex: '1 1 100%',textAlign: "start" }}
+        variant="h6"
+        id="tableTitle"
+        component="div"
+      >
+        Mechenic
+      </Typography>
+      <Button onClick={handleClickOpen} variant="contained" color="primary">
+        CREATE
+      </Button>
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        component="form" noValidate onSubmit={handleSubmit}
       >
         <DialogTitle id="alert-dialog-title">
           {"Adding new members to the crew"}
         </DialogTitle>
         <Divider />
         <DialogContent>
-          {/* <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending anonymous
-            location data to Google, even when no apps are running.
-          </DialogContentText> */}
-          {/* <Grid container spacing={{ xl: 2, md: 3 }}>
-          <Grid  item xl={6}>
-          <TextField id="outlined-basic" label="Outlined" variant="outlined" />
-          <TextField id="outlined-basic" label="Outlined" variant="outlined" />
-
-          </Grid>
-          <Grid item xl={6}>
-          <TextField id="outlined-basic" label="Outlined" variant="outlined" />
-
-          </Grid>
-          </Grid> */}
           <Grid
             container
             rowSpacing={1}
             columnSpacing={{ xs: 1, sm: 2, md: 3 }}
           >
+
             <Grid item xs={6}>
               <TextField
                 fullWidth
                 id="Fristname"
                 label="FristName"
                 variant="outlined"
-                // onChange={handleFirstNameChange}
+                onChange={(e) => setFname(e.target.value)}
               />
             </Grid>
             <Grid item xs={6}>
@@ -280,6 +277,7 @@ const EnhancedTableToolbar = (props) => {
                 id="Lastname"
                 label="Lastname"
                 variant="outlined"
+                onChange={(e) => setLname(e.target.value)}
               />
             </Grid>
             <Grid item xs={6}>
@@ -288,87 +286,54 @@ const EnhancedTableToolbar = (props) => {
                 id="Email"
                 label="Email"
                 variant="outlined"
+                onChange={(e) => setEmail(e.target.value)}
               />
             </Grid>
             <Grid item xs={6}>
               <TextField
-              fullWidth
-                id="Age"
-                label="Age"
-                type="number"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-              fullWidth
-                id="Telephone"
-                label="Telephone"
+                fullWidth
+                id="telephone"
+                label="telephone"
                 variant="outlined"
+                onChange={(e) => setTelephone(e.target.value)}
               />
             </Grid>
             <Grid item xs={6}>
-              <TextField
-              fullWidth
-                id="Gender"
-                label="Gender"
+            {/* <FormControl fullWidth>
+            <InputLabel id="gender-select-label">Gender</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="gender-select"
+                label="gender"
+                onChange={handleChange}
+              >
+                <MenuItem value={"Male"}>Male</MenuItem>
+                <MenuItem value={"Female"}>Female</MenuItem>
+              </Select>
+                </FormControl> */}
+              {/* <TextField
+                fullWidth
+                id="gender"
+                label="gender"
                 variant="outlined"
-              />
+                onChange={(e) => setAvatar(e.target.value)}
+              /> */}
             </Grid>
           </Grid>
         </DialogContent>
         <Divider />
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handlePostData} autoFocus>
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={disableApplyButton}
+          //  onClick={handleClose} 
+          >
             Confirm
           </Button>
         </DialogActions>
       </Dialog>
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        ></Typography>
-        // <Button justifyContent="flex-end" variant="contained">Add +</Button>
-      )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        // <Tooltip title="Filter list">
-        //   <IconButton>
-        // {/* <Button justifyContent="flex-end" variant="contained">Add +</Button> */}
-        //     <FilterListIcon />
-        //   </IconButton>
-        // </Tooltip>
-
-        <Button
-          justifyContent="flex-end"
-          sx={{ width: 80 }}
-          variant="contained"
-          onClick={handleClickOpen}
-        >
-          Add +
-        </Button>
-      )}
     </Toolbar>
   );
 };
@@ -378,23 +343,44 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function EnhancedTable() {
-  const classes = useStyles();
-  const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("calories");
+  const [order, setOrder] = React.useState('asc');
+  const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [users, setUsers] = useState([]);
+  const axios = require("axios");
+  const url = "http://192.168.1.53:8080";
+
+  useEffect(() => {
+    UsersGet()
+  }, []);
+  const UsersGet = () => {
+    axios.get(url + "/m/mechanics").then((res) => {
+      console.log(res.data);
+      const list = res.data.map((d) => d);
+      setUsers(list);
+    });
+  }
+  const UserDelete = id => {
+    console.log(id)
+    axios.put(url + "/m/delete?id="+id).then((res) => {
+      console.log(res);
+      window.location.href = '/mechanic';
+    });
+
+  }
 
   const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = listOfMechanic.map((n) => n.name);
+      const newSelecteds = users.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -414,7 +400,7 @@ export default function EnhancedTable() {
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
+        selected.slice(selectedIndex + 1),
       );
     }
 
@@ -430,57 +416,26 @@ export default function EnhancedTable() {
     setPage(0);
   };
 
+
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
 
-  const [listOfMechanic, setListOfMechanic] = useState(
-    []
-    // id: "",
-    // firstName: "",
-    // lastName: "",
-    // email: "",
-    // gender: "",
-    // age: "",
-    // status: "",
-    // telephone: "",
-  );
-  useEffect(() => {
-    //Get All Trip
-    axios.get(url + "/m/mechanics").then((res) => {
-      console.log(res.data);
-      const list = res.data.map((d) => d);
-      setListOfMechanic(list);
-    });
-  }, []);
-  // const getdata = async () => {
-  //   const url = "http://192.168.1.53:8080/mechanics";
-  //   //   const await axios.get(url).then(res => {
-  //   //       console.log(res.data);
-  //   //       const datas = res.data.map((d)=> d)
-  //   //       setData(datas)
-
-  //   // })
-  //   const a =await axios({
-  //     method: "get",
-  //     url: url,
-  //   }).then(async (res) => {
-  //     await setListOfMechanic([res.data]);
-  //   }).then(()=>{
-  //     console.log(listOfMechanic);
-  //   })
+  const UpdateUser = id => {
+    window.location = '/update/' + id
+  }
 
   return (
-    <Box sx={{ pl: 40, pt: 15 }} width={"95%"}>
-      <Paper sx={{ mb: 2 }} width={"100%"}>
+    <Box sx={{ width: '95%', pl: 45, pt: 15 }}>
+      <Paper sx={{ width: '100%', mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
-            size={dense ? "small" : "medium"}
+            size={dense ? 'small' : 'medium'}
           >
             <EnhancedTableHead
               numSelected={selected.length}
@@ -488,24 +443,21 @@ export default function EnhancedTable() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={listOfMechanic.length}
+              rowCount={users.length}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(listOfMechanic, getComparator(order, orderBy))
+              {stableSort(users, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.firstName);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
-                  // const b = listOfMechanic.map((l) => {
-                  //   console.log(listOfMechanic);
-                  // });
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.firstName)}
+                      // onClick={(event) => handleClick(event, row.fname)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
@@ -513,13 +465,13 @@ export default function EnhancedTable() {
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
-                        <Checkbox
+                        {/* <Checkbox
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
-                            "aria-labelledby": labelId,
+                            'aria-labelledby': labelId,
                           }}
-                        />
+                        /> */}
                       </TableCell>
                       <TableCell
                         component="th"
@@ -527,19 +479,17 @@ export default function EnhancedTable() {
                         scope="row"
                         padding="none"
                       >
-                        {/* {console.log(row.firstName)} */}
-                        {row.firstName + "\t" + row.lastName}
+                        {row.firstName + '\t' + row.lastName}
                       </TableCell>
-                      <TableCell align="right">
-                        {row.status === true ? "avaliable" : "unavaliable "}
-                      </TableCell>
+                      <TableCell align="right">{row.status === true ? "avaliable" : "unavaliable"}</TableCell>
                       <TableCell align="right">{row.email}</TableCell>
-                      {/* <TableCell align="right">{row.protein}</TableCell> */}
                       <TableCell align="right">{row.telephone}</TableCell>
-                      <ButtonGroup color="primary" aria-label="outlined primary button group">
-                      <Button >Edit</Button>
-                      <Button>Del</Button>
-                    </ButtonGroup>
+                      <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">
+                        <Button onClick={() => UpdateUser(row.id)} >Edit</Button>
+                        <Button onClick={() => UserDelete(row.id)}>Del</Button>
+                      </ButtonGroup>
+                      </TableCell>
+
                     </TableRow>
                   );
                 })}
@@ -558,7 +508,7 @@ export default function EnhancedTable() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={listOfMechanic.length}
+          count={users.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -566,10 +516,6 @@ export default function EnhancedTable() {
         />
       </Paper>
 
-      {/* <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      /> */}
     </Box>
   );
 }

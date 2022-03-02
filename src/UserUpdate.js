@@ -6,6 +6,11 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useParams } from 'react-router-dom';
+import Select from '@mui/material/Select';
+import FormControl from '@mui/material/FormControl';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -29,54 +34,79 @@ const useStyles = makeStyles((theme) => ({
 
 export default function UserUpdate() {
   const classes = useStyles();
-
+  const axios = require("axios");
+  const url = "http://192.168.1.53:8080";
   const { id } = useParams();
+  
   useEffect(() => {
-    fetch("https://www.mecallapi.com/api/users/"+id)
-      .then(res => res.json())
+    axios.get(url + "/m/get?id=" + id)
+      // .then(res => console.log(res.data))
       .then(
         (result) => {
-          setFname(result.user.fname)
-          setLname(result.user.lname)
-          setUsername(result.user.username)
-          setEmail(result.user.email)
-          setAvatar(result.user.avatar)
-        }
-      )
+          console.log(result.data)
+          setFname(result.data.firstName)
+          setLname(result.data.lastName)
+          setEmail(result.data.email)
+          setTelephone(result.data.telephone)
+          setGender(result.data.gender)
+        })
+    // fetch("https://www.mecallapi.com/api/users/"+id)
+    //   .then(res => res.json())
+    //   .then(
+    //     (result) => {
+    //       setFname(result.user.fname)
+    //       setLname(result.user.lname)
+    //       setUsername(result.user.username)
+    //       setEmail(result.user.email)
+    //       setAvatar(result.user.avatar)
+    //     }
+    //   )
   }, [id])
 
+  const handleChange = (event) => {
+    setGender(event.target.value);    
+  };
   const handleSubmit = event => {
     event.preventDefault();
+ 
     var data = {
-      'id': id,
-      'fname': fname,
-      'lname': lname,
-      'username': username,
-      'email': email,
-      'avatar': 'avatar',
+      id: id,
+      status: true,
+      firstName: fname,
+      lastName: lname,
+      telephone: telephone,
+      email: email,
+      gender: gender,
+      age: 22,
     }
-    fetch('https://www.mecallapi.com/api/users/update', {
-      method: 'PUT',
-      headers: {
-        Accept: 'application/form-data',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-    .then(res => res.json())
-    .then(
-      (result) => {
-        alert(result['message'])
-        if (result['status'] === 'ok') {
-          window.location.href = '/testtable';
-        }
-      }
-    )
+    axios.put(url + "/m/update", data).then((res) => {
+      console.log(res);
+      window.location.href = '/mechanic';
+    });
+    // fetch('https://www.mecallapi.com/api/users/update', {
+    //   method: 'PUT',
+    //   headers: {
+    //     Accept: 'application/form-data',
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(data),
+    // })
+    // .then(res => res.json())
+    // .then(
+    //   (result) => {
+    //     alert(result['message'])
+    //     if (result['status'] === 'ok') {
+    //       window.location.href = '/testtable';
+    //     }
+    //   }
+    // )
   }
 
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
-  const [username, setUsername] = useState('');
+  const [telephone,setTelephone] = useState('');
+  const [status, setStatus] = useState('');
+  const [gender, setGender] = useState('');
   const [email, setEmail] = useState('');
   const [avatar, setAvatar] = useState('');
 
@@ -118,19 +148,8 @@ export default function UserUpdate() {
                 variant="outlined"
                 required
                 fullWidth
-                id="username"
-                label="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
                 id="email"
-                label="Email"
+                label="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -140,11 +159,28 @@ export default function UserUpdate() {
                 variant="outlined"
                 required
                 fullWidth
-                id="avatar"
-                label="Avatar"
-                value={avatar}
-                onChange={(e) => setAvatar(e.target.value)}
+                id="telephone"
+                label="Telephone"
+                value={telephone}
+                onChange={(e) => setTelephone(e.target.value)}
               />
+            </Grid>
+            <Grid item xs={12}>
+            <FormControl fullWidth>
+            <InputLabel id="gender-select-label">Gender</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="gender-select"
+                label="gender"
+                // value={gender}
+                // SelectDisplayProps={gender}
+                // input={gender}
+                onChange={handleChange}
+              >
+                <MenuItem value={"Male"}>Male</MenuItem>
+                <MenuItem value={"Female"}>Female</MenuItem>
+              </Select>
+                </FormControl>
             </Grid>
           </Grid>
           <Button
