@@ -110,6 +110,20 @@ export default function UserUpdate() {
   const [email, setEmail] = useState('');
   const [avatar, setAvatar] = useState('');
 
+  const handlePhoneChange = (event) => {
+    var val = event.target.value.replace(/[^0-9]/g, "");
+    console.log(val)
+    if (val[0] === "0") {
+      let a = val;
+      a = val.slice(0, 3);
+      a += val.length > 3 ? "-" + val.slice(3, 6) : "";
+      a += val.length > 6 ? "-" + val.slice(6) : "";
+      val = a;
+    } else {
+      val = "";
+    }
+    setTelephone(val);
+    };
   return (
     <Container maxWidth="xs">
       <div className={classes.paper}>
@@ -162,11 +176,13 @@ export default function UserUpdate() {
                 id="telephone"
                 label="Telephone"
                 value={telephone}
-                onChange={(e) => setTelephone(e.target.value)}
+                inputProps={{ maxLength: 12 }}
+                onChange={handlePhoneChange}
+                // onChange={(e) => setTelephone(e.target.value)}
               />
             </Grid>
             <Grid item xs={12}>
-            <FormControl fullWidth>
+            {/* <FormControl fullWidth>
             <InputLabel id="gender-select-label">Gender</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
@@ -180,7 +196,7 @@ export default function UserUpdate() {
                 <MenuItem value={"Male"}>Male</MenuItem>
                 <MenuItem value={"Female"}>Female</MenuItem>
               </Select>
-                </FormControl>
+                </FormControl> */}
             </Grid>
           </Grid>
           <Button

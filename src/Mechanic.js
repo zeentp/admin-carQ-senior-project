@@ -36,6 +36,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { useEffect, useState } from "react";
+import { v4 as uuid } from 'uuid';
 
 
 function descendingComparator(a, b, orderBy) {
@@ -167,12 +168,13 @@ const EnhancedTableToolbar = (props) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [avatar, setAvatar] = useState('');
+  const unique_id = uuid();
   const [disableApplyButton, setDisableApplyButton] = React.useState(false);
   const url = "http://192.168.1.53:8080";
   const axios = require("axios");
 
   useEffect(() => {
-    if (fname !== '' && lname !== '' && email !== ''&& telephone !== '') {
+    if (fname !== '' && lname !== '' && email !== ''&& telephone !== ''&& telephone.length === 12) {
       setDisableApplyButton(false)
     } else {
       setDisableApplyButton(true)
@@ -181,7 +183,7 @@ const EnhancedTableToolbar = (props) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     var data = {
-      id: "XDujKGpNWRNOSIUhsYJY",
+      id: unique_id,
       status: true,
       firstName: fname,
       lastName: lname,
@@ -221,7 +223,20 @@ const EnhancedTableToolbar = (props) => {
   const handleClose = () => {
     setOpen(false);
   };
-
+  const handlePhoneChange = (event) => {
+    var val = event.target.value.replace(/[^0-9]/g, "");
+    console.log(val)
+    if (val[0] === "0") {
+      let a = val;
+      a = val.slice(0, 3);
+      a += val.length > 3 ? "-" + val.slice(3, 6) : "";
+      a += val.length > 6 ? "-" + val.slice(6) : "";
+      val = a;
+    } else {
+      val = "";
+    }
+    setTelephone(val);
+    };
   return (
     <Toolbar
       sx={{
@@ -295,7 +310,10 @@ const EnhancedTableToolbar = (props) => {
                 id="telephone"
                 label="telephone"
                 variant="outlined"
-                onChange={(e) => setTelephone(e.target.value)}
+                onChange={handlePhoneChange}
+                inputProps={{ maxLength: 12 }}
+                value={telephone}
+                // onChange={(e) => setTelephone(e.target.value)}
               />
             </Grid>
             <Grid item xs={6}>
