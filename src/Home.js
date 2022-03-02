@@ -31,32 +31,8 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
+import { useEffect, useState } from "react";
 
-function createData(name, calories, fat, carbs, protein) {
-  return {
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-  };
-}
-
-const rows = [
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Donut', 452, 25.0, 51, 4.9),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Honeycomb', 408, 3.2, 87, 6.5),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Jelly Bean', 375, 0.0, 94, 0.0),
-  createData('KitKat', 518, 26.0, 65, 7.0),
-  createData('Lollipop', 392, 0.2, 98, 0.0),
-  createData('Marshmallow', 318, 0, 81, 2.0),
-  createData('Nougat', 360, 19.0, 9, 37.0),
-  createData('Oreo', 437, 18.0, 63, 4.0),
-];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -90,34 +66,34 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'name',
+    id: 'fname',
     numeric: false,
     disablePadding: true,
-    label: 'Name',
+    label: 'fname',
   },
+    // {
+    //   id: 'lname',
+    //   numeric: true,
+    //   disablePadding: false,
+    //   label: 'lname',
+    // },
   {
-    id: 'calories',
+    id: 'username',
     numeric: true,
     disablePadding: false,
-    label: 'Calories',
+    label: 'username',
   },
   {
-    id: 'fat',
+    id: 'avatar',
     numeric: true,
     disablePadding: false,
-    label: 'Fat (g)',
+    label: 'avatar',
   },
   {
-    id: 'carbs',
+    id: 'action',
     numeric: true,
     disablePadding: false,
-    label: 'Carbs (g)',
-  },
-  {
-    id: 'protein',
-    numeric: true,
-    disablePadding: false,
-    label: 'Protein (g)',
+    label: 'action',
   },
 ];
 
@@ -132,15 +108,15 @@ function EnhancedTableHead(props) {
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          />
+            {/* <Checkbox
+              color="primary"
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              checked={rowCount > 0 && numSelected === rowCount}
+              onChange={onSelectAllClick}
+              inputProps={{
+                'aria-label': 'select all desserts',
+              }}
+            /> */}
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
@@ -179,6 +155,53 @@ EnhancedTableHead.propTypes = {
 
 const EnhancedTableToolbar = (props) => {
   const { numSelected } = props;
+  const [open, setOpen] = React.useState(false);
+  const [fname,setFname] = useState('');
+  const [lname,setLname] = useState('');
+  const [username,setUsername] = useState('');
+  const [avatar,setAvatar] = useState('');
+  const [disableApplyButton, setDisableApplyButton] = React.useState(false);
+
+  useEffect(() => {
+    if (fname!== ''&& lname !== '' ) {
+      setDisableApplyButton(false)
+    } else {
+      setDisableApplyButton(true)
+    }
+  }, [fname,lname]);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    var data = {
+        'fname': fname,
+        'lname': lname,
+        'username': username,
+        'email': 'email',
+        'avatar': avatar,
+      }
+      fetch('https://www.mecallapi.com/api/users/create', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/form-data',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+      .then(res => res.json())
+      .then(
+        (result) => {
+          alert(result['message'])
+          if (result['status'] === 'ok') {
+            window.location.href = '/home';
+          }
+        }
+      )
+  };
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <Toolbar
@@ -191,16 +214,6 @@ const EnhancedTableToolbar = (props) => {
         }),
       }}
     >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
         <Typography
           sx={{ flex: '1 1 100%' }}
           variant="h6"
@@ -209,21 +222,97 @@ const EnhancedTableToolbar = (props) => {
         >
           Appointments
         </Typography>
-      )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
+        <Button onClick={handleClickOpen} variant="contained" color="primary">
+                  CREATE
+                </Button>
+                <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        component="form" noValidate onSubmit={handleSubmit}
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Adding new members to the crew"}
+        </DialogTitle>
+        <Divider />
+        <DialogContent>
+          <Grid
+            container
+            rowSpacing={1}
+            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+          >
+          
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                id="Fristname"
+                label="FristName"
+                variant="outlined"
+                onChange={(e) => setFname(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                id="Lastname"
+                label="Lastname"
+                variant="outlined"
+                onChange={(e) => setLname(e.target.value)}
+              />
+            </Grid>
+            {/* <Grid item xs={6}>
+              <TextField
+                fullWidth
+                id="Email"
+                label="Email"
+                variant="outlined"
+              />
+            </Grid> */}
+            {/* <Grid item xs={6}>
+              <TextField
+                fullWidth
+                id="Age"
+                label="Age"
+                type="number"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Grid> */}
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                id="username"
+                label="username"
+                variant="outlined"
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                id="avatar"
+                label="avatar"
+                variant="outlined"
+                onChange={(e) => setAvatar(e.target.value)}
+              />
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <Divider />
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button 
+          type="submit" 
+          variant="contained"
+          disabled={disableApplyButton}
+          //  onClick={handleClose} 
+          >
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Toolbar>
   );
 };
@@ -239,14 +328,42 @@ export default function EnhancedTable() {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const [users, setUsers] = useState([]);
+    useEffect(() => {
+        UsersGet()
+    }, []);
+    const UsersGet = () => {
+        fetch("https://www.mecallapi.com/api/users")
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    setUsers(result)
+                }
+            )
+    }
+      const UserDelete = id => {
+        var data = {
+          'id': id
+        }
+        fetch('https://www.mecallapi.com/api/users/delete', {
+          method: 'DELETE',
+          headers: {
+            Accept: 'application/form-data',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        })
+        .then(res => res.json())
+        .then(
+          (result) => {
+            alert(result['message'])
+            if (result['status'] === 'ok') {
+              UsersGet();
+            }
+          }
+        )
+      }
+ 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -255,7 +372,7 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
+      const newSelecteds = users.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -296,7 +413,7 @@ export default function EnhancedTable() {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
 
   const UpdateUser = id =>{
     window.location = '/update/'+id
@@ -318,35 +435,35 @@ export default function EnhancedTable() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={users.length}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(users, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.fname);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      // onClick={(event) => handleClick(event, row.fname)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.fname}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
-                        <Checkbox
+                        {/* <Checkbox
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{
                             'aria-labelledby': labelId,
                           }}
-                        />
+                        /> */}
                       </TableCell>
                       <TableCell
                         component="th"
@@ -354,14 +471,14 @@ export default function EnhancedTable() {
                         scope="row"
                         padding="none"
                       >
-                        {row.name}
+                        {row.fname + '\t' + row.lname}
                       </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
+                      {/* <TableCell align="right">{row.lname}</TableCell> */}
+                      <TableCell align="right">{row.username}</TableCell>
+                      <TableCell align="right">{row.avatar}</TableCell>
                       <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">
-                        <Button onClick={() => UpdateUser(row.name)} >Edit</Button>
-                        <Button>Del</Button>
+                        <Button onClick={() => UpdateUser(row.id)} >Edit</Button>
+                        <Button onClick={() => UserDelete(row.id)}>Del</Button>
                       </ButtonGroup>
                       </TableCell>
 
@@ -383,106 +500,14 @@ export default function EnhancedTable() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={users.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Adding new members to the crew"}
-        </DialogTitle>
-        <Divider />
-        <DialogContent>
-          {/* <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending anonymous
-            location data to Google, even when no apps are running.
-          </DialogContentText> */}
-          {/* <Grid container spacing={{ xl: 2, md: 3 }}>
-          <Grid  item xl={6}>
-          <TextField id="outlined-basic" label="Outlined" variant="outlined" />
-          <TextField id="outlined-basic" label="Outlined" variant="outlined" />
-
-          </Grid>
-          <Grid item xl={6}>
-          <TextField id="outlined-basic" label="Outlined" variant="outlined" />
-
-          </Grid>
-          </Grid> */}
-          <Grid
-            container
-            rowSpacing={1}
-            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-          >
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                id="Fristname"
-                label="FristName"
-                variant="outlined"
-              // onChange={handleFirstNameChange}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                id="Lastname"
-                label="Lastname"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                id="Email"
-                label="Email"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                id="Age"
-                label="Age"
-                type="number"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                id="Telephone"
-                label="Telephone"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                id="Gender"
-                label="Gender"
-                variant="outlined"
-              />
-            </Grid>
-          </Grid>
-        </DialogContent>
-        <Divider />
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose} autoFocus>
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
+      
     </Box>
   );
 }

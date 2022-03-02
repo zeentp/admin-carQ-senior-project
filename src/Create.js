@@ -30,39 +30,46 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUp() {
-    const [fname,setFname] = useState('');
-    const [lname,setLname] = useState('');
-    const [username,setUsername] = useState('');
-    const [email,setEmail] = useState('');
+  const [fname, setFname] = useState('');
+  const [lname, setLname] = useState('');
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [disableApplyButton, setDisableApplyButton] = React.useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     var data = {
-        'fname': fname,
-        'lname': lname,
-        'username': username,
-        'email': email,
-        'avatar': 'avatar',
-      }
-      fetch('https://www.mecallapi.com/api/users/create', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/form-data',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      })
+      'fname': fname,
+      'lname': lname,
+      'username': username,
+      'email': email,
+      'avatar': 'avatar',
+    }
+    fetch('https://www.mecallapi.com/api/users/create', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/form-data',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
       .then(res => res.json())
       .then(
         (result) => {
           alert(result['message'])
           if (result['status'] === 'ok') {
-            window.location.href = '/';
+            window.location.href = '/testtable';
           }
         }
       )
   };
-
+  useEffect(() => {
+    if (fname!== '' ) {
+      setDisableApplyButton(false)
+    } else {
+      setDisableApplyButton(true)
+    }
+  }, [fname]);
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -92,6 +99,7 @@ export default function SignUp() {
                   id="fname"
                   label="First Name"
                   autoFocus
+                  value={fname}
                   onChange={(e) => setFname(e.target.value)}
                 />
               </Grid>
@@ -128,7 +136,7 @@ export default function SignUp() {
                   id="password"
                   autoComplete="new-password"
                   onChange={(e) => setUsername(e.target.value)}
-                  
+
                 />
               </Grid>
               <Grid item xs={12}>
@@ -139,6 +147,7 @@ export default function SignUp() {
               </Grid>
             </Grid>
             <Button
+              disabled={disableApplyButton}
               type="submit"
               fullWidth
               variant="contained"
