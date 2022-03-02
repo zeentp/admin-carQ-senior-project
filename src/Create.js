@@ -35,33 +35,47 @@ export default function SignUp() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [disableApplyButton, setDisableApplyButton] = React.useState(false);
-
+  const url = "http://localhost:8080";
+  const axios = require("axios");
   const handleSubmit = (event) => {
     event.preventDefault();
     var data = {
-      'fname': fname,
-      'lname': lname,
-      'username': username,
-      'email': email,
-      'avatar': 'avatar',
+      // 'fname': fname,
+      // 'lname': lname,
+      // 'username': username,
+      // 'email': email,
+      // 'avatar': 'avatar',
+      id: "XDujKGpNWRNOSIUhsYJY",
+      status: true,
+      firstName: fname,
+      lastName: lname,
+      telephone: "084-444-4444",
+      email: email,
+      gender: "male",
+      age: 22,
+
     }
-    fetch('https://www.mecallapi.com/api/users/create', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/form-data',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then(res => res.json())
-      .then(
-        (result) => {
-          alert(result['message'])
-          if (result['status'] === 'ok') {
-            window.location.href = '/testtable';
-          }
-        }
-      )
+    axios.post(url + "/m/create", data).then((res) => {
+      console.log(res);
+      window.location.href = '/testtable';
+    });
+    // fetch('https://www.mecallapi.com/api/users/create', {
+    //   method: 'POST',
+    //   headers: {
+    //     Accept: 'application/form-data',
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(data),
+    // })
+    //   .then(res => res.json())
+    //   .then(
+    //     (result) => {
+    //       alert(result['message'])
+    //       if (result['status'] === 'ok') {
+    //         window.location.href = '/testtable';
+    //       }
+    //     }
+    //   )
   };
   useEffect(() => {
     if (fname!== '' ) {

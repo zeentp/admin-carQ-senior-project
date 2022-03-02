@@ -29,6 +29,8 @@ export default function TestTable() {
   const [email, setEmail] = useState('');
   const [avatar, setAvatar] = useState('');
 
+  const axios = require("axios");
+const url = "http://localhost:8080";
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -39,19 +41,18 @@ export default function TestTable() {
 
   useEffect(() => {
     UsersGet()
+
   }, []);
   const UsersGet = () => {
-    fetch("https://www.mecallapi.com/api/users")
-      .then(res => res.json())
-      .then(
-        (result) => {
-          setUsers(result)
-        }
-      )
+    axios.get(url + "/m/mechanics").then((res) => {
+      console.log(res.data);
+      const list = res.data.map((d) => d);
+      setUsers(list);
+    });
   }
   const UsersGetById = (id) => {
     console.log(id)
-    fetch("https://www.mecallapi.com/api/users/" + id)
+    fetch("http:localhost8080/u/users" + id)
       .then(res => res.json())
       .then(
         (result) => {
@@ -74,23 +75,29 @@ export default function TestTable() {
     var data = {
       'id': id
     }
-    fetch('https://www.mecallapi.com/api/users/delete', {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/form-data',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
+    console.log(id)
+    axios.delete(url + "/m/delete?id=${id}").then((res) => {
+      console.log(res);
+      window.location.href = '/testtable';
     })
-      .then(res => res.json())
-      .then(
-        (result) => {
-          alert(result['message'])
-          if (result['status'] === 'ok') {
-            UsersGet();
-          }
-        }
-      )
+    }
+    // fetch('https://www.mecallapi.com/api/users/delete', {
+    //   method: 'DELETE',
+    //   headers: {
+    //     Accept: 'application/form-data',
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(data),
+    // })
+    //   .then(res => res.json())
+    //   .then(
+    //     (result) => {
+    //       alert(result['message'])
+    //       if (result['status'] === 'ok') {
+    //         UsersGet();
+    //       }
+    //     }
+    //   )
   }
 
   return (
@@ -131,9 +138,9 @@ export default function TestTable() {
                 {user.id}
               </TableCell>
 
-              <TableCell align="right">{user.fname}</TableCell>
-              <TableCell align="right">{user.lname}</TableCell>
-              <TableCell align="right">{user.username}</TableCell>
+              <TableCell align="right">{user.firstName + "\t" + user.lastName}</TableCell>
+              <TableCell align="right">{user.telephone}</TableCell>
+              <TableCell align="right">{user.email}</TableCell>
               <TableCell align="right">{user.avatar}</TableCell>
               <TableCell align="right">
                 <ButtonGroup color="primary" aria-label="outlined primary button group">

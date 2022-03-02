@@ -33,7 +33,7 @@ import { makeStyles } from "@mui/styles";
 import { useEffect, useState } from "react";
 
 const axios = require("axios");
-const url = "http://192.168.2.71:8080";
+const url = "http://localhost:8080";
 
 // axios
 //   .get("http://192.168.1.53:8080/v1/get?id=mechanic_1")
@@ -449,7 +449,7 @@ export default function EnhancedTable() {
   );
   useEffect(() => {
     //Get All Trip
-    axios.get(url + "/mechanics").then((res) => {
+    axios.get(url + "/m/mechanics").then((res) => {
       console.log(res.data);
       const list = res.data.map((d) => d);
       setListOfMechanic(list);
