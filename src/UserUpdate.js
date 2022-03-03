@@ -26,6 +26,8 @@ const useStyles = makeStyles((theme) => ({
   form: {
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(3),
+    // marginLeft: theme.spacing(3),
+
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
@@ -125,10 +127,10 @@ export default function UserUpdate() {
     setTelephone(val);
     };
   return (
-    <Container maxWidth="xs">
+    <Container sx={{pt:10, marginRight:90}} maxWidth="xs">
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          User
+          Crew
         </Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>

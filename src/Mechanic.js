@@ -254,7 +254,7 @@ const EnhancedTableToolbar = (props) => {
         id="tableTitle"
         component="div"
       >
-        Mechenic
+        Mechanic
       </Typography>
       <Button onClick={handleClickOpen} variant="contained" color="primary">
         CREATE
