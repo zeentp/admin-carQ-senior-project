@@ -23,6 +23,8 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { useForm } from "react-hook-form";
+
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -88,6 +90,7 @@ export default function UserUpdate() {
     };
     const handleSubmit = event => {
         event.preventDefault();
+        console.log(isCheck1)
 
         var data = {
             id: id,
@@ -99,10 +102,10 @@ export default function UserUpdate() {
             gender: gender,
             age: 22,
         }
-        axios.put(url + "/m/update", data).then((res) => {
-            console.log(res);
-            window.location.href = '/mechanic';
-        });
+            // axios.put(url + "/m/update", data).then((res) => {
+            //     console.log(res);
+            //     window.location.href = '/mechanic';
+            // });
         // fetch('https://www.mecallapi.com/api/users/update', {
         //   method: 'PUT',
         //   headers: {
@@ -121,17 +124,54 @@ export default function UserUpdate() {
         //   }
         // )
     }
+    // const [textEdit, setTextEdit] = useState('');
+    const [editFlag, setEditFlag] = useState(false);
 
-    const [fname, setFname] = useState('');
+
+    const [fname, setFname] = useState('555');
+    const inputRef = React.useRef(null);
+
     const [lname, setLname] = useState('');
     const [telephone, setTelephone] = useState('');
     const [status, setStatus] = useState('');
     const [gender, setGender] = useState('');
     const [email, setEmail] = useState('');
     const [avatar, setAvatar] = useState('');
-    const handleOnClick = () => {
-        setDisableEditButton(disableEditButton === true ? false : true)
+    const [isCheck1, setIscheck1] = useState(false);
+    const [isCheck2, setIscheck2] = useState(false);
+
+
+    const check1 = async () => {
+        setIscheck1(true)
+        setIscheck2(false)
+        if(isCheck1 === true){
+            setIscheck1(false)
+        }
+
+
     }
+    const check2 = async () => {
+        setIscheck1(false)
+        setIscheck2(true)
+        if(isCheck2 === true){
+            setIscheck2(false)
+        }
+
+    }
+    const handleEditClick = () => {
+        setEditFlag(editFlag === false ? true : false)
+        setDisableEditButton(disableEditButton === false ? true : false)
+        reset()
+
+
+    }
+    function refreshPage() {
+        window.location.reload(false);
+    }
+    // const handleOnClick = () => {
+    //     setDisableEditButton(false)
+    //     handleEditClick()
+    // }
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -152,13 +192,31 @@ export default function UserUpdate() {
         }
         setTelephone(val);
     };
+
+    // const loadInfo = {};
+    const { register, errors, reset } = useForm();
+
+
+
     return (
-        <Box sx={{ pt: 15, pl: 90 }} >
+        <Box sx={{ pt: 15, pl: 60 }} >
             <Paper sx={{ pt: 10, p: 5, width: '666px' }}>
                 <div className={classes.paper}>
                     <Typography component="h1" variant="h5">
                         Accepting an appointment card
                     </Typography>
+                    {editFlag === false ? <Fab
+                        color="secondary"
+                        aria-label="edit"
+                        onClick={handleEditClick}
+                    >
+                        <EditIcon />
+                    </Fab> :
+                        <Button
+                            variant="outlined"
+
+                            onClick={() => refreshPage()}>cancel</Button>}
+
                     <form className={classes.form} onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
@@ -166,16 +224,16 @@ export default function UserUpdate() {
                                     autoComplete="fname"
                                     name="firstName"
                                     variant="outlined"
-                                    required
                                     fullWidth
                                     id="firstName"
                                     label="First Name"
-                                    value={fname}
+                                    defaultValue={fname}
                                     onChange={(e) => setFname(e.target.value)}
                                     autoFocus
                                     disabled={disableEditButton}
                                 />
                             </Grid>
+
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     variant="outlined"
@@ -252,10 +310,10 @@ export default function UserUpdate() {
                                 <FormGroup>
                                     <Grid container spacing={2}>
                                         <Grid item xs={6}>
-                                            <FormControlLabel control={<Checkbox defaultChecked />} label="Label" />
+                                            <FormControlLabel onChange={check1} checked={isCheck1} control={<Checkbox defaultChecked />} label="Accept" />
                                         </Grid>
                                         <Grid item xs={6}>
-                                            <FormControlLabel control={<Checkbox />} label="Disabled" />
+                                            <FormControlLabel onChange={check2} checked={isCheck2} control={<Checkbox />} label="Decline" />
                                         </Grid>
                                     </Grid>
                                 </FormGroup>
@@ -288,13 +346,7 @@ export default function UserUpdate() {
                         >
                             Update
                         </Button>
-                        <Fab
-                            color="secondary"
-                            aria-label="edit"
-                            onClick={handleOnClick}
-                        >
-                            <EditIcon />
-                        </Fab>
+
                     </form>
                 </div>
             </Paper >
@@ -333,7 +385,7 @@ export default function UserUpdate() {
                                 onChange={(e) => setLname(e.target.value)}
                             />
                         </Grid>
-                       
+
                     </Grid>
                 </DialogContent>
                 <DialogActions>
