@@ -32,6 +32,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { useEffect, useState } from "react";
+import UserUpdate from './UserUpdate';
 
 
 function descendingComparator(a, b, orderBy) {
@@ -69,25 +70,25 @@ const headCells = [
     id: 'fname',
     numeric: false,
     disablePadding: true,
-    label: 'fname',
+    label: 'ClientName',
   },
-    // {
-    //   id: 'lname',
-    //   numeric: true,
-    //   disablePadding: false,
-    //   label: 'lname',
-    // },
+  // {
+  //   id: 'lname',
+  //   numeric: true,
+  //   disablePadding: false,
+  //   label: 'lname',
+  // },
   {
     id: 'username',
     numeric: true,
     disablePadding: false,
-    label: 'username',
+    label: 'Date',
   },
   {
     id: 'avatar',
     numeric: true,
     disablePadding: false,
-    label: 'avatar',
+    label: 'Telephone',
   },
   {
     id: 'action',
@@ -108,7 +109,7 @@ function EnhancedTableHead(props) {
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
-            {/* <Checkbox
+          {/* <Checkbox
               color="primary"
               indeterminate={numSelected > 0 && numSelected < rowCount}
               checked={rowCount > 0 && numSelected === rowCount}
@@ -156,36 +157,36 @@ EnhancedTableHead.propTypes = {
 const EnhancedTableToolbar = (props) => {
   const { numSelected } = props;
   const [open, setOpen] = React.useState(false);
-  const [fname,setFname] = useState('');
-  const [lname,setLname] = useState('');
-  const [username,setUsername] = useState('');
-  const [avatar,setAvatar] = useState('');
+  const [fname, setFname] = useState('');
+  const [lname, setLname] = useState('');
+  const [username, setUsername] = useState('');
+  const [avatar, setAvatar] = useState('');
   const [disableApplyButton, setDisableApplyButton] = React.useState(false);
 
   useEffect(() => {
-    if (fname!== ''&& lname !== '' ) {
+    if (fname !== '' && lname !== '') {
       setDisableApplyButton(false)
     } else {
       setDisableApplyButton(true)
     }
-  }, [fname,lname]);
+  }, [fname, lname]);
   const handleSubmit = (event) => {
     event.preventDefault();
     var data = {
-        'fname': fname,
-        'lname': lname,
-        'username': username,
-        'email': 'email',
-        'avatar': avatar,
-      }
-      fetch('https://www.mecallapi.com/api/users/create', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/form-data',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      })
+      'fname': fname,
+      'lname': lname,
+      'username': username,
+      'email': 'email',
+      'avatar': avatar,
+    }
+    fetch('https://www.mecallapi.com/api/users/create', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/form-data',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
       .then(res => res.json())
       .then(
         (result) => {
@@ -214,18 +215,18 @@ const EnhancedTableToolbar = (props) => {
         }),
       }}
     >
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          Appointments
-        </Typography>
-        <Button onClick={handleClickOpen} variant="contained" color="primary">
-                  CREATE
-                </Button>
-                <Dialog
+      <Typography
+        sx={{ flex: '1 1 100%' }}
+        variant="h6"
+        id="tableTitle"
+        component="div"
+      >
+        Appointments
+      </Typography>
+      <Button onClick={handleClickOpen} variant="contained" color="primary">
+        CREATE
+      </Button>
+      <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
@@ -242,7 +243,7 @@ const EnhancedTableToolbar = (props) => {
             rowSpacing={1}
             columnSpacing={{ xs: 1, sm: 2, md: 3 }}
           >
-          
+
             <Grid item xs={6}>
               <TextField
                 fullWidth
@@ -303,10 +304,10 @@ const EnhancedTableToolbar = (props) => {
         <Divider />
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button 
-          type="submit" 
-          variant="contained"
-          disabled={disableApplyButton}
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={disableApplyButton}
           //  onClick={handleClose} 
           >
             Confirm
@@ -329,41 +330,41 @@ export default function EnhancedTable() {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [users, setUsers] = useState([]);
-    useEffect(() => {
-        UsersGet()
-    }, []);
-    const UsersGet = () => {
-        fetch("https://www.mecallapi.com/api/users")
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    setUsers(result)
-                }
-            )
-    }
-      const UserDelete = id => {
-        var data = {
-          'id': id
+  useEffect(() => {
+    UsersGet()
+  }, []);
+  const UsersGet = () => {
+    fetch("https://www.mecallapi.com/api/users")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          setUsers(result)
         }
-        fetch('https://www.mecallapi.com/api/users/delete', {
-          method: 'DELETE',
-          headers: {
-            Accept: 'application/form-data',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        })
-        .then(res => res.json())
-        .then(
-          (result) => {
-            alert(result['message'])
-            if (result['status'] === 'ok') {
-              UsersGet();
-            }
+      )
+  }
+  const UserDelete = id => {
+    var data = {
+      'id': id
+    }
+    fetch('https://www.mecallapi.com/api/users/delete', {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/form-data',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then(res => res.json())
+      .then(
+        (result) => {
+          alert(result['message'])
+          if (result['status'] === 'ok') {
+            UsersGet();
           }
-        )
-      }
- 
+        }
+      )
+  }
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -408,17 +409,19 @@ export default function EnhancedTable() {
     setPage(0);
   };
 
-  
+
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
 
-  const UpdateUser = id =>{
-    window.location = '/update/'+id
+  const UpdateUser = id => {
+    window.location = '/detail'
   }
-
+  const handleDetailClick = id => {
+    window.location = '/update/' + id
+  }
   return (
     <Box sx={{ width: '95%', pl: 45, pt: 15 }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -451,12 +454,15 @@ export default function EnhancedTable() {
                       hover
                       // onClick={(event) => handleClick(event, row.fname)}
                       role="checkbox"
+                      // onClick={() => handleDetailClick(row.id)}
                       aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={row.fname}
                       selected={isItemSelected}
                     >
-                      <TableCell padding="checkbox">
+                      <TableCell
+
+                        padding="checkbox">
                         {/* <Checkbox
                           color="primary"
                           checked={isItemSelected}
@@ -477,7 +483,8 @@ export default function EnhancedTable() {
                       <TableCell align="right">{row.username}</TableCell>
                       <TableCell align="right">{row.avatar}</TableCell>
                       <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">
-                        <Button onClick={() => UpdateUser(row.id)} >Edit</Button>
+                        <Button onClick={() => UpdateUser(row.id)}
+                        >View</Button>
                         <Button onClick={() => UserDelete(row.id)}>Del</Button>
                       </ButtonGroup>
                       </TableCell>
@@ -507,7 +514,7 @@ export default function EnhancedTable() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      
+
     </Box>
   );
 }

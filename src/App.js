@@ -8,12 +8,14 @@ import Dashboard from './Dashboard';
 import UserUpdate from './UserUpdate';
 import TestTable from './TestTable';
 import Create from './Create';
+import Detail from './Detail';
+
 
 
 
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Update } from '@mui/icons-material';
+import { Details, Update } from '@mui/icons-material';
 
 const theme = createTheme({
  
@@ -32,6 +34,7 @@ function App() {
         <Route path="TestTable" element={<TestTable />} />
         <Route path="mechanic" element={<Mechanic />} />
         <Route path="dashboard" element={<Dashboard />} />
+        <Route path="detail" element={<Detail />} />
         <Route path="create" element={<Create />} />
         <Route path='/update/:id' element={<UserUpdate/>} />
 
