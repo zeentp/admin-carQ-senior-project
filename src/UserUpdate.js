@@ -9,9 +9,10 @@ import { useParams } from 'react-router-dom';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
-
-
+import Fab from '@mui/material/Fab';
+import EditIcon from '@mui/icons-material/Edit';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -38,8 +39,10 @@ export default function UserUpdate() {
   const classes = useStyles();
   const axios = require("axios");
   const url = "http://192.168.1.53:8080";
+  const [editFlag, setEditFlag] = useState(false);
+  const [disableEditButton, setDisableEditButton] = React.useState(true);
   const { id } = useParams();
-  
+
   useEffect(() => {
     axios.get(url + "/m/get?id=" + id)
       // .then(res => console.log(res.data))
@@ -66,11 +69,11 @@ export default function UserUpdate() {
   }, [id])
 
   const handleChange = (event) => {
-    setGender(event.target.value);    
+    setGender(event.target.value);
   };
   const handleSubmit = event => {
     event.preventDefault();
- 
+
     var data = {
       id: id,
       status: true,
@@ -106,11 +109,12 @@ export default function UserUpdate() {
 
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
-  const [telephone,setTelephone] = useState('');
+  const [telephone, setTelephone] = useState('');
   const [status, setStatus] = useState('');
   const [gender, setGender] = useState('');
   const [email, setEmail] = useState('');
   const [avatar, setAvatar] = useState('');
+  const [alertOpen, setAlertOpen] = React.useState(false);
 
   const handlePhoneChange = (event) => {
     var val = event.target.value.replace(/[^0-9]/g, "");
@@ -125,13 +129,51 @@ export default function UserUpdate() {
       val = "";
     }
     setTelephone(val);
-    };
+  };
+
+  const handleEditClick = () => {
+    setEditFlag(editFlag === false ? true : false)
+    setDisableEditButton(disableEditButton === false ? true : false)
+    setAlertOpen(true)
+
+
+  }
+
+
+
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+  const handleAlertClose = (event, reason) => {
+    if (reason === 'clickaway') {
+        return;
+    }
+    setAlertOpen(false);
+};
+
+
+
+  function refreshPage() {
+    window.location.reload(false);
+  }
+
   return (
-    <Container sx={{pt:10, marginRight:90}} maxWidth="xs">
+    <Container sx={{ pt: 10, marginRight: 90 }} maxWidth="xs">
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
           Crew
         </Typography>
+        {editFlag === false ? <Fab
+          color="secondary"
+          aria-label="edit"
+          onClick={handleEditClick}
+        >
+          <EditIcon />
+        </Fab> :
+          <Button
+            variant="outlined"
+
+            onClick={() => refreshPage()}>cancel</Button>}
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
@@ -146,6 +188,7 @@ export default function UserUpdate() {
                 value={fname}
                 onChange={(e) => setFname(e.target.value)}
                 autoFocus
+                disabled={disableEditButton}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -157,6 +200,7 @@ export default function UserUpdate() {
                 label="Last Name"
                 value={lname}
                 onChange={(e) => setLname(e.target.value)}
+                disabled={disableEditButton}
               />
             </Grid>
             <Grid item xs={12}>
@@ -168,6 +212,7 @@ export default function UserUpdate() {
                 label="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                disabled={disableEditButton}
               />
             </Grid>
             <Grid item xs={12}>
@@ -180,11 +225,12 @@ export default function UserUpdate() {
                 value={telephone}
                 inputProps={{ maxLength: 12 }}
                 onChange={handlePhoneChange}
-                // onChange={(e) => setTelephone(e.target.value)}
+                disabled={disableEditButton}
+              // onChange={(e) => setTelephone(e.target.value)}
               />
             </Grid>
             <Grid item xs={12}>
-            {/* <FormControl fullWidth>
+              {/* <FormControl fullWidth>
             <InputLabel id="gender-select-label">Gender</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
@@ -212,6 +258,11 @@ export default function UserUpdate() {
           </Button>
         </form>
       </div>
+      <Snackbar open={alertOpen} autoHideDuration={6000} onClose={handleAlertClose}>
+        <Alert onClose={handleAlertClose} severity="info" sx={{ width: '100%' }}>
+          Editing
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }

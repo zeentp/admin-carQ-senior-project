@@ -10,7 +10,7 @@ import Divider from "@mui/material/Divider";
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
+import { Table, InputAdornment, } from '@mui/material';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -33,7 +33,8 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { useEffect, useState } from "react";
 import UserUpdate from './UserUpdate';
-
+import SearchIcon from "@mui/icons-material/Search";
+import { filter } from "lodash";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -72,12 +73,6 @@ const headCells = [
     disablePadding: true,
     label: 'ClientName',
   },
-  // {
-  //   id: 'lname',
-  //   numeric: true,
-  //   disablePadding: false,
-  //   label: 'lname',
-  // },
   {
     id: 'username',
     numeric: true,
@@ -162,7 +157,8 @@ const EnhancedTableToolbar = (props) => {
   const [username, setUsername] = useState('');
   const [avatar, setAvatar] = useState('');
   const [disableApplyButton, setDisableApplyButton] = React.useState(false);
-
+  const [anchorFilter, setAnchorFilter] = React.useState(null);
+  const { filterName, onFilterName } = props;
   useEffect(() => {
     if (fname !== '' && lname !== '') {
       setDisableApplyButton(false)
@@ -170,6 +166,9 @@ const EnhancedTableToolbar = (props) => {
       setDisableApplyButton(true)
     }
   }, [fname, lname]);
+  const handleSearchFilter = (event) => {
+    setAnchorFilter(event.currentTarget);
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
     var data = {
@@ -197,6 +196,9 @@ const EnhancedTableToolbar = (props) => {
         }
       )
   };
+  const handleClickFilter = (event) => {
+    setAnchorFilter(event.currentTarget);
+  };
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -220,9 +222,25 @@ const EnhancedTableToolbar = (props) => {
         variant="h6"
         id="tableTitle"
         component="div"
+        textAlign={'start'}
       >
         Appointments
       </Typography>
+      <TextField
+        value={filterName}
+        onChange={onFilterName}
+        // label="ค้นหา"
+        placeholder="ค้นหา"
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <IconButton>
+                <SearchIcon />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />
       <Button onClick={handleClickOpen} variant="contained" color="primary">
         CREATE
       </Button>
@@ -320,6 +338,8 @@ const EnhancedTableToolbar = (props) => {
 
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
+  filterName: PropTypes.string,
+  onFilterName: PropTypes.func,
 };
 
 export default function EnhancedTable() {
@@ -330,6 +350,38 @@ export default function EnhancedTable() {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [users, setUsers] = useState([]);
+  const [filterName, setFilterName] = React.useState("");
+
+  const handleFilterByName = (event) => {
+    setFilterName(event.target.value);
+  };
+
+  const filteredInvoice = applySortFilter(
+    users,
+    getComparator(order, orderBy),
+    filterName
+  );
+
+  function applySortFilter(array, comparator, query) {
+    console.log("applySortFilter");
+    const stabilizedThis = array.map((el, index) => [el, index]);
+    stabilizedThis.sort((a, b) => {
+      const order = comparator(a[0], b[0]);
+      if (order !== 0) return order;
+      return a[1] - b[1];
+    });
+    if (query) {
+      return filter(
+        array,
+        (_user) => _user.fname.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      );
+    }
+    return stabilizedThis.map((el) => el[0]);
+  }
+
+
+
+
   useEffect(() => {
     UsersGet()
   }, []);
@@ -342,6 +394,7 @@ export default function EnhancedTable() {
         }
       )
   }
+
   const UserDelete = id => {
     var data = {
       'id': id
@@ -425,7 +478,9 @@ export default function EnhancedTable() {
   return (
     <Box sx={{ width: '95%', pl: 45, pt: 15 }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar filterName={filterName}
+          onFilterName={handleFilterByName} 
+          numSelected={selected.length} />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -443,7 +498,8 @@ export default function EnhancedTable() {
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(users, getComparator(order, orderBy))
+              {/* {stableSort(users, getComparator(order, orderBy)) */}
+              {filteredInvoice
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.fname);

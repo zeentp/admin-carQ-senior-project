@@ -16,12 +16,12 @@ import { Link } from "react-router-dom";
 import DriveEtaIcon from '@mui/icons-material/DriveEta';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import EngineeringIcon from '@mui/icons-material/Engineering';
-
+import DashboardIcon from '@mui/icons-material/Dashboard';
 const drawerWidth = 240;
 
 export default function Navbar() {
     const [menu, setMenu] = React.useState("");
-    const listMenuTitle = ['Home', 'Crew']
+    const listMenuTitle = ['Home', 'Crew','Dashboard']
     let navigate = useNavigate();
 
     function changePage(page) {
@@ -34,7 +34,7 @@ export default function Navbar() {
                 navigate("mechanic");
                 break;
             case "Dashboard":
-                navigate("testtable");
+                navigate("dashboardPage");
                 break;
             default:
                 navigate("/");
@@ -94,7 +94,7 @@ export default function Navbar() {
                     {listMenuTitle.map((text, index) => (
                         <ListItem button key={text} onClick={() => changePage(text)} >
                             <ListItemIcon>
-                                {index === 0 ? <HomeIcon sx={{ color: "white" }} /> : <EngineeringIcon sx={{ color: "white" }} />}
+                                {text === 'Home' ? <HomeIcon sx={{ color: "white" }} /> : text === 'Crew' ? <EngineeringIcon sx={{ color: "white" }}/> : <DashboardIcon sx={{ color: "white" }}/>}
 
                             </ListItemIcon>
                             <ListItemText primary={text} />

@@ -9,6 +9,8 @@ import UserUpdate from './UserUpdate';
 import TestTable from './TestTable';
 import Create from './Create';
 import Detail from './Detail';
+import DashboardPage from './Dashboard/DashboardPage';
+
 
 
 
@@ -37,6 +39,8 @@ function App() {
         <Route path="detail" element={<Detail />} />
         <Route path="create" element={<Create />} />
         <Route path='/update/:id' element={<UserUpdate/>} />
+        <Route path="dashboardPage" element={<DashboardPage />} />
+
 
       </Routes>
       </ThemeProvider>

@@ -24,6 +24,10 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useForm } from "react-hook-form";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import { useTheme } from '@mui/material/styles';
+import OutlinedInput from '@mui/material/OutlinedInput';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -51,8 +55,83 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
+    },
+};
+
+const names = [
+    'Oliver Hansen',
+    'Van Henry',
+    'April Tucker',
+    'Ralph Hubbard',
+    'Omar Alexander',
+    'Carlos Abbott',
+    'Miriam Wagner',
+    'Bradley Wilkerson',
+    'Virginia Andrews',
+    'Kelly Snyder',
+];
+
+function getStyles(name, personName, theme) {
+    return {
+        fontWeight:
+            personName.indexOf(name) === -1
+                ? theme.typography.fontWeightRegular
+                : theme.typography.fontWeightMedium,
+    };
+}
+
+const MultipleSelect = () => {
+    const theme = useTheme();
+    const [personName, setPersonName] = React.useState([]);
+
+    const handleChange = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setPersonName(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+    };
+
+    return (
+        <div>
+            <FormControl sx={{width: "100%" }}>
+                <InputLabel id="demo-multiple-name-label">Mechanic</InputLabel>
+                <Select
+                    labelId="demo-multiple-name-label"
+                    id="demo-multiple-name"
+                    multiple
+                    value={personName}
+                    onChange={handleChange}
+                    input={<OutlinedInput label="Mechanic" />}
+                    MenuProps={MenuProps}
+                >
+                    {names.map((name) => (
+                        <MenuItem
+                            key={name}
+                            value={name}
+                            style={getStyles(name, personName, theme)}
+                        >
+                            {name}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
+        </div>
+    );
+}
 export default function UserUpdate() {
     const [open, setOpen] = React.useState(false);
+    const [alertOpen, setAlertOpen] = React.useState(false);
     const classes = useStyles();
     const axios = require("axios");
     const url = "http://192.168.1.53:8080";
@@ -102,10 +181,10 @@ export default function UserUpdate() {
             gender: gender,
             age: 22,
         }
-            // axios.put(url + "/m/update", data).then((res) => {
-            //     console.log(res);
-            //     window.location.href = '/mechanic';
-            // });
+        // axios.put(url + "/m/update", data).then((res) => {
+        //     console.log(res);
+        //     window.location.href = '/mechanic';
+        // });
         // fetch('https://www.mecallapi.com/api/users/update', {
         //   method: 'PUT',
         //   headers: {
@@ -144,7 +223,7 @@ export default function UserUpdate() {
     const check1 = async () => {
         setIscheck1(true)
         setIscheck2(false)
-        if(isCheck1 === true){
+        if (isCheck1 === true) {
             setIscheck1(false)
         }
 
@@ -153,7 +232,7 @@ export default function UserUpdate() {
     const check2 = async () => {
         setIscheck1(false)
         setIscheck2(true)
-        if(isCheck2 === true){
+        if (isCheck2 === true) {
             setIscheck2(false)
         }
 
@@ -161,6 +240,7 @@ export default function UserUpdate() {
     const handleEditClick = () => {
         setEditFlag(editFlag === false ? true : false)
         setDisableEditButton(disableEditButton === false ? true : false)
+        setAlertOpen(true)
         reset()
 
 
@@ -193,6 +273,16 @@ export default function UserUpdate() {
         setTelephone(val);
     };
 
+    const Alert = React.forwardRef(function Alert(props, ref) {
+        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    });
+
+    const handleAlertClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setAlertOpen(false);
+    };
     // const loadInfo = {};
     const { register, errors, reset } = useForm();
 
@@ -272,7 +362,10 @@ export default function UserUpdate() {
                                 // onChange={(e) => setTelephone(e.target.value)}
                                 />
                             </Grid>
-                            <Grid item xs={10}>
+                            <Grid item xs={12}>
+                                <MultipleSelect></MultipleSelect>
+                            </Grid>
+                            {/* <Grid item xs={10}>
                                 <TextField
                                     variant="outlined"
                                     required
@@ -293,18 +386,28 @@ export default function UserUpdate() {
                                 >
                                     <AddIcon />
                                 </Fab>
+                            </Grid> */}
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    id="issue"
+                                    label="issue"
+                                    disabled={disableEditButton}
+                                // onChange={(e) => setTelephone(e.target.value)}
+                                />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
                                     variant="outlined"
                                     required
                                     fullWidth
-                                    id="note"
+                                    id="Note"
                                     label="Note"
                                     disabled={disableEditButton}
                                 // onChange={(e) => setTelephone(e.target.value)}
                                 />
-
                             </Grid>
                             <Grid item xs={12}>
                                 <FormGroup>
@@ -400,6 +503,11 @@ export default function UserUpdate() {
                     </Button>
                 </DialogActions>
             </Dialog>
+            <Snackbar open={alertOpen} autoHideDuration={6000} onClose={handleAlertClose}>
+                <Alert onClose={handleAlertClose} severity="info" sx={{ width: '100%' }}>
+                    Editing
+                </Alert>
+            </Snackbar>
         </Box>
     );
 

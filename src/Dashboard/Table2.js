@@ -1,66 +1,38 @@
 import * as React from 'react';
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import Divider from "@mui/material/Divider";
 import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
+import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import { Paper } from "@mui/material";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import { useEffect, useState } from "react";
-import TableSortLabel from '@mui/material/TableSortLabel';
-import { visuallyHidden } from '@mui/utils';
-import Divider from "@mui/material/Divider";
-import DialogActions from "@mui/material/DialogActions";
-import Toolbar from '@mui/material/Toolbar';
-import Button from "@mui/material/Button";
-import ButtonGroup from '@mui/material/ButtonGroup';
-import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import { alpha } from '@mui/material/styles';
 import TablePagination from '@mui/material/TablePagination';
-
-
-
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Button from "@mui/material/Button";
+import TableRow from '@mui/material/TableRow';
+import TableSortLabel from '@mui/material/TableSortLabel';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
+import Checkbox from '@mui/material/Checkbox';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import DeleteIcon from '@mui/icons-material/Delete';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import { visuallyHidden } from '@mui/utils';
+import { useEffect, useState } from "react";
+import UserUpdate from '../UserUpdate';
 
 
 function descendingComparator(a, b, orderBy) {
@@ -100,12 +72,6 @@ const headCells = [
     disablePadding: true,
     label: 'ClientName',
   },
-  // {
-  //   id: 'lname',
-  //   numeric: true,
-  //   disablePadding: false,
-  //   label: 'lname',
-  // },
   {
     id: 'username',
     numeric: true,
@@ -125,6 +91,7 @@ const headCells = [
     label: 'action',
   },
 ];
+
 function EnhancedTableHead(props) {
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
     props;
@@ -171,6 +138,16 @@ function EnhancedTableHead(props) {
     </TableHead>
   );
 }
+
+EnhancedTableHead.propTypes = {
+  numSelected: PropTypes.number.isRequired,
+  onRequestSort: PropTypes.func.isRequired,
+  onSelectAllClick: PropTypes.func.isRequired,
+  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  orderBy: PropTypes.string.isRequired,
+  rowCount: PropTypes.number.isRequired,
+};
+
 const EnhancedTableToolbar = (props) => {
   const { numSelected } = props;
   const [open, setOpen] = React.useState(false);
@@ -237,6 +214,7 @@ const EnhancedTableToolbar = (props) => {
         variant="h6"
         id="tableTitle"
         component="div"
+        textAlign={'start'}
       >
         Appointments
       </Typography>
@@ -338,15 +316,8 @@ const EnhancedTableToolbar = (props) => {
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
-EnhancedTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
-};
-const EnhancedTable =()=> {
+
+export default function Table1() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -447,7 +418,7 @@ const EnhancedTable =()=> {
     window.location = '/update/' + id
   }
   return (
-    <Box sx={{ width: '95%', pl: 45, pt: 15 }}>
+    <Box sx={{ width: '100%'}}>
       <Paper sx={{ width: '100%', mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
@@ -540,92 +511,5 @@ const EnhancedTable =()=> {
       </Paper>
 
     </Box>
-  );
-}
-export default function BasicTabs() {
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-  // const [users, setUsers] = useState([]);
-  const [open, setOpen] = React.useState(false);
-  const [fname, setFname] = useState('');
-  const [lname, setLname] = useState('');
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [avatar, setAvatar] = useState('');
-
-
-  function createData(name, lastname,) {
-    return { name, lastname };
-  }
-  const users = [
-    createData('Frozen yoghurt', 'yoghurt'),
-   
-  ];
-  return (
-    <Box sx={{ width: '100%', pt: 20, pl: 40 }}>
-      <Paper sx={{ pt: 20, p: 5, width: '95%' ,backgroundColor:'#4b636e'}}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-            <Tab sx={{color: 'white'}} label="Today" {...a11yProps(0)} />
-            <Tab sx={{color: 'white'}} label="Item Two" {...a11yProps(1)} />
-            <Tab sx={{color: 'white'}} label="Item Three" {...a11yProps(2)} />
-          </Tabs>
-        </Box>
-        <TabPanel value={value} index={0}>
-          <TableContainer component={Paper}>
-            <Box display="flex">
-              <Box flexGrow={1}>
-                <Typography textAlign='start'  variant="h6" color="primary" gutterBottom>
-                  USERS
-                </Typography>
-              </Box>
-              <Box>
-              </Box>
-            </Box>
-            <Table sx={{ Width: '50%' }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>ID</TableCell>
-                  <TableCell align="right">Fname</TableCell>
-                  <TableCell align="right">Lname</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {users.map((user) => (
-                  <TableRow
-                    key={user.id}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {user.id}
-                    </TableCell>
-
-                    <TableCell align="right">{user.name + "\t" + user.lastName}</TableCell>
-                    {/* <TableCell align="right">{user.telephone}</TableCell> */}
-                    <TableCell align="right">
-                      {/* <ButtonGroup color="primary" aria-label="outlined primary button group">
-                <Button onClick={() => UpdateUser(user.id)}>Edit</Button>
-                <Button onClick={() => UserDelete(user.id)}>Del</Button>
-              </ButtonGroup> */}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <EnhancedTable
-          ></EnhancedTable>
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          Item Three
-        </TabPanel>
-      </Paper>
-    </Box>
-
   );
 }
