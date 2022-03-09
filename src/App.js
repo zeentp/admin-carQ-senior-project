@@ -36,7 +36,7 @@ function App() {
         <Route path="TestTable" element={<TestTable />} />
         <Route path="mechanic" element={<Mechanic />} />
         <Route path="dashboard" element={<Dashboard />} />
-        <Route path="detail" element={<Detail />} />
+        <Route path="/detail/:id" element={<Detail />} />
         <Route path="create" element={<Create />} />
         <Route path='/update/:id' element={<UserUpdate/>} />
         <Route path="dashboardPage" element={<DashboardPage />} />

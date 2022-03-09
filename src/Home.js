@@ -229,11 +229,12 @@ const EnhancedTableToolbar = (props) => {
       <TextField
         value={filterName}
         onChange={onFilterName}
+        // sx={{width:'200px',height:'10px'}}
         // label="ค้นหา"
         placeholder="ค้นหา"
         InputProps={{
           startAdornment: (
-            <InputAdornment position="start">
+            <InputAdornment  position="start">
               <IconButton>
                 <SearchIcon />
               </IconButton>
@@ -351,7 +352,18 @@ export default function EnhancedTable() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [users, setUsers] = useState([]);
   const [filterName, setFilterName] = React.useState("");
-
+   const axios = require("axios");
+  const url = "http://192.168.1.144:8080";
+  function createData(name, date, telephone, status, issue) {
+    return { name, date, telephone, status, issue };
+  }
+  
+  const rows = [
+    createData('Frozen yoghurt', '09-03-2565',null, 'air-filter'),
+    createData('Ray yoghurt', '09-03-2565',null, 'engine'),
+    createData('Zee yoghurt', '09-03-2565',null, 'port'),
+    createData('Aet yoghurt', '09-03-2565',null, 'air'),
+  ];
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
@@ -373,7 +385,7 @@ export default function EnhancedTable() {
     if (query) {
       return filter(
         array,
-        (_user) => _user.fname.toLowerCase().indexOf(query.toLowerCase()) !== -1
+        (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
       );
     }
     return stabilizedThis.map((el) => el[0]);
@@ -383,8 +395,20 @@ export default function EnhancedTable() {
 
 
   useEffect(() => {
-    UsersGet()
+    getAppointment()
+    // UsersGet()
   }, []);
+  const getAppointment = () => {
+    axios.get(url + "/a/appointments").then((res) => {
+      console.log(res.data);
+      const list = res.data.map((d) => d);
+      setUsers(list);
+    });
+  }
+  const  formatDate =(d) =>{
+    const date = new Date(d*1000).toLocaleString('fr-FR')
+    return date
+  }
   const UsersGet = () => {
     fetch("https://www.mecallapi.com/api/users")
       .then(res => res.json())
@@ -393,6 +417,12 @@ export default function EnhancedTable() {
           setUsers(result)
         }
       )
+    // axios.get(url + "/a/appointments").then((res) => {
+    //   console.log(res.data);
+    //   const list = res.data.map((d) => d);
+    //   setUsers(list);
+    // });
+    // console.log(users)
   }
 
   const UserDelete = id => {
@@ -412,7 +442,7 @@ export default function EnhancedTable() {
         (result) => {
           alert(result['message'])
           if (result['status'] === 'ok') {
-            UsersGet();
+            getAppointment();
           }
         }
       )
@@ -469,8 +499,8 @@ export default function EnhancedTable() {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
 
-  const UpdateUser = id => {
-    window.location = '/detail'
+  const viewUser = id => {
+    window.location = '/detail/'+id
   }
   const handleDetailClick = id => {
     window.location = '/update/' + id
@@ -502,9 +532,8 @@ export default function EnhancedTable() {
               {filteredInvoice
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.fname);
+                  const isItemSelected = isSelected(row.name);
                   const labelId = `enhanced-table-checkbox-${index}`;
-
                   return (
                     <TableRow
                       hover
@@ -513,7 +542,7 @@ export default function EnhancedTable() {
                       // onClick={() => handleDetailClick(row.id)}
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.fname}
+                      key={row.name}
                       selected={isItemSelected}
                     >
                       <TableCell
@@ -533,13 +562,13 @@ export default function EnhancedTable() {
                         scope="row"
                         padding="none"
                       >
-                        {row.fname + '\t' + row.lname}
+                        {row.name}
                       </TableCell>
                       {/* <TableCell align="right">{row.lname}</TableCell> */}
-                      <TableCell align="right">{row.username}</TableCell>
-                      <TableCell align="right">{row.avatar}</TableCell>
+                      <TableCell align="right">{formatDate(row.create_at.seconds)}</TableCell>
+                      <TableCell align="right">{row.telephone}</TableCell>
                       <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">
-                        <Button onClick={() => UpdateUser(row.id)}
+                        <Button onClick={() => viewUser(row.appointment_id)}
                         >View</Button>
                         <Button onClick={() => UserDelete(row.id)}>Del</Button>
                       </ButtonGroup>
@@ -548,6 +577,7 @@ export default function EnhancedTable() {
                     </TableRow>
                   );
                 })}
+              
               {emptyRows > 0 && (
                 <TableRow
                   style={{

@@ -66,18 +66,18 @@ const MenuProps = {
     },
 };
 
-const names = [
-    'Oliver Hansen',
-    'Van Henry',
-    'April Tucker',
-    'Ralph Hubbard',
-    'Omar Alexander',
-    'Carlos Abbott',
-    'Miriam Wagner',
-    'Bradley Wilkerson',
-    'Virginia Andrews',
-    'Kelly Snyder',
-];
+// const names = [
+//     'Oliver Hansen',
+//     'Van Henry',
+//     'April Tucker',
+//     'Ralph Hubbard',
+//     'Omar Alexander',
+//     'Carlos Abbott',
+//     'Miriam Wagner',
+//     'Bradley Wilkerson',
+//     'Virginia Andrews',
+//     'Kelly Snyder',
+// ];
 
 function getStyles(name, personName, theme) {
     return {
@@ -90,7 +90,23 @@ function getStyles(name, personName, theme) {
 
 const MultipleSelect = () => {
     const theme = useTheme();
+    const { id } = useParams();
+    const [mechanics, setMechanics] = React.useState([]);
     const [personName, setPersonName] = React.useState([]);
+    const [users, setUsers] = useState([]);
+    const [names, setNames] = useState([]);
+    const axios = require("axios");
+    const url = "http://192.168.1.144:8080";
+    useEffect(() => {
+        axios.get(url + "/a/details?id=" + id)
+            .then(
+                (result) => {
+                    console.log(result.data)
+                    setMechanics(result.data.mechanic)
+                })
+    }, [id])
+
+
 
     const handleChange = (event) => {
         const {
@@ -104,7 +120,7 @@ const MultipleSelect = () => {
 
     return (
         <div>
-            <FormControl sx={{width: "100%" }}>
+            <FormControl sx={{ width: "100%" }}>
                 <InputLabel id="demo-multiple-name-label">Mechanic</InputLabel>
                 <Select
                     labelId="demo-multiple-name-label"
@@ -115,7 +131,7 @@ const MultipleSelect = () => {
                     input={<OutlinedInput label="Mechanic" />}
                     MenuProps={MenuProps}
                 >
-                    {names.map((name) => (
+                    {mechanics.map((name) => (
                         <MenuItem
                             key={name}
                             value={name}
@@ -133,14 +149,14 @@ export default function UserUpdate() {
     const [open, setOpen] = React.useState(false);
     const [alertOpen, setAlertOpen] = React.useState(false);
     const classes = useStyles();
-    const axios = require("axios");
-    const url = "http://192.168.1.53:8080";
     const { id } = useParams();
     const [disableEditButton, setDisableEditButton] = React.useState(true);
+    const axios = require("axios");
+    const url = "http://192.168.1.144:8080";
 
 
     useEffect(() => {
-        axios.get(url + "/m/get?id=" + id)
+        axios.get(url + "/a/details?id=" + id)
             // .then(res => console.log(res.data))
             .then(
                 (result) => {
@@ -150,6 +166,7 @@ export default function UserUpdate() {
                     setEmail(result.data.email)
                     setTelephone(result.data.telephone)
                     setGender(result.data.gender)
+                    setIssue(result.data.description)
                 })
         // fetch("https://www.mecallapi.com/api/users/"+id)
         //   .then(res => res.json())
@@ -207,14 +224,14 @@ export default function UserUpdate() {
     const [editFlag, setEditFlag] = useState(false);
 
 
-    const [fname, setFname] = useState('555');
+    const [fname, setFname] = useState('');
     const inputRef = React.useRef(null);
-
     const [lname, setLname] = useState('');
     const [telephone, setTelephone] = useState('');
     const [status, setStatus] = useState('');
     const [gender, setGender] = useState('');
     const [email, setEmail] = useState('');
+    const [issue, setIssue] = useState('');
     const [avatar, setAvatar] = useState('');
     const [isCheck1, setIscheck1] = useState(false);
     const [isCheck2, setIscheck2] = useState(false);
@@ -317,7 +334,7 @@ export default function UserUpdate() {
                                     fullWidth
                                     id="firstName"
                                     label="First Name"
-                                    defaultValue={fname}
+                                    value={fname}
                                     onChange={(e) => setFname(e.target.value)}
                                     autoFocus
                                     disabled={disableEditButton}
@@ -392,6 +409,7 @@ export default function UserUpdate() {
                                     variant="outlined"
                                     required
                                     fullWidth
+                                    value={issue}
                                     id="issue"
                                     label="issue"
                                     disabled={disableEditButton}

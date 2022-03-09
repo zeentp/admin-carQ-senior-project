@@ -21,7 +21,7 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from "@mui/material/Button";
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
+import {InputAdornment,Toolbar} from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Select from '@mui/material/Select';
@@ -35,9 +35,10 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
+import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useState } from "react";
 import { v4 as uuid } from 'uuid';
-
+import { filter } from "lodash";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -168,10 +169,11 @@ const EnhancedTableToolbar = (props) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [avatar, setAvatar] = useState('');
+  const { filterName, onFilterName } = props;
   const unique_id = uuid();
   const [disableApplyButton, setDisableApplyButton] = React.useState(false);
-  const url = "http://192.168.1.53:8080";
   const axios = require("axios");
+  const url = "http://192.168.1.144:8080";
 
   useEffect(() => {
     if (fname !== '' && lname !== '' && email !== ''&& telephone !== ''&& telephone.length === 12) {
@@ -192,6 +194,7 @@ const EnhancedTableToolbar = (props) => {
       gender: gender,
       age: 22,
     }
+    
     axios.post(url + "/m/create", data).then((res) => {
       console.log(res);
       window.location.href = '/mechanic';
@@ -256,6 +259,21 @@ const EnhancedTableToolbar = (props) => {
       >
         Mechanic
       </Typography>
+      <TextField
+        value={filterName}
+        onChange={onFilterName}
+        // label="ค้นหา"
+        placeholder="ค้นหา"
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <IconButton>
+                <SearchIcon />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />
       <Button onClick={handleClickOpen} variant="contained" color="primary">
         CREATE
       </Button>
@@ -358,6 +376,8 @@ const EnhancedTableToolbar = (props) => {
 
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
+  filterName: PropTypes.string,
+  onFilterName: PropTypes.func,
 };
 
 export default function EnhancedTable() {
@@ -369,7 +389,10 @@ export default function EnhancedTable() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [users, setUsers] = useState([]);
   const axios = require("axios");
-  const url = "http://192.168.1.53:8080";
+  const url = "http://192.168.1.144:8080";
+  const [filterName, setFilterName] = React.useState("");
+
+  
 
   useEffect(() => {
     UsersGet()
@@ -395,7 +418,15 @@ export default function EnhancedTable() {
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
+  const handleFilterByName = (event) => {
+    setFilterName(event.target.value);
+  };
 
+  const filteredInvoice = applySortFilter(
+    users,
+    getComparator(order, orderBy),
+    filterName
+  );
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelecteds = users.map((n) => n.name);
@@ -405,6 +436,22 @@ export default function EnhancedTable() {
     setSelected([]);
   };
 
+  function applySortFilter(array, comparator, query) {
+    console.log("applySortFilter");
+    const stabilizedThis = array.map((el, index) => [el, index]);
+    stabilizedThis.sort((a, b) => {
+      const order = comparator(a[0], b[0]);
+      if (order !== 0) return order;
+      return a[1] - b[1];
+    });
+    if (query) {
+      return filter(
+        array,
+        (_user) => _user.firstName.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      );
+    }
+    return stabilizedThis.map((el) => el[0]);
+  }
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
@@ -448,7 +495,9 @@ export default function EnhancedTable() {
   return (
     <Box sx={{ width: '95%', pl: 45, pt: 15 }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar  filterName={filterName}
+          onFilterName={handleFilterByName} 
+          numSelected={selected.length} />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -466,7 +515,7 @@ export default function EnhancedTable() {
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(users, getComparator(order, orderBy))
+              {filteredInvoice
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.firstName);
