@@ -232,11 +232,13 @@ const EnhancedTableToolbar = (props) => {
         // sx={{width:'200px',height:'10px'}}
         // label="ค้นหา"
         placeholder="ค้นหา"
+        size="small" 
         InputProps={{
+          
           startAdornment: (
             <InputAdornment  position="start">
-              <IconButton>
-                <SearchIcon />
+              <IconButton  >
+                <SearchIcon  />
               </IconButton>
             </InputAdornment>
           ),

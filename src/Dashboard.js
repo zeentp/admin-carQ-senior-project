@@ -440,10 +440,10 @@ const EnhancedTable =()=> {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
 
+  // const UpdateUser = id => {
+  //   window.location = '/detail'
+  // }
   const UpdateUser = id => {
-    window.location = '/detail'
-  }
-  const handleDetailClick = id => {
     window.location = '/update/' + id
   }
   return (

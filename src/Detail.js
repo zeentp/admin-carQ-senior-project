@@ -228,11 +228,11 @@ export default function UserUpdate() {
     const inputRef = React.useRef(null);
     const [lname, setLname] = useState('');
     const [telephone, setTelephone] = useState('');
-    const [status, setStatus] = useState('');
+    const [brand, setBrand] = useState('');
     const [gender, setGender] = useState('');
     const [email, setEmail] = useState('');
     const [issue, setIssue] = useState('');
-    const [avatar, setAvatar] = useState('');
+    const [plateNumber, setPlateNumber] = useState('');
     const [isCheck1, setIscheck1] = useState(false);
     const [isCheck2, setIscheck2] = useState(false);
 
@@ -362,6 +362,30 @@ export default function UserUpdate() {
                                     label="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
+                                    disabled={disableEditButton}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    id="plateNumber"
+                                    label="plateNumber"
+                                    value={plateNumber}
+                                    onChange={(e) => setPlateNumber(e.target.value)}
+                                    disabled={disableEditButton}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    id="brand"
+                                    label="brand"
+                                    value={brand}
+                                    onChange={(e) => setBrand(e.target.value)}
                                     disabled={disableEditButton}
                                 />
                             </Grid>

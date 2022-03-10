@@ -69,7 +69,7 @@ export default function BasicTabs() {
                     <Table2></Table2>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                    <Table2></Table2>
+                    <Table3></Table3>
                 </TabPanel>
             </Paper>
         </Box>

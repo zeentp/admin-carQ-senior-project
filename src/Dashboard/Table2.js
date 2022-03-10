@@ -317,7 +317,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function Table1() {
+export default function Table2() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -325,6 +325,15 @@ export default function Table1() {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [users, setUsers] = useState([]);
+  function createData(name, date, telephone, status, issue) {
+    return { name, date, telephone, status, issue };
+  }
+  
+  const rows = [
+    createData('Test Bey', '09-03-2565','089-999-8888', 'air-filter'),
+    createData('Tik Tok', '09-03-2565','080-000-0000', 'engine'),
+    createData('Ter Ahe', '09-03-2565','081-111-1111', 'port'),
+  ];
   useEffect(() => {
     UsersGet()
   }, []);
@@ -438,7 +447,7 @@ export default function Table1() {
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(users, getComparator(order, orderBy))
+              {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.fname);
@@ -472,11 +481,12 @@ export default function Table1() {
                         scope="row"
                         padding="none"
                       >
-                        {row.fname + '\t' + row.lname}
+                        {/* {row.fname + '\t' + row.lname} */}
+                        {row.name}
                       </TableCell>
                       {/* <TableCell align="right">{row.lname}</TableCell> */}
-                      <TableCell align="right">{row.username}</TableCell>
-                      <TableCell align="right">{row.avatar}</TableCell>
+                      <TableCell align="right">{row.date}</TableCell>
+                      <TableCell align="right">{row.telephone}</TableCell>
                       <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">
                         <Button onClick={() => UpdateUser(row.id)}
                         >View</Button>
