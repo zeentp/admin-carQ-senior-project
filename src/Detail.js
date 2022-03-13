@@ -167,6 +167,9 @@ export default function UserUpdate() {
                     setTelephone(result.data.telephone)
                     setGender(result.data.gender)
                     setIssue(result.data.description)
+                    setBrand(result.data.brand)
+                    setPlateNumber(result.data.plate_no)
+                    setDateTime(result.data.create_at.seconds)
                 })
         // fetch("https://www.mecallapi.com/api/users/"+id)
         //   .then(res => res.json())
@@ -235,6 +238,8 @@ export default function UserUpdate() {
     const [plateNumber, setPlateNumber] = useState('');
     const [isCheck1, setIscheck1] = useState(false);
     const [isCheck2, setIscheck2] = useState(false);
+    const [dateTime, setDateTime] = useState('');   
+
 
 
     const check1 = async () => {
@@ -300,6 +305,10 @@ export default function UserUpdate() {
         }
         setAlertOpen(false);
     };
+    const  formatDate =(d) =>{
+        const date = new Date(d*1000).toLocaleString('fr-FR')
+        return date
+      }
     // const loadInfo = {};
     const { register, errors, reset } = useForm();
 
@@ -446,7 +455,19 @@ export default function UserUpdate() {
                                     required
                                     fullWidth
                                     id="Note"
-                                    label="Note"
+                                    label="Date"
+                                    value={formatDate(dateTime)}
+                                    disabled={disableEditButton}
+                                // onChange={(e) => setTelephone(e.target.value)}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    id="date-time"
+                                    label="date-time"
                                     disabled={disableEditButton}
                                 // onChange={(e) => setTelephone(e.target.value)}
                                 />

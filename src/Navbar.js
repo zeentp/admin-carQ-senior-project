@@ -10,6 +10,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import List from '@mui/material/List';
+import { Container, Grid, MenuItem, Menu, IconButton } from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -17,11 +18,14 @@ import DriveEtaIcon from '@mui/icons-material/DriveEta';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import EngineeringIcon from '@mui/icons-material/Engineering';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import { bgcolor } from '@mui/system';
 const drawerWidth = 240;
 
 export default function Navbar() {
     const [menu, setMenu] = React.useState("");
-    const listMenuTitle = ['Home', 'Crew','Dashboard']
+    const listMenuTitle = ['Home', 'Crew', 'Dashboard']
+    const [anchorEl, setAnchorEl] = React.useState(null);
     let navigate = useNavigate();
 
     function changePage(page) {
@@ -40,35 +44,73 @@ export default function Navbar() {
                 navigate("/");
         }
     }
+    const handleMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
     return (
-        <Box sx={{ display: 'flex' }}>
-            <AppBar
-                color=''
-                position="fixed"
-                sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
-            >
-                <Toolbar>
-                    <Typography variant="h6" noWrap component="div">
-                        {menu}
-                    </Typography>
-                    <Box sx={{ flexGrow: 1 }}>
+        <Box>
+            <Box sx={{ flexGrow: 1 }}>
+                <AppBar
+                    color=''
+                    position="fixed"
+                    sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
+                >
+                    <Toolbar sx={{ bgcolor: '#E0E3E2 ' }} >
+                        <Typography sx={{ flexGrow: 1, textAlign: 'start', fontFamily: 'Poppins' }} variant="h5" noWrap component="div">
+                            {menu}
+                        </Typography>
+                        <div>
+                            <IconButton
+                                size="large"
+                                aria-label="account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                onClick={handleMenu}
+                                color="inherit"
+                            >
+                                <AccountCircle />
+                            </IconButton>
+                            <Menu
+                                id="menu-appbar"
+                                anchorEl={anchorEl}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                open={Boolean(anchorEl)}
+                                onClose={handleClose}
+                            >
+                                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                                <MenuItem onClick={handleClose}>My account</MenuItem>
+                            </Menu>
+                        </div>
+                        {/* <Box sx={{ flexGrow: 1 }}>
 
-                        {/* <IconButton
-          edge="end"
-          size="large"
-          aria-label="account of current user"
-          aria-controls="menu-appbar"
-          aria-haspopup="true"
-          // onClick={handleMenu}
-          color="inherit"
-        > */}
-                        {/* <AccountCircle />
-        </IconButton> */}
-                    </Box>
-
-                </Toolbar>
-
-            </AppBar>
+                        <IconButton
+                            edge="end"
+                            size="large"
+                            aria-label="account of current user"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            // onClick={handleMenu}
+                            color="inherit"
+                        >
+                            <AccountCircle />
+                        </IconButton>
+                    </Box> */}
+                    </Toolbar>
+                </AppBar>
+            </Box>
             <Drawer
                 sx={{
                     width: drawerWidth,
@@ -94,7 +136,7 @@ export default function Navbar() {
                     {listMenuTitle.map((text, index) => (
                         <ListItem button key={text} onClick={() => changePage(text)} >
                             <ListItemIcon>
-                                {text === 'Home' ? <HomeIcon sx={{ color: "white" }} /> : text === 'Crew' ? <EngineeringIcon sx={{ color: "white" }}/> : <DashboardIcon sx={{ color: "white" }}/>}
+                                {text === 'Home' ? <HomeIcon sx={{ color: "white" }} /> : text === 'Crew' ? <EngineeringIcon sx={{ color: "white" }} /> : <DashboardIcon sx={{ color: "white" }} />}
 
                             </ListItemIcon>
                             <ListItemText primary={text} />
@@ -113,7 +155,13 @@ export default function Navbar() {
       ))}
     </List> */}
             </Drawer>
-        </Box>
+            <Box
+                component="main"
+                sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
+            >
+                <Toolbar />
+            </Box>
+        </Box >
 
     );
 }

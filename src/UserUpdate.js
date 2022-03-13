@@ -54,6 +54,7 @@ export default function UserUpdate() {
           setEmail(result.data.email)
           setTelephone(result.data.telephone)
           setGender(result.data.gender)
+          setStatus(result.data.status)
         })
     // fetch("https://www.mecallapi.com/api/users/"+id)
     //   .then(res => res.json())
@@ -110,11 +111,14 @@ export default function UserUpdate() {
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
   const [telephone, setTelephone] = useState('');
-  const [status, setStatus] = useState('');
+  // const [status, setStatus] = useState('');
   const [gender, setGender] = useState('');
   const [email, setEmail] = useState('');
   const [avatar, setAvatar] = useState('');
   const [alertOpen, setAlertOpen] = React.useState(false);
+  const [status, setStatus] = React.useState(false);
+
+
 
   const handlePhoneChange = (event) => {
     var val = event.target.value.replace(/[^0-9]/g, "");

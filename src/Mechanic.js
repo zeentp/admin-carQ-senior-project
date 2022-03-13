@@ -494,7 +494,7 @@ export default function EnhancedTable() {
   }
 
   return (
-    <Box sx={{ width: '95%', pl: 45, pt: 15 }}>
+    <Box sx={{ width: '95%', pl: 45,}}>
       <Paper sx={{ width: '100%', mb: 2 }}>
         <EnhancedTableToolbar  filterName={filterName}
           onFilterName={handleFilterByName} 
