@@ -307,10 +307,6 @@ export default function UserUpdate() {
         }
         setAlertOpen(false);
     };
-    const  formatDate =(d) =>{
-        const date = new Date(d*1000).toLocaleString('fr-FR')
-        return date
-      }
     // const loadInfo = {};
     const { register, errors, reset } = useForm();
 
