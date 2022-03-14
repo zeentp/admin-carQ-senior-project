@@ -19,17 +19,24 @@ import EventNoteIcon from '@mui/icons-material/EventNote';
 import EngineeringIcon from '@mui/icons-material/Engineering';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import { useEffect, useState } from "react";
 import { bgcolor } from '@mui/system';
 const drawerWidth = 240;
+const pathname = window.location.pathname
+
 
 export default function Navbar() {
-    const [menu, setMenu] = React.useState("");
+    const [menu, setMenu] = React.useState(pathname);
     const listMenuTitle = ['Home', 'Crew', 'Dashboard']
     const [anchorEl, setAnchorEl] = React.useState(null);
     let navigate = useNavigate();
 
+    useEffect(() => {
+        // setMenu(pathname)
+        // console.log(pathname)
+    }, [menu]);
     function changePage(page) {
-        setMenu(page)
+        setMenu('/'+page)
         switch (page) {
             case "Home":
                 navigate("home");
@@ -50,6 +57,8 @@ export default function Navbar() {
 
     const handleClose = () => {
         setAnchorEl(null);
+        window.location.href = '/account';
+
     };
 
     return (
