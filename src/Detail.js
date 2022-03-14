@@ -307,6 +307,10 @@ export default function UserUpdate() {
         }
         setAlertOpen(false);
     };
+    const  formatDate =(d) =>{
+        const date = new Date(d*1000).toLocaleString('fr-FR')
+        return date
+      }
     // const loadInfo = {};
     const { register, errors, reset } = useForm();
 
@@ -465,7 +469,19 @@ export default function UserUpdate() {
                                     required
                                     fullWidth
                                     id="Note"
-                                    label="Note"
+                                    label="Date"
+                                    value={formatDate(dateTime)}
+                                    disabled={disableEditButton}
+                                // onChange={(e) => setTelephone(e.target.value)}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    id="date-time"
+                                    label="date-time"
                                     disabled={disableEditButton}
                                 // onChange={(e) => setTelephone(e.target.value)}
                                 />

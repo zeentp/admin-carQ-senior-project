@@ -52,7 +52,7 @@ export default function BasicTabs() {
     };
 
     return (
-        <Box sx={{ width: '100%', pt: 20, pl: 40 }}>
+        <Box sx={{ width: '100%', pl: 40 }}>
             <Paper sx={{ pt: 20, p: 5, width: '95%', backgroundColor: 'lightGrey' }}>
 
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
