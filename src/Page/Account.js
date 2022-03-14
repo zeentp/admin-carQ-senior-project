@@ -1,5 +1,5 @@
 import React from 'react'
-import { Typography, Grid, Button, Container, Box, Divider, TextField, Paper, Fab, Snackbar, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormGroup } from "@mui/material";
+import { Typography, Grid, Button,Stack, Container, Box, Divider, TextField, Paper, Fab, Snackbar, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormGroup } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
 import MuiAlert from '@mui/material/Alert';
@@ -7,7 +7,7 @@ import { makeStyles } from '@mui/styles';
 import EditIcon from '@mui/icons-material/Edit';
 export default function Account() {
     return (
-        <Box sx={{ pl: 20 }}>
+        <Box sx={{ pl: 30 }}>
             <Container>
                 <Paper>
                     <Typography variant='h1'>
@@ -30,13 +30,13 @@ export default function Account() {
                         <Grid item xs={6}>
                             <TextField
                                 sx={{ width: '400px' }}
-                                label={'FirstName'}>
+                                label={'TELEPHONE'}>
                             </TextField>
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
                                 sx={{ width: '400px' }}
-                                label={'LastName'}>
+                                label={'te'}>
                             </TextField>
                         </Grid>
                         <Grid item xs={6}>
@@ -53,7 +53,8 @@ export default function Account() {
                             </TextField>
                         </Grid>
                     </Grid>
-                    <Grid item spacing={5} xs={2} sx={{pb:2}}>
+                    <Grid sx={{justifyContent:'end',display:'flex',pb:2}} item>
+                        <Stack direction={'row'} spacing={2}>
                         <Button
                             variant="contained"
                         >
@@ -64,6 +65,7 @@ export default function Account() {
                         >
                             Test
                         </Button>
+                        </Stack>
                     </Grid>
                 </Paper>
             </Container>

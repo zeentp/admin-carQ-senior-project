@@ -10,6 +10,7 @@ import TestTable from './TestTable';
 import Create from './Create';
 import Detail from './Detail';
 import Account from './Page/Account';
+import Test from './Page/Test';
 import DashboardPage from './Dashboard/DashboardPage';
 import { useEffect, useState } from "react";
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
@@ -47,6 +48,8 @@ function App() {
           <Route path="create" element={<Create />} />
           <Route path='/update/:id' element={<UserUpdate />} />
           <Route path="dashboardPage" element={<DashboardPage />} />
+          <Route path="test" element={<Test />} />
+
           <Route path="account" element={<Account />} />
 
         </Routes>

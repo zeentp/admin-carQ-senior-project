@@ -3,6 +3,7 @@ import { makeStyles } from '@mui/styles';
 import Button from '@mui/material/Button';
 import TextField from "@mui/material/TextField";
 import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useParams } from 'react-router-dom';
@@ -10,12 +11,14 @@ import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import MenuItem from '@mui/material/MenuItem';
 import Fab from '@mui/material/Fab';
+import Paper from '@mui/material/Paper';
 import EditIcon from '@mui/icons-material/Edit';
 import Snackbar from '@mui/material/Snackbar';
+import Stack from '@mui/material/Stack';
 import MuiAlert from '@mui/material/Alert';
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    // marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -38,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 export default function UserUpdate() {
   const classes = useStyles();
   const axios = require("axios");
-  const url = "http://localhost:8080";
+  const url = "http://192.168.1.53:8080";
   const [editFlag, setEditFlag] = useState(false);
   const [disableEditButton, setDisableEditButton] = React.useState(true);
   const { id } = useParams();
@@ -147,13 +150,13 @@ export default function UserUpdate() {
 
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
+  });
   const handleAlertClose = (event, reason) => {
     if (reason === 'clickaway') {
-        return;
+      return;
     }
     setAlertOpen(false);
-};
+  };
 
 
 
@@ -162,79 +165,87 @@ export default function UserUpdate() {
   }
 
   return (
-    <Container sx={{ pt: 10, marginRight: 90 }} maxWidth="xs">
-      <div className={classes.paper}>
-        <Typography component="h1" variant="h5">
-          Crew
-        </Typography>
-        {editFlag === false ? <Fab
-          color="secondary"
-          aria-label="edit"
-          onClick={handleEditClick}
-        >
-          <EditIcon />
-        </Fab> :
-          <Button
-            variant="outlined"
+    <Box sx={{ pl: 30 }}>
+      <Container>
+        <Paper>
+          <div className={classes.paper}>
+            <Typography component="h1" variant="h5">
+              Crew
+            </Typography>
+            {editFlag === false ? <Fab
+              color="secondary"
+              aria-label="edit"
+              onClick={handleEditClick}
+            >
+              <EditIcon />
+            </Fab> :
+              <Button
+                variant="outlined"
 
-            onClick={() => refreshPage()}>cancel</Button>}
-        <form className={classes.form} onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                value={fname}
-                onChange={(e) => setFname(e.target.value)}
-                autoFocus
-                disabled={disableEditButton}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                value={lname}
-                onChange={(e) => setLname(e.target.value)}
-                disabled={disableEditButton}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                disabled={disableEditButton}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="telephone"
-                label="Telephone"
-                value={telephone}
-                inputProps={{ maxLength: 12 }}
-                onChange={handlePhoneChange}
-                disabled={disableEditButton}
-              // onChange={(e) => setTelephone(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              {/* <FormControl fullWidth>
+                onClick={() => refreshPage()}>cancel</Button>}
+            <form className={classes.form} onSubmit={handleSubmit}>
+              <Grid sx={{ display: 'flex' }} container spacing={2}>
+                <Grid item xs={12}>
+                  <Stack
+                    sx={{ justifyContent: 'center', alignItems: 'center' }}
+                    direction={"row"} spacing={3}  >
+                    <TextField
+                      autoComplete="fname"
+                      name="firstName"
+                      variant="outlined"
+                      required
+                      // fullWidth
+                      id="firstName"
+                      label="First Name"
+                      value={fname}
+                      onChange={(e) => setFname(e.target.value)}
+                      autoFocus
+                      disabled={disableEditButton}
+                    />
+                    <TextField
+                      variant="outlined"
+                      required
+                      // fullWidth
+                      id="lastName"
+                      label="Last Name"
+                      value={lname}
+                      onChange={(e) => setLname(e.target.value)}
+                      disabled={disableEditButton}
+                    />
+                  </Stack>
+                  <Grid sx={{pt:2}}item xs={12}>
+                    <Stack
+                      sx={{ justifyContent: 'center', alignItems: 'center' }}
+                      direction={"row"} spacing={3} >
+                      <TextField
+                        variant="outlined"
+                        required
+                        // fullWidth
+                        id="email"
+                        label="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        disabled={disableEditButton}
+                      />
+
+                      <TextField
+                        variant="outlined"
+                        required
+                        // fullWidth
+                        id="telephone"
+                        label="Telephone"
+                        value={telephone}
+                        inputProps={{ maxLength: 12 }}
+                        onChange={handlePhoneChange}
+                        disabled={disableEditButton}
+                      // onChange={(e) => setTelephone(e.target.value)}
+                      />
+                    </Stack>
+                  </Grid>
+                </Grid>
+
+                <Grid item xs={6}>
+                  {/* <FormControl fullWidth>
             <InputLabel id="gender-select-label">Gender</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
@@ -249,24 +260,26 @@ export default function UserUpdate() {
                 <MenuItem value={"Female"}>Female</MenuItem>
               </Select>
                 </FormControl> */}
-            </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Update
-          </Button>
-        </form>
-      </div>
-      <Snackbar open={alertOpen} autoHideDuration={6000} onClose={handleAlertClose}>
-        <Alert onClose={handleAlertClose} severity="info" sx={{ width: '100%' }}>
-          Editing
-        </Alert>
-      </Snackbar>
-    </Container>
+                </Grid>
+              </Grid>
+              <Button
+                type="submit"
+                // fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                Update
+              </Button>
+            </form>
+          </div>
+        </Paper>
+        <Snackbar open={alertOpen} autoHideDuration={6000} onClose={handleAlertClose}>
+          <Alert onClose={handleAlertClose} severity="info" sx={{ width: '100%' }}>
+            Editing
+          </Alert>
+        </Snackbar>
+      </Container>
+    </Box>
   );
 }
