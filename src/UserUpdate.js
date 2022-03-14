@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 export default function UserUpdate() {
   const classes = useStyles();
   const axios = require("axios");
-  const url = "http://192.168.1.144:8080";
+  const url = "http://localhost:8080";
   const [editFlag, setEditFlag] = useState(false);
   const [disableEditButton, setDisableEditButton] = React.useState(true);
   const { id } = useParams();

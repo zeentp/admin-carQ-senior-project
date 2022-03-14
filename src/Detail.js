@@ -96,7 +96,7 @@ const MultipleSelect = () => {
     const [users, setUsers] = useState([]);
     const [names, setNames] = useState([]);
     const axios = require("axios");
-    const url = "http://192.168.1.144:8080";
+    const url = "http://localhost:8080";
     useEffect(() => {
         axios.get(url + "/a/details?id=" + id)
             .then(
@@ -152,7 +152,7 @@ export default function UserUpdate() {
     const { id } = useParams();
     const [disableEditButton, setDisableEditButton] = React.useState(true);
     const axios = require("axios");
-    const url = "http://192.168.1.144:8080";
+    const url = "http://localhost:8080";
 
 
     useEffect(() => {
@@ -167,6 +167,9 @@ export default function UserUpdate() {
                     setTelephone(result.data.telephone)
                     setGender(result.data.gender)
                     setIssue(result.data.description)
+                    setBrand(result.data.brand)
+                    setPlateNumber(result.data.plate_no)
+                    setDateTime(result.data.starts_at.seconds)
                 })
         // fetch("https://www.mecallapi.com/api/users/"+id)
         //   .then(res => res.json())
@@ -235,8 +238,12 @@ export default function UserUpdate() {
     const [plateNumber, setPlateNumber] = useState('');
     const [isCheck1, setIscheck1] = useState(false);
     const [isCheck2, setIscheck2] = useState(false);
+    const [dateTime, setDateTime] = useState('');
 
-
+    const  formatDate =(d) =>{
+        const date = new Date(d*1000).toLocaleString('fr-FR')
+        return date
+      }
     const check1 = async () => {
         setIscheck1(true)
         setIscheck2(false)
@@ -306,7 +313,7 @@ export default function UserUpdate() {
 
 
     return (
-        <Box sx={{ pt: 15, pl: 60 }} >
+        <Box sx={{ pt: 15, pl: 90 }} >
             <Paper sx={{ pt: 10, p: 5, width: '666px' }}>
                 <div className={classes.paper}>
                     <Typography component="h1" variant="h5">
@@ -436,6 +443,18 @@ export default function UserUpdate() {
                                     value={issue}
                                     id="issue"
                                     label="issue"
+                                    disabled={disableEditButton}
+                                // onChange={(e) => setTelephone(e.target.value)}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    id="Date"
+                                    label="Date"
+                                    value={formatDate(dateTime)}
                                     disabled={disableEditButton}
                                 // onChange={(e) => setTelephone(e.target.value)}
                                 />

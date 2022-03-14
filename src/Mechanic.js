@@ -173,7 +173,7 @@ const EnhancedTableToolbar = (props) => {
   const unique_id = uuid();
   const [disableApplyButton, setDisableApplyButton] = React.useState(false);
   const axios = require("axios");
-  const url = "http://192.168.1.144:8080";
+  const url = "http://localhost:8080";
 
   useEffect(() => {
     if (fname !== '' && lname !== '' && email !== ''&& telephone !== ''&& telephone.length === 12) {
@@ -390,7 +390,7 @@ export default function EnhancedTable() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [users, setUsers] = useState([]);
   const axios = require("axios");
-  const url = "http://192.168.1.144:8080";
+  const url = "http://localhost:8080";
   const [filterName, setFilterName] = React.useState("");
 
   

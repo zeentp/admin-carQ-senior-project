@@ -35,7 +35,7 @@ export default function SignUp() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [disableApplyButton, setDisableApplyButton] = React.useState(false);
-  const url = "http://192.168.1.53:8080";
+  const url = "http://localhost:8080";
   const axios = require("axios");
   const handleSubmit = (event) => {
     event.preventDefault();
