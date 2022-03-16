@@ -69,8 +69,8 @@ export default function Navbar() {
                     position="fixed"
                     sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
                 >
-                    <Toolbar sx={{ bgcolor: '#E0E3E2 ' }} >
-                        <Typography sx={{ flexGrow: 1, textAlign: 'start', fontFamily: 'Poppins' }} variant="h5" noWrap component="div">
+                    <Toolbar sx={{ bgcolor: '#1a237e' }} >
+                        <Typography sx={{ flexGrow: 1, textAlign: 'start',color:'white' }} variant="h6" noWrap component="div">
                             {menu}
                         </Typography>
                         <div>
@@ -81,8 +81,9 @@ export default function Navbar() {
                                 aria-haspopup="true"
                                 onClick={handleMenu}
                                 color="inherit"
+                                
                             >
-                                <AccountCircle />
+                                <AccountCircle sx ={{color:'white'}}/>
                             </IconButton>
                             <Menu
                                 id="menu-appbar"
@@ -127,7 +128,7 @@ export default function Navbar() {
                     '& .MuiDrawer-paper': {
                         width: drawerWidth,
                         boxSizing: 'border-box',
-                        bgcolor: "#151357",
+                        bgcolor: "#000051",
                         color: "white"
                     },
                 }}
@@ -140,7 +141,7 @@ export default function Navbar() {
                         <Typography>CarQ-Admin</Typography>
                     </Stack>
                 </Toolbar>
-                <Divider />
+                <Divider sx={{bgcolor:'white'}}/>
                 <List>
                     {listMenuTitle.map((text, index) => (
                         <ListItem button key={text} onClick={() => changePage(text)} >
@@ -152,7 +153,7 @@ export default function Navbar() {
                         </ListItem>
                     ))}
                 </List>
-                <Divider />
+                <Divider sx={{bgcolor:'white'}}/>
                 {/* <List>
       {['All mail', 'Trash', 'Spam'].map((text, index) => (
         <ListItem button key={text}>

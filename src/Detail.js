@@ -313,7 +313,7 @@ export default function UserUpdate() {
 
 
     return (
-        <Box sx={{ pt: 15, pl: 90 }} >
+        <Box sx={{ pl: 90,pb:5 }} >
             <Paper sx={{ pt: 10, p: 5, width: '666px' }}>
                 <div className={classes.paper}>
                     <Typography component="h1" variant="h5">

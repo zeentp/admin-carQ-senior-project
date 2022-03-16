@@ -53,7 +53,7 @@ export default function BasicTabs() {
 
     return (
         <Box sx={{ width: '100%', pl: 40 }}>
-            <Paper sx={{ pt: 20, p: 5, width: '95%', backgroundColor: 'lightGrey' }}>
+            <Paper sx={{ pt: 20, p: 5, width: '95%', backgroundColor: '#8aacc8' }}>
 
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs textColor='' value={value} onChange={handleChange} aria-label="basic tabs example">

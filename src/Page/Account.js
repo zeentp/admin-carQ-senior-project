@@ -10,21 +10,21 @@ export default function Account() {
         <Box sx={{ pl: 30 }}>
             <Container>
                 <Paper>
-                    <Typography variant='h1'>
-                        Profile
+                    <Typography textAlign={'start'}sx={{pt:2,pl:2}} variant='h5'>
+                        Profile Detail
                     </Typography>
-                    <Divider />
+                    <Divider sx={{pb:2}} />
                     <Grid sx={{ pt: 5, pb: 5 }} container spacing={3}>
                         <Grid item xs={6}>
                             <TextField
                                 sx={{ width: '400px' }}
-                                label={'FirstName'}>
+                                label={'Username'}>
                             </TextField>
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
                                 sx={{ width: '400px' }}
-                                label={'LastName'}>
+                                label={'Password'}>
                             </TextField>
                         </Grid>
                         <Grid item xs={6}>
@@ -36,10 +36,10 @@ export default function Account() {
                         <Grid item xs={6}>
                             <TextField
                                 sx={{ width: '400px' }}
-                                label={'te'}>
+                                label={'Email'}>
                             </TextField>
                         </Grid>
-                        <Grid item xs={6}>
+                        {/* <Grid item xs={6}>
                             <TextField sx={{ width: '400px' }}
                                 label={'FirstName'}>
                             </TextField>
@@ -51,19 +51,19 @@ export default function Account() {
                                 sx={{ width: '400px' }}
                                 label={'LastName'}>
                             </TextField>
-                        </Grid>
+                        </Grid> */}
                     </Grid>
-                    <Grid sx={{justifyContent:'end',display:'flex',pb:2}} item>
+                    <Grid sx={{justifyContent:'end',display:'flex',pb:2,pr:2}} item>
                         <Stack direction={'row'} spacing={2}>
                         <Button
                             variant="contained"
                         >
-                            Test
+                            Confirm
                         </Button>
                         <Button
-                            variant="contained"
+                            sx={{color:'blue'}}
                         >
-                            Test
+                        Cancel
                         </Button>
                         </Stack>
                     </Grid>
