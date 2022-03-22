@@ -11,6 +11,7 @@ import Create from './Create';
 import Detail from './Detail';
 import Account from './Page/Account';
 import Test from './Page/Test';
+import Landing from './Page/Landing';
 import DashboardPage from './Dashboard/DashboardPage';
 import { useEffect, useState } from "react";
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
@@ -32,13 +33,16 @@ function App() {
     <div className="App">
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        {pathname !== '/login' ?
-          <Navbar></Navbar>
-          // <box></box>
-          :
-          <box></box>
+        {pathname === '/' ? <box></box>
+          : pathname === '/login' ?
+            <box></box>
+            // <box></box>
+            :
+            <Navbar></Navbar>
+
         }
         <Routes>
+        <Route path="/" element={<Landing />} />
           <Route path="login" element={<Login />} />
           <Route path="home" element={<Home />} />
           <Route path="testTable" element={<TestTable />} />
@@ -49,7 +53,6 @@ function App() {
           <Route path='/update/:id' element={<UserUpdate />} />
           <Route path="dashboardPage" element={<DashboardPage />} />
           <Route path="test" element={<Test />} />
-
           <Route path="account" element={<Account />} />
 
         </Routes>

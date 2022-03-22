@@ -509,7 +509,7 @@ export default function EnhancedTable() {
   }
   return (
     <Box  sx={{ width: '95%', pl: 45,}}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
+      <Paper sx={{ width: '100%', mb: 2, border: "2px solid", borderColor: '#3864F8', }}>
         <EnhancedTableToolbar filterName={filterName}
           onFilterName={handleFilterByName} 
           numSelected={selected.length} />

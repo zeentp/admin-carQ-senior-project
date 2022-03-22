@@ -24,6 +24,7 @@ export default function Login() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    handleOnClick();
     const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
     console.log({
@@ -31,7 +32,11 @@ export default function Login() {
       password: data.get('password'),
     });
   };
+  const handleOnClick =() =>{
+    console.log()
+    window.location.href = "/home";
 
+  }
   return (
     <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: '100vh' }}>

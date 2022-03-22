@@ -60,6 +60,12 @@ export default function Navbar() {
         window.location.href = '/account';
 
     };
+    
+    const handleSignout = () => {
+        setAnchorEl(null);
+        window.location.href = '/';
+
+    };
 
     return (
         <Box>
@@ -101,7 +107,7 @@ export default function Navbar() {
                                 onClose={handleClose}
                             >
                                 <MenuItem onClick={handleClose}>Profile</MenuItem>
-                                <MenuItem onClick={handleClose}>My account</MenuItem>
+                                <MenuItem onClick={handleSignout}>Sign Out</MenuItem>
                             </Menu>
                         </div>
                         {/* <Box sx={{ flexGrow: 1 }}>
