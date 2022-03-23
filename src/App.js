@@ -1,5 +1,10 @@
 import './App.css';
 import { Routes, Route, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { Details, Update } from '@mui/icons-material';
+// Admin side
 import Navbar from './Navbar';
 import Mechanic from './Mechanic';
 import Home from './Home';
@@ -13,13 +18,21 @@ import Account from './Page/Account';
 import Test from './Page/Test';
 import Landing from './Page/Landing';
 import DashboardPage from './Dashboard/DashboardPage';
-import { useEffect, useState } from "react";
-import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import { Details, Update } from '@mui/icons-material';
+// Client side
 
+import ClientHome from './client/page/ClientHome';
+import Booking from './client/page/Booking';
+import AppBarClient from './client/component/AppBarClient'
 const theme = createTheme({
-
+  overrides: {
+    MuiInput: {
+      underline: {
+        '&:hover:not($disabled):before': {
+          backgroundColor: 'red',
+        },
+      },
+    },
+  },
 });
 const pathname = window.location.pathname
 
@@ -36,9 +49,10 @@ function App() {
         {pathname === '/' ? <box></box>
           : pathname === '/login' ?
             <box></box>
-            // <box></box>
             :
             <Navbar></Navbar>
+            // <AppBarClient></AppBarClient>
+            // <box></box>
 
         }
         <Routes>
@@ -54,7 +68,12 @@ function App() {
           <Route path="dashboardPage" element={<DashboardPage />} />
           <Route path="test" element={<Test />} />
           <Route path="account" element={<Account />} />
-
+          {/* Client */}
+          <Route path="/client/clientHome" element={<ClientHome />} />
+          <Route path="booking" element={<Booking />} />
+          
+          
+          
         </Routes>
       </ThemeProvider>
     </div>

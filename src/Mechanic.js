@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { URL as url}  from './Constant';
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -173,7 +174,6 @@ const EnhancedTableToolbar = (props) => {
   const unique_id = uuid();
   const [disableApplyButton, setDisableApplyButton] = React.useState(false);
   const axios = require("axios");
-  const url = "http://localhost:8080";
 
   useEffect(() => {
     if (fname !== '' && lname !== '' && email !== ''&& telephone !== ''&& telephone.length === 12) {
@@ -260,6 +260,7 @@ const EnhancedTableToolbar = (props) => {
         Mechanic
       </Typography>
       <TextField
+        sx={{pr:2}}
         value={filterName}
         onChange={onFilterName}
         // label="ค้นหา"
@@ -390,7 +391,6 @@ export default function EnhancedTable() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [users, setUsers] = useState([]);
   const axios = require("axios");
-  const url = "http://localhost:8080";
   const [filterName, setFilterName] = React.useState("");
 
   
@@ -494,8 +494,8 @@ export default function EnhancedTable() {
   }
 
   return (
-    <Box sx={{ width: '95%', pl: 45,}}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
+    <Box sx={{ width: '95%', pl: 30,}}>
+      <Paper elevation={6} sx={{ width: '100%', mb: 2,}}>
         <EnhancedTableToolbar  filterName={filterName}
           onFilterName={handleFilterByName} 
           numSelected={selected.length} />

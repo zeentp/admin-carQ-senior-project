@@ -52,12 +52,11 @@ export default function BasicTabs() {
     };
 
     return (
-        <Box sx={{ width: '100%', pl: 40 }}>
-            <Paper sx={{ pt: 20, p: 5, width: '95%', backgroundColor: '#8aacc8' , border: "2px solid", borderColor: '#3864F8',  }}>
-
+        <Box sx={{ width: '100%', pl: 26 }}>
+            <Paper elevation={6} sx={{ pt: 20, p: 5, width: '95%', backgroundColor: 'white' ,   }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs textColor='' value={value} onChange={handleChange} aria-label="basic tabs example">
-                        <Tab sx={{ color: 'white' }} label="Pending" {...a11yProps(0)} />
+                        <Tab sx={{ color: 'grey' }} label="Pending" {...a11yProps(0)} />
                         <Tab sx={{ color: '#003c8f' }} label="On track" {...a11yProps(1)} />
                         <Tab sx={{ color: 'green' }} label="Completed" {...a11yProps(2)} />
                     </Tabs>

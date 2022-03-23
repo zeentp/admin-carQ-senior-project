@@ -28,6 +28,8 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
+import "./Css/Button.css";
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -240,10 +242,10 @@ export default function UserUpdate() {
     const [isCheck2, setIscheck2] = useState(false);
     const [dateTime, setDateTime] = useState('');
 
-    const  formatDate =(d) =>{
-        const date = new Date(d*1000).toLocaleString('fr-FR')
+    const formatDate = (d) => {
+        const date = new Date(d * 1000).toLocaleString('fr-FR')
         return date
-      }
+    }
     const check1 = async () => {
         setIscheck1(true)
         setIscheck2(false)
@@ -313,14 +315,14 @@ export default function UserUpdate() {
 
 
     return (
-        <Box sx={{ pl: 90,pb:5 }} >
+        <Box sx={{ pl: 90, pb: 5 }} >
             <Paper sx={{ pt: 10, p: 5, width: '666px' }}>
                 <div className={classes.paper}>
-                    <Typography component="h1" variant="h5">
+                    <Typography sx={{ pb: 2 }} component="h1" variant="h5">
                         Accepting an appointment card
                     </Typography>
                     {editFlag === false ? <Fab
-                        color="secondary"
+                        color=""
                         aria-label="edit"
                         onClick={handleEditClick}
                     >
@@ -513,15 +515,19 @@ export default function UserUpdate() {
                 </FormControl> */}
                             {/* </Grid> */}
                         </Grid>
-                        <Button
+                        {/* <Button
+                        sx={{bgcolor:'yellow'}}
                             type="submit"
                             fullWidth
                             variant="contained"
                             color="primary"
-                            className={classes.submit}
+                            // className={classes.submit}
+                            className="setHomebtn"
+
                         >
                             Update
-                        </Button>
+                        </Button> */}
+                    <button type="submit" id = "setHomebtn">Calculate</button>
 
                     </form>
                 </div>

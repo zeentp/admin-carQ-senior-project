@@ -14,7 +14,7 @@ export default function Account() {
                         Profile Detail
                     </Typography>
                     <Divider sx={{pb:2}} />
-                    <Grid sx={{ pt: 5, pb: 5 }} container spacing={3}>
+                    <Grid  sx={{ pt: 5, pb: 5 }} textAlign={'center'} container spacing={3}>
                         <Grid item xs={6}>
                             <TextField
                                 sx={{ width: '400px' }}

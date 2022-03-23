@@ -16,6 +16,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import Snackbar from '@mui/material/Snackbar';
 import Stack from '@mui/material/Stack';
 import MuiAlert from '@mui/material/Alert';
+import { URL as url}  from './Constant';
+import "./Css/Button.css";
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     // marginTop: theme.spacing(8),
@@ -41,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
 export default function UserUpdate() {
   const classes = useStyles();
   const axios = require("axios");
-  const url = "http://192.168.1.53:8080";
   const [editFlag, setEditFlag] = useState(false);
   const [disableEditButton, setDisableEditButton] = React.useState(true);
   const { id } = useParams();
@@ -165,7 +167,7 @@ export default function UserUpdate() {
   }
 
   return (
-    <Box sx={{ pl: 30 }}>
+    <Box sx={{ pl:10 }}>
       <Container>
         <Paper>
           <div className={classes.paper}>
@@ -173,7 +175,7 @@ export default function UserUpdate() {
               Crew
             </Typography>
             {editFlag === false ? <Fab
-              color="secondary"
+              color=""
               aria-label="edit"
               onClick={handleEditClick}
             >
@@ -271,6 +273,7 @@ export default function UserUpdate() {
               >
                 Update
               </Button>
+                    {/* <button id = "setHomebtn" type="submit" >update</button> */}
             </form>
           </div>
         </Paper>

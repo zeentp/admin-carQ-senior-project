@@ -33,9 +33,7 @@ export default function Login() {
     });
   };
   const handleOnClick =() =>{
-    console.log()
     window.location.href = "/home";
-
   }
   return (
     <ThemeProvider theme={theme}>
@@ -92,10 +90,10 @@ export default function Login() {
                 id="password"
                 autoComplete="current-password"
               />
-              <FormControlLabel
+              {/* <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
-              />
+              /> */}
               <Button
                 type="submit"
                 fullWidth
@@ -105,7 +103,7 @@ export default function Login() {
               >
                 Sign In
               </Button>
-              <Grid container>
+              {/* <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body2">
                     Forgot password?
@@ -116,7 +114,7 @@ export default function Login() {
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
-              </Grid>
+              </Grid> */}
             </Box>
           </Box>
         </Grid>

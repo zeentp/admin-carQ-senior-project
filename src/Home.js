@@ -508,8 +508,8 @@ export default function EnhancedTable() {
     window.location = '/update/' + id
   }
   return (
-    <Box  sx={{ width: '95%', pl: 45,}}>
-      <Paper sx={{ width: '100%', mb: 2, border: "2px solid", borderColor: '#3864F8', }}>
+    <Box  sx={{ width: '95%', pl: 30,}}>
+      <Paper elevation={6}  sx={{ width: '100%', mb: 2 }}>
         <EnhancedTableToolbar filterName={filterName}
           onFilterName={handleFilterByName} 
           numSelected={selected.length} />

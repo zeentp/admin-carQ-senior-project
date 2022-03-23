@@ -21,7 +21,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useEffect, useState } from "react";
 import { bgcolor } from '@mui/system';
-const drawerWidth = 240;
+const drawerWidth = 125;
 const pathname = window.location.pathname
 
 
@@ -36,7 +36,7 @@ export default function Navbar() {
         // console.log(pathname)
     }, [menu]);
     function changePage(page) {
-        setMenu('/'+page)
+        setMenu('/' + page)
         switch (page) {
             case "Home":
                 navigate("home");
@@ -60,7 +60,7 @@ export default function Navbar() {
         window.location.href = '/account';
 
     };
-    
+
     const handleSignout = () => {
         setAnchorEl(null);
         window.location.href = '/';
@@ -75,8 +75,8 @@ export default function Navbar() {
                     position="fixed"
                     sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
                 >
-                    <Toolbar sx={{ bgcolor: '#1a237e' }} >
-                        <Typography sx={{ flexGrow: 1, textAlign: 'start',color:'white' }} variant="h6" noWrap component="div">
+                    <Toolbar sx={{ bgcolor: '#132b42' }} >
+                        <Typography sx={{ flexGrow: 1, textAlign: 'start', color: 'white' }} variant="h6" noWrap component="div">
                             {menu}
                         </Typography>
                         <div>
@@ -87,9 +87,9 @@ export default function Navbar() {
                                 aria-haspopup="true"
                                 onClick={handleMenu}
                                 color="inherit"
-                                
+
                             >
-                                <AccountCircle sx ={{color:'white'}}/>
+                                <AccountCircle sx={{ color: 'white' ,fontSize:30}} />
                             </IconButton>
                             <Menu
                                 id="menu-appbar"
@@ -110,20 +110,6 @@ export default function Navbar() {
                                 <MenuItem onClick={handleSignout}>Sign Out</MenuItem>
                             </Menu>
                         </div>
-                        {/* <Box sx={{ flexGrow: 1 }}>
-
-                        <IconButton
-                            edge="end"
-                            size="large"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            // onClick={handleMenu}
-                            color="inherit"
-                        >
-                            <AccountCircle />
-                        </IconButton>
-                    </Box> */}
                     </Toolbar>
                 </AppBar>
             </Box>
@@ -134,7 +120,7 @@ export default function Navbar() {
                     '& .MuiDrawer-paper': {
                         width: drawerWidth,
                         boxSizing: 'border-box',
-                        bgcolor: "#000051",
+                        bgcolor: "#051d34",
                         color: "white"
                     },
                 }}
@@ -143,23 +129,28 @@ export default function Navbar() {
             >
                 <Toolbar>
                     <Stack direction="row" spacing={1} sx={{ pr: 6, alignItems: "center" }}>
-                        <DriveEtaIcon sx={{ fontSize: 40 }} ></DriveEtaIcon>
-                        <Typography>CarQ-Admin</Typography>
+                        <Box sx={{ pl: 0 }}>
+                            <DriveEtaIcon sx={{
+                                fontSize: 52, color: 'orange'
+                                // "& .MuiToolbar-root": { width: "25ch" },
+                            }}  ></DriveEtaIcon>
+                        </Box>
+
+                        {/* <Typography>CarQ-Admin</Typography> */}
                     </Stack>
                 </Toolbar>
-                <Divider sx={{bgcolor:'white'}}/>
-                <List>
+                <Divider />
+                <List sx={{ pl: 2 }} >
                     {listMenuTitle.map((text, index) => (
                         <ListItem button key={text} onClick={() => changePage(text)} >
-                            <ListItemIcon>
-                                {text === 'Home' ? <HomeIcon sx={{ color: "white" }} /> : text === 'Crew' ? <EngineeringIcon sx={{ color: "white" }} /> : <DashboardIcon sx={{ color: "white" }} />}
-
+                            <ListItemIcon sx={{ pb: 3 }} >
+                                {text === 'Home' ? <HomeIcon fontSize='large' sx={{ color: "white" }} /> : text === 'Crew' ? <EngineeringIcon fontSize='large' sx={{ color: "white" }} /> : <DashboardIcon fontSize='large' sx={{ color: "white" }} />}
                             </ListItemIcon>
-                            <ListItemText primary={text} />
+                            {/* <ListItemText primary={text} /> */}
                         </ListItem>
                     ))}
                 </List>
-                <Divider sx={{bgcolor:'white'}}/>
+                <Divider />
                 {/* <List>
       {['All mail', 'Trash', 'Spam'].map((text, index) => (
         <ListItem button key={text}>
@@ -173,7 +164,7 @@ export default function Navbar() {
             </Drawer>
             <Box
                 component="main"
-                sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
+                sx={{ flexGrow: 1, bgcolor: 'background.default', p: 6.5 }}
             >
                 <Toolbar />
             </Box>
