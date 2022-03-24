@@ -21,7 +21,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useEffect, useState } from "react";
 import { bgcolor } from '@mui/system';
-const drawerWidth = 125;
+const drawerWidth = 100;
 const pathname = window.location.pathname
 
 
@@ -63,6 +63,8 @@ export default function Navbar() {
 
     const handleSignout = () => {
         setAnchorEl(null);
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("user");
         window.location.href = '/';
 
     };
@@ -140,7 +142,7 @@ export default function Navbar() {
                     </Stack>
                 </Toolbar>
                 <Divider />
-                <List sx={{ pl: 2 }} >
+                <List sx={{ ml: 2,mr:2 }} >
                     {listMenuTitle.map((text, index) => (
                         <ListItem button key={text} onClick={() => changePage(text)} >
                             <ListItemIcon sx={{ pb: 3 }} >

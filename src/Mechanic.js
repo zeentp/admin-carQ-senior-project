@@ -14,6 +14,7 @@ import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
+import MuiAlert from '@mui/material/Alert';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
@@ -24,7 +25,6 @@ import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import {InputAdornment,Toolbar} from '@mui/material';
 import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
@@ -32,14 +32,17 @@ import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import SearchIcon from "@mui/icons-material/Search";
+import  {Snackbar,Paper} from "@mui/material";
+// import Snackbar from '@mui/material/Snackbar';
+
 import { useEffect, useState } from "react";
 import { v4 as uuid } from 'uuid';
 import { filter } from "lodash";
+
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -196,8 +199,8 @@ const EnhancedTableToolbar = (props) => {
     }
     
     axios.post(url + "/m/create", data).then((res) => {
-      console.log(res);
-      window.location.href = '/mechanic';
+      console.log(res.status);
+      // window.location.href = '/mechanic';
     });
     // fetch('https://www.mecallapi.com/api/users/create', {
     //   method: 'POST',
@@ -392,8 +395,18 @@ export default function EnhancedTable() {
   const [users, setUsers] = useState([]);
   const axios = require("axios");
   const [filterName, setFilterName] = React.useState("");
+  const [alertOpen, setAlertOpen] = React.useState(false);
 
   
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
+  const handleAlertClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setAlertOpen(false);
+  };
 
   useEffect(() => {
     UsersGet()
@@ -406,6 +419,7 @@ export default function EnhancedTable() {
     });
   }
   const UserDelete = id => {
+    setAlertOpen(true)
     console.log(id)
     axios.put(url + "/m/delete?id="+id).then((res) => {
       console.log(res);
@@ -583,7 +597,11 @@ export default function EnhancedTable() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-
+      <Snackbar open={alertOpen} autoHideDuration={6000} onClose={handleAlertClose}>
+          <Alert onClose={handleAlertClose} severity="info" sx={{ width: '100%' }}>
+            Deleting
+          </Alert>
+        </Snackbar>
     </Box>
   );
 }

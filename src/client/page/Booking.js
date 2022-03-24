@@ -1,6 +1,7 @@
 import React from "react";
 import MainLayout from "../component/MainLayout";
 import { useEffect, useState } from "react";
+import { URL as url}  from '../../Constant';
 
 import {
   Card,
@@ -30,7 +31,6 @@ export default function Booking() {
   const [description, setDescription] = React.useState("");
   const [disableApplyButton, setDisableApplyButton] = React.useState(false);
   const axios = require("axios");
-  const url = "http://192.168.1.144:8080";
   useEffect(() => {
     if (
       fname !== "" &&

@@ -35,6 +35,7 @@ import { useEffect, useState } from "react";
 import UserUpdate from './UserUpdate';
 import SearchIcon from "@mui/icons-material/Search";
 import { filter } from "lodash";
+import { URL as url}  from './Constant';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -160,6 +161,8 @@ const EnhancedTableToolbar = (props) => {
   const [anchorFilter, setAnchorFilter] = React.useState(null);
   const { filterName, onFilterName } = props;
   useEffect(() => {
+    // const user = JSON.parse(localStorage.getItem('user'));
+    // console.log(user)
     if (fname !== '' && lname !== '') {
       setDisableApplyButton(false)
     } else {
@@ -355,7 +358,6 @@ export default function EnhancedTable() {
   const [users, setUsers] = useState([]);
   const [filterName, setFilterName] = React.useState("");
    const axios = require("axios");
-  const url = "http://localhost:8080";
   function createData(name, date, telephone, status, issue) {
     return { name, date, telephone, status, issue };
   }

@@ -13,6 +13,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
+import { URL as url } from './Constant';
+import { useEffect, useState } from "react";
 
 
 
@@ -21,19 +23,38 @@ const theme = createTheme();
 
 export default function Login() {
   let navigate = useNavigate();
-
+  const axios = require("axios");
+  const [username, setUserName] = useState();
+  const [password, setPassword] = useState();
   const handleSubmit = (event) => {
     event.preventDefault();
-    handleOnClick();
-    const data = new FormData(event.currentTarget);
+    // handleOnClick();
+    // const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+
+    var data = {
+      username: username,
+      password: password
+    }
+
+    axios.post(url + "/api/login", data).then((res) => {
+      console.log(res);
+      if (res.data.status === 'ok') {
+        localStorage.setItem('accessToken',res.data.accessToken);
+        localStorage.setItem('user', JSON.stringify(res.data.user));
+        window.location.href = '/home';
+      }else{
+        console.log('error')
+      }
+
     });
   };
-  const handleOnClick =() =>{
-    window.location.href = "/home";
+  const handleOnClick = () => {
+    // const data = new FormData(event.currentTarget);
+
+
+    // localStorage.setItem('accessToken','test')
+    // window.location.href = "/home";
   }
   return (
     <ThemeProvider theme={theme}>
@@ -79,6 +100,7 @@ export default function Login() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                onChange={e => setUserName(e.target.value)}
               />
               <TextField
                 margin="normal"
@@ -89,6 +111,7 @@ export default function Login() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={e => setPassword(e.target.value)}
               />
               {/* <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
@@ -99,7 +122,8 @@ export default function Login() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                onClick={navigate("home")}
+              // onClick={navigate("home")}
+
               >
                 Sign In
               </Button>

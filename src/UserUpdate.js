@@ -7,7 +7,6 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useParams } from 'react-router-dom';
-import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import MenuItem from '@mui/material/MenuItem';
 import Fab from '@mui/material/Fab';
@@ -16,8 +15,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import Snackbar from '@mui/material/Snackbar';
 import Stack from '@mui/material/Stack';
 import MuiAlert from '@mui/material/Alert';
-import { URL as url}  from './Constant';
+import { URL as url } from './Constant';
+import { InputLabel,Select } from '@mui/material'
 import "./Css/Button.css";
+import { findAllByDisplayValue } from "@testing-library/react";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -47,6 +48,15 @@ export default function UserUpdate() {
   const [editFlag, setEditFlag] = useState(false);
   const [disableEditButton, setDisableEditButton] = React.useState(true);
   const { id } = useParams();
+
+  const [fname, setFname] = useState('');
+  const [lname, setLname] = useState('');
+  const [telephone, setTelephone] = useState('');
+  const [gender, setGender] = useState('');
+  const [email, setEmail] = useState('');
+  const [avatar, setAvatar] = useState('');
+  const [alertOpen, setAlertOpen] = React.useState(false);
+  const [status, setStatus] = React.useState(null);
 
   useEffect(() => {
     axios.get(url + "/m/get?id=" + id)
@@ -87,8 +97,7 @@ export default function UserUpdate() {
       lastName: lname,
       telephone: telephone,
       email: email,
-      gender: gender,
-      age: 22,
+      status: status,
     }
     axios.put(url + "/m/update", data).then((res) => {
       console.log(res);
@@ -113,18 +122,11 @@ export default function UserUpdate() {
     // )
   }
 
-  const [fname, setFname] = useState('');
-  const [lname, setLname] = useState('');
-  const [telephone, setTelephone] = useState('');
-  // const [status, setStatus] = useState('');
-  const [gender, setGender] = useState('');
-  const [email, setEmail] = useState('');
-  const [avatar, setAvatar] = useState('');
-  const [alertOpen, setAlertOpen] = React.useState(false);
-  const [status, setStatus] = React.useState(false);
+ 
 
-
-
+  const handleChangeSelect = (event) => {
+    setStatus(event.target.value);
+  };
   const handlePhoneChange = (event) => {
     var val = event.target.value.replace(/[^0-9]/g, "");
     console.log(val)
@@ -167,7 +169,7 @@ export default function UserUpdate() {
   }
 
   return (
-    <Box sx={{ pl:10 }}>
+    <Box sx={{ pl: 10 }}>
       <Container>
         <Paper>
           <div className={classes.paper}>
@@ -215,7 +217,7 @@ export default function UserUpdate() {
                       disabled={disableEditButton}
                     />
                   </Stack>
-                  <Grid sx={{pt:2}}item xs={12}>
+                  <Grid sx={{ pt: 2 }} item xs={12}>
                     <Stack
                       sx={{ justifyContent: 'center', alignItems: 'center' }}
                       direction={"row"} spacing={3} >
@@ -242,6 +244,33 @@ export default function UserUpdate() {
                         disabled={disableEditButton}
                       // onChange={(e) => setTelephone(e.target.value)}
                       />
+                    </Stack>
+                  </Grid>
+                  <Grid sx={{ pt: 2 }} item xs={12}>
+                    <Stack
+                      sx={{ justifyContent: 'center', alignItems: 'center' }}
+                      direction={"row"} spacing={3} >
+                        <Box>
+                      <FormControl fullWidth>
+                        <Box>
+                          <InputLabel id="demo-simple-select-label">
+                            1
+                          </InputLabel>
+                          <Select
+                          fullWidth
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={status}
+                            // label="Status"
+                            onChange={handleChangeSelect}
+                            disabled={disableEditButton}
+                          >
+                            <MenuItem value={true}>avaliable</MenuItem>
+                            <MenuItem value={false}>unavaliable</MenuItem>
+                          </Select>
+                        </Box>
+                      </FormControl>
+                      </Box>
                     </Stack>
                   </Grid>
                 </Grid>
@@ -273,7 +302,7 @@ export default function UserUpdate() {
               >
                 Update
               </Button>
-                    {/* <button id = "setHomebtn" type="submit" >update</button> */}
+              {/* <button id = "setHomebtn" type="submit" >update</button> */}
             </form>
           </div>
         </Paper>

@@ -13,6 +13,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useEffect, useState } from "react";
+import { URL as url}  from './Constant';
+
 
 function Copyright(props) {
   return (
@@ -35,7 +37,6 @@ export default function SignUp() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [disableApplyButton, setDisableApplyButton] = React.useState(false);
-  const url = "http://localhost:8080";
   const axios = require("axios");
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -56,8 +57,8 @@ export default function SignUp() {
 
     }
     axios.post(url + "/m/create", data).then((res) => {
-      console.log(res);
-      window.location.href = '/testtable';
+      console.log(res.status);
+      // window.location.href = '/testtable';
     });
     // fetch('https://www.mecallapi.com/api/users/create', {
     //   method: 'POST',

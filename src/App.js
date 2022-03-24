@@ -17,6 +17,7 @@ import Detail from './Detail';
 import Account from './Page/Account';
 import Test from './Page/Test';
 import Landing from './Page/Landing';
+import Admin from './Page/Admin';
 import DashboardPage from './Dashboard/DashboardPage';
 // Client side
 
@@ -37,11 +38,18 @@ const theme = createTheme({
 const pathname = window.location.pathname
 
 function App() {
+ 
   useEffect(() => {
     // console.log(pathname !== '/detail/:id')
     // console.log(pathname.includes('/detail/:id'));
     console.log(pathname)
+    console.log(token)
   }, []);
+  const token = localStorage.getItem('accessToken');
+
+  if(!token) {
+    return <Login />
+  }
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
@@ -56,8 +64,7 @@ function App() {
 
         }
         <Routes>
-        <Route path="/" element={<Landing />} />
-          <Route path="login" element={<Login />} />
+          <Route path="/" element={<Login />} />
           <Route path="home" element={<Home />} />
           <Route path="testTable" element={<TestTable />} />
           <Route path="mechanic" element={<Mechanic />} />
@@ -68,6 +75,8 @@ function App() {
           <Route path="dashboardPage" element={<DashboardPage />} />
           <Route path="test" element={<Test />} />
           <Route path="account" element={<Account />} />
+          <Route path="admin" element={<Admin />} />
+          
           {/* Client */}
           <Route path="/client/clientHome" element={<ClientHome />} />
           <Route path="booking" element={<Booking />} />

@@ -29,6 +29,8 @@ import MuiAlert from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import "./Css/Button.css";
+import { URL as url}  from './Constant';
+
 
 
 
@@ -98,7 +100,6 @@ const MultipleSelect = () => {
     const [users, setUsers] = useState([]);
     const [names, setNames] = useState([]);
     const axios = require("axios");
-    const url = "http://localhost:8080";
     useEffect(() => {
         axios.get(url + "/a/details?id=" + id)
             .then(
@@ -154,7 +155,6 @@ export default function UserUpdate() {
     const { id } = useParams();
     const [disableEditButton, setDisableEditButton] = React.useState(true);
     const axios = require("axios");
-    const url = "http://localhost:8080";
 
 
     useEffect(() => {
