@@ -194,13 +194,11 @@ const EnhancedTableToolbar = (props) => {
       lastName: lname,
       telephone: telephone,
       email: email,
-      gender: gender,
-      age: 22,
     }
     
     axios.post(url + "/m/create", data).then((res) => {
       console.log(res.status);
-      // window.location.href = '/mechanic';
+      window.location.href = '/mechanic';
     });
     // fetch('https://www.mecallapi.com/api/users/create', {
     //   method: 'POST',
@@ -402,6 +400,7 @@ export default function EnhancedTable() {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
   const handleAlertClose = (event, reason) => {
+    window.location.href = '/mechanic';
     if (reason === 'clickaway') {
       return;
     }
@@ -423,7 +422,7 @@ export default function EnhancedTable() {
     console.log(id)
     axios.put(url + "/m/delete?id="+id).then((res) => {
       console.log(res);
-      window.location.href = '/mechanic';
+      // window.location.href = '/mechanic';
     });
 
   }
@@ -597,7 +596,7 @@ export default function EnhancedTable() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <Snackbar open={alertOpen} autoHideDuration={6000} onClose={handleAlertClose}>
+      <Snackbar open={alertOpen} autoHideDuration={3000} onClose={handleAlertClose}>
           <Alert onClose={handleAlertClose} severity="info" sx={{ width: '100%' }}>
             Deleting
           </Alert>

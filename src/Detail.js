@@ -515,8 +515,7 @@ export default function UserUpdate() {
                 </FormControl> */}
                             {/* </Grid> */}
                         </Grid>
-                        {/* <Button
-                        sx={{bgcolor:'yellow'}}
+                        <Button
                             type="submit"
                             fullWidth
                             variant="contained"
@@ -526,8 +525,8 @@ export default function UserUpdate() {
 
                         >
                             Update
-                        </Button> */}
-                    <button type="submit" id = "setHomebtn">Calculate</button>
+                        </Button>
+                    {/* <button type="submit" id = "setHomebtn">Calculate</button> */}
 
                     </form>
                 </div>

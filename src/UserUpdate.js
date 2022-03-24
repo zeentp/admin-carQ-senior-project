@@ -254,7 +254,7 @@ export default function UserUpdate() {
                       <FormControl fullWidth>
                         <Box>
                           <InputLabel id="demo-simple-select-label">
-                            1
+                            {/* Status */}
                           </InputLabel>
                           <Select
                           fullWidth

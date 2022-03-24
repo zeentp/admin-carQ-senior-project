@@ -33,6 +33,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { useEffect, useState } from "react";
 import UserUpdate from '../UserUpdate';
+import { URL as url}  from '../Constant';
 
 
 function descendingComparator(a, b, orderBy) {
@@ -197,7 +198,7 @@ const EnhancedTableToolbar = (props) => {
   const handleClose = () => {
     setOpen(false);
   };
-
+ 
   return (
     <Toolbar
       sx={{
@@ -218,9 +219,6 @@ const EnhancedTableToolbar = (props) => {
       >
         Appointments
       </Typography>
-      <Button onClick={handleClickOpen} variant="contained" color="primary">
-        CREATE
-      </Button>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -318,6 +316,7 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function Table2() {
+  const axios = require("axios");
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -330,21 +329,20 @@ export default function Table2() {
   }
   
   const rows = [
-    createData('Test Bey', '09-03-2565','089-999-8888', 'air-filter'),
-    createData('Tik Tok', '09-03-2565','080-000-0000', 'engine'),
+    createData('Frozen Bey', '09-03-2565','089-999-8888', 'air-filter'),
+    createData('Jin yoghurt', '09-03-2565','080-000-0000', 'engine'),
     createData('Ter Ahe', '09-03-2565','081-111-1111', 'port'),
+    createData('Aet yoghurt', '09-03-2565','086-666-6666', 'air'),
   ];
   useEffect(() => {
     UsersGet()
   }, []);
   const UsersGet = () => {
-    fetch("https://www.mecallapi.com/api/users")
-      .then(res => res.json())
-      .then(
-        (result) => {
-          setUsers(result)
-        }
-      )
+    axios.get(url + "/a/appointmentsOnTrack").then((res) => {
+      console.log(res.data);
+      const list = res.data.map((d) => d);
+      setUsers(list);
+    });
   }
   const UserDelete = id => {
     var data = {
@@ -426,6 +424,10 @@ export default function Table2() {
   const handleDetailClick = id => {
     window.location = '/update/' + id
   }
+  const  formatDate =(d) =>{
+    const date = new Date(d*1000).toLocaleString('fr-FR')
+    return date
+  }
   return (
     <Box sx={{ width: '100%'}}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -447,7 +449,7 @@ export default function Table2() {
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(users, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.fname);
@@ -485,10 +487,11 @@ export default function Table2() {
                         {row.name}
                       </TableCell>
                       {/* <TableCell align="right">{row.lname}</TableCell> */}
-                      <TableCell align="right">{row.date}</TableCell>
+                      <TableCell align="right">{formatDate(row.starts_at.seconds)}</TableCell>
                       <TableCell align="right">{row.telephone}</TableCell>
                       <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">
-                        <Button onClick={() => UpdateUser(row.id)}
+                        <Button disable={true} 
+                        // onClick={() => handleDetailClick(row.id)}
                         >View</Button>
                         <Button onClick={() => UserDelete(row.id)}>Del</Button>
                       </ButtonGroup>
