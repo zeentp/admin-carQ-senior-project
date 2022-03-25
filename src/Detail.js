@@ -479,7 +479,7 @@ export default function UserUpdate() {
                                     required
                                     fullWidth
                                     id="date-time"
-                                    label="date-time"
+                                    label="note"
                                     disabled={disableEditButton}
                                 // onChange={(e) => setTelephone(e.target.value)}
                                 />
@@ -524,7 +524,7 @@ export default function UserUpdate() {
                             className="setHomebtn"
 
                         >
-                            Update
+                            submit
                         </Button>
                     {/* <button type="submit" id = "setHomebtn">Calculate</button> */}
 
