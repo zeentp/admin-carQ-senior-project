@@ -74,13 +74,19 @@ const headCells = [
     label: 'ClientName',
   },
   {
-    id: 'username',
+    id: 'date',
     numeric: true,
     disablePadding: false,
     label: 'Date',
   },
   {
-    id: 'avatar',
+    id: 'description',
+    numeric: true,
+    disablePadding: false,
+    label: 'Description',
+  },
+  {
+    id: 'telephone',
     numeric: true,
     disablePadding: false,
     label: 'Telephone',
@@ -488,6 +494,7 @@ export default function Table3() {
                       </TableCell>
                       {/* <TableCell align="right">{row.lname}</TableCell> */}
                       <TableCell align="right">{formatDate(row.starts_at.seconds)}</TableCell>
+                      <TableCell align="right">{row.description}</TableCell>
                       <TableCell align="right">{row.telephone}</TableCell>
                       <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">
                         <Button disable={true} 

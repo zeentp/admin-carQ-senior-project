@@ -25,6 +25,9 @@ import ClientHome from './client/page/ClientHome';
 import Booking from './client/page/Booking';
 import AppBarClient from './client/component/AppBarClient'
 const theme = createTheme({
+  typography: {
+    fontFamily: 'font-family: monospace',
+  },
   overrides: {
     MuiInput: {
       underline: {

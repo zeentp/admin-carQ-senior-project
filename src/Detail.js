@@ -29,7 +29,7 @@ import MuiAlert from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import "./Css/Button.css";
-import { URL as url}  from './Constant';
+import { URL as url } from './Constant';
 
 
 
@@ -126,6 +126,7 @@ const MultipleSelect = () => {
             <FormControl sx={{ width: "100%" }}>
                 <InputLabel id="demo-multiple-name-label">Mechanic</InputLabel>
                 <Select
+                    sx={{ textAlign: 'start' }}
                     labelId="demo-multiple-name-label"
                     id="demo-multiple-name"
                     multiple
@@ -157,6 +158,7 @@ export default function UserUpdate() {
     const axios = require("axios");
 
 
+
     useEffect(() => {
         axios.get(url + "/a/details?id=" + id)
             // .then(res => console.log(res.data))
@@ -172,6 +174,7 @@ export default function UserUpdate() {
                     setBrand(result.data.brand)
                     setPlateNumber(result.data.plate_no)
                     setDateTime(result.data.starts_at.seconds)
+                    setStatus(result.data.status)
                 })
         // fetch("https://www.mecallapi.com/api/users/"+id)
         //   .then(res => res.json())
@@ -186,8 +189,9 @@ export default function UserUpdate() {
         //   )
     }, [id])
 
-    const handleChange = (event) => {
-        setGender(event.target.value);
+
+    const handleChangeSelect = (event) => {
+        setStatus(event.target.value);
     };
     const handleSubmit = event => {
         event.preventDefault();
@@ -228,7 +232,6 @@ export default function UserUpdate() {
     // const [textEdit, setTextEdit] = useState('');
     const [editFlag, setEditFlag] = useState(false);
 
-
     const [fname, setFname] = useState('');
     const inputRef = React.useRef(null);
     const [lname, setLname] = useState('');
@@ -241,6 +244,8 @@ export default function UserUpdate() {
     const [isCheck1, setIscheck1] = useState(false);
     const [isCheck2, setIscheck2] = useState(false);
     const [dateTime, setDateTime] = useState('');
+    const [status, setStatus] = useState('');
+
 
     const formatDate = (d) => {
         const date = new Date(d * 1000).toLocaleString('fr-FR')
@@ -321,7 +326,7 @@ export default function UserUpdate() {
                     <Typography sx={{ pb: 2 }} component="h1" variant="h5">
                         Accepting an appointment card
                     </Typography>
-                    {editFlag === false ? <Fab
+                    {/* {editFlag === false ? <Fab
                         color=""
                         aria-label="edit"
                         onClick={handleEditClick}
@@ -330,9 +335,8 @@ export default function UserUpdate() {
                     </Fab> :
                         <Button
                             variant="outlined"
-
-                            onClick={() => refreshPage()}>cancel</Button>}
-
+                            onClick={() => refreshPage()}>cancel</Button>
+                    } */}
                     <form className={classes.form} onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
@@ -413,43 +417,6 @@ export default function UserUpdate() {
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <MultipleSelect></MultipleSelect>
-                            </Grid>
-                            {/* <Grid item xs={10}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    id="mechanic"
-                                    label="Mechanic"
-                                    value={telephone}
-                                    disabled={disableEditButton}
-                                // onChange={(e) => setTelephone(e.target.value)}
-                                />
-
-                            </Grid>
-
-                            <Grid item xs={2}>
-                                <Fab
-                                    aria-label="edit"
-                                    onClick={handleClickOpen}
-                                >
-                                    <AddIcon />
-                                </Fab>
-                            </Grid> */}
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    value={issue}
-                                    id="issue"
-                                    label="issue"
-                                    disabled={disableEditButton}
-                                // onChange={(e) => setTelephone(e.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
                                 <TextField
                                     variant="outlined"
                                     required
@@ -466,54 +433,63 @@ export default function UserUpdate() {
                                     variant="outlined"
                                     required
                                     fullWidth
-                                    id="Note"
-                                    label="Date"
-                                    value={formatDate(dateTime)}
+                                    value={issue}
+                                    id="issue"
+                                    label="issue"
                                     disabled={disableEditButton}
                                 // onChange={(e) => setTelephone(e.target.value)}
                                 />
                             </Grid>
                             <Grid item xs={12}>
+                                <MultipleSelect></MultipleSelect>
+                            </Grid>
+                            <Grid item xs={12}>
+                                {status !== 'pending' ?
+
+                                    <FormGroup>
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={6}>
+                                                <FormControlLabel onChange={check1} checked={isCheck1} control={<Checkbox defaultChecked />} label="Accept" />
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                <FormControlLabel onChange={check2} checked={isCheck2} control={<Checkbox />} label="Decline" />
+                                            </Grid>
+                                        </Grid>
+                                    </FormGroup>
+                                    : <Box>
+                                        <FormControl>
+                                            <Box sx={{
+                                                "& .MuiSelect-select": { width: "60.5ch" },
+                                            }}>
+                                                <InputLabel id="demo-simple-select-label">
+                                                    Status
+                                                </InputLabel>
+                                                <Select
+                                                    sx={{ textAlign: 'start' }}
+                                                    labelId="demo-simple-select-label"
+                                                    id="demo-simple-select"
+                                                    value={status}
+                                                    label="Status"
+                                                    // label="Status"
+                                                    onChange={handleChangeSelect}
+                                                >
+                                                    <MenuItem value={'pedding'}>pedding</MenuItem>
+                                                    <MenuItem value={'completed'}>completed</MenuItem>
+                                                </Select>
+                                            </Box>
+                                        </FormControl>
+                                    </Box>}
+                            </Grid>
+                            <Grid sx={{ pb: 2 }} item xs={12}>
                                 <TextField
                                     variant="outlined"
-                                    required
                                     fullWidth
-                                    id="date-time"
-                                    label="date-time"
-                                    disabled={disableEditButton}
+                                    id="note"
+                                    label="note"
+                                    multiline
                                 // onChange={(e) => setTelephone(e.target.value)}
                                 />
                             </Grid>
-                            <Grid item xs={12}>
-                                <FormGroup>
-                                    <Grid container spacing={2}>
-                                        <Grid item xs={6}>
-                                            <FormControlLabel onChange={check1} checked={isCheck1} control={<Checkbox defaultChecked />} label="Accept" />
-                                        </Grid>
-                                        <Grid item xs={6}>
-                                            <FormControlLabel onChange={check2} checked={isCheck2} control={<Checkbox />} label="Decline" />
-                                        </Grid>
-                                    </Grid>
-                                </FormGroup>
-                            </Grid>
-
-                            {/* <Grid item xs={12}> */}
-                            {/* <FormControl fullWidth>
-            <InputLabel id="gender-select-label">Gender</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="gender-select"
-                label="gender"
-                // value={gender}
-                // SelectDisplayProps={gender}
-                // input={gender}
-                onChange={handleChange}
-              >
-                <MenuItem value={"Male"}>Male</MenuItem>
-                <MenuItem value={"Female"}>Female</MenuItem>
-              </Select>
-                </FormControl> */}
-                            {/* </Grid> */}
                         </Grid>
                         <Button
                             type="submit"
@@ -522,11 +498,10 @@ export default function UserUpdate() {
                             color="primary"
                             // className={classes.submit}
                             className="setHomebtn"
-
                         >
-                            Update
+                            Submit
                         </Button>
-                    {/* <button type="submit" id = "setHomebtn">Calculate</button> */}
+                        {/* <button type="submit" id = "setHomebtn">Calculate</button> */}
 
                     </form>
                 </div>

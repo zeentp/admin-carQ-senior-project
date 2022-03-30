@@ -36,6 +36,8 @@ import UserUpdate from './UserUpdate';
 import SearchIcon from "@mui/icons-material/Search";
 import { filter } from "lodash";
 import { URL as url}  from './Constant';
+import NotifyBox from './component/NotifyBox';
+import Chart from './component/Chart';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -75,13 +77,19 @@ const headCells = [
     label: 'ClientName',
   },
   {
-    id: 'username',
+    id: 'date',
     numeric: true,
     disablePadding: false,
     label: 'Date',
   },
   {
-    id: 'avatar',
+    id: 'description',
+    numeric: true,
+    disablePadding: false,
+    label: 'Description',
+  },
+  {
+    id: 'telephone',
     numeric: true,
     disablePadding: false,
     label: 'Telephone',
@@ -156,7 +164,7 @@ const EnhancedTableToolbar = (props) => {
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
   const [username, setUsername] = useState('');
-  const [avatar, setAvatar] = useState('');
+  const [description, setDescription] = useState('');
   const [disableApplyButton, setDisableApplyButton] = React.useState(false);
   const [anchorFilter, setAnchorFilter] = React.useState(null);
   const { filterName, onFilterName } = props;
@@ -179,7 +187,6 @@ const EnhancedTableToolbar = (props) => {
       'lname': lname,
       'username': username,
       'email': 'email',
-      'avatar': avatar,
     }
     fetch('https://www.mecallapi.com/api/users/create', {
       method: 'POST',
@@ -312,15 +319,6 @@ const EnhancedTableToolbar = (props) => {
                 label="username"
                 variant="outlined"
                 onChange={(e) => setUsername(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                id="avatar"
-                label="avatar"
-                variant="outlined"
-                onChange={(e) => setAvatar(e.target.value)}
               />
             </Grid>
           </Grid>
@@ -511,6 +509,10 @@ export default function EnhancedTable() {
   }
   return (
     <Box  sx={{ width: '95%', pl: 30,}}>
+      <Box pb={2}>
+        <NotifyBox isLoading={true} notification={users.length}></NotifyBox>
+        <Chart></Chart>
+        </Box>
       <Paper elevation={6}  sx={{ width: '100%', mb: 2 }}>
         <EnhancedTableToolbar filterName={filterName}
           onFilterName={handleFilterByName} 
@@ -570,6 +572,7 @@ export default function EnhancedTable() {
                       </TableCell>
                       {/* <TableCell align="right">{row.lname}</TableCell> */}
                       <TableCell align="right">{formatDate(row.starts_at.seconds)}</TableCell>
+                      <TableCell align="right">{row.description}</TableCell>
                       <TableCell align="right">{row.telephone}</TableCell>
                       <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">
                         <Button onClick={() => viewUser(row.appointment_id)}

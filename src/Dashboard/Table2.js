@@ -74,13 +74,19 @@ const headCells = [
     label: 'ClientName',
   },
   {
-    id: 'username',
+    id: 'date',
     numeric: true,
     disablePadding: false,
     label: 'Date',
   },
   {
-    id: 'avatar',
+    id: 'description',
+    numeric: true,
+    disablePadding: false,
+    label: 'Description',
+  },
+  {
+    id: 'telephone',
     numeric: true,
     disablePadding: false,
     label: 'Telephone',
@@ -422,7 +428,7 @@ export default function Table2() {
     window.location = '/detail'
   }
   const handleDetailClick = id => {
-    window.location = '/update/' + id
+    window.location = '/detail/' + id
   }
   const  formatDate =(d) =>{
     const date = new Date(d*1000).toLocaleString('fr-FR')
@@ -488,10 +494,11 @@ export default function Table2() {
                       </TableCell>
                       {/* <TableCell align="right">{row.lname}</TableCell> */}
                       <TableCell align="right">{formatDate(row.starts_at.seconds)}</TableCell>
+                      <TableCell align="right">{row.description}</TableCell>
                       <TableCell align="right">{row.telephone}</TableCell>
                       <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">
                         <Button disable={true} 
-                        // onClick={() => handleDetailClick(row.id)}
+                        onClick={() => handleDetailClick(row.appointment_id)}
                         >View</Button>
                         <Button onClick={() => UserDelete(row.id)}>Del</Button>
                       </ButtonGroup>

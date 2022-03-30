@@ -276,6 +276,24 @@ export default function UserUpdate() {
                     </Stack>
                   </Grid>
                 </Grid>
+
+                <Grid item xs={6}>
+                  {/* <FormControl fullWidth>
+            <InputLabel id="gender-select-label">Gender</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="gender-select"
+                label="gender"
+                // value={gender}
+                // SelectDisplayProps={gender}
+                // input={gender}
+                onChange={handleChange}
+              >
+                <MenuItem value={"Male"}>Male</MenuItem>
+                <MenuItem value={"Female"}>Female</MenuItem>
+              </Select>
+                </FormControl> */}
+                </Grid>
               </Grid>
               <Button
                 type="submit"

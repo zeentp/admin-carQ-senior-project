@@ -33,7 +33,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { useEffect, useState } from "react";
 import UserUpdate from '../UserUpdate';
-import { URL as url}  from '../Constant';
+import { URL as url } from '../Constant';
 
 
 function descendingComparator(a, b, orderBy) {
@@ -74,13 +74,19 @@ const headCells = [
     label: 'ClientName',
   },
   {
-    id: 'username',
+    id: 'date',
     numeric: true,
     disablePadding: false,
     label: 'Date',
   },
   {
-    id: 'avatar',
+    id: 'description',
+    numeric: true,
+    disablePadding: false,
+    label: 'Description',
+  },
+  {
+    id: 'telephone',
     numeric: true,
     disablePadding: false,
     label: 'Telephone',
@@ -198,7 +204,7 @@ const EnhancedTableToolbar = (props) => {
   const handleClose = () => {
     setOpen(false);
   };
- 
+
   return (
     <Toolbar
       sx={{
@@ -327,12 +333,12 @@ export default function Table1() {
   function createData(name, date, telephone, status, issue) {
     return { name, date, telephone, status, issue };
   }
-  
+
   const rows = [
-    createData('Frozen Bey', '09-03-2565','089-999-8888', 'air-filter'),
-    createData('Jin yoghurt', '09-03-2565','080-000-0000', 'engine'),
-    createData('Ter Ahe', '09-03-2565','081-111-1111', 'port'),
-    createData('Aet yoghurt', '09-03-2565','086-666-6666', 'air'),
+    createData('Frozen Bey', '09-03-2565', '089-999-8888', 'air-filter'),
+    createData('Jin yoghurt', '09-03-2565', '080-000-0000', 'engine'),
+    createData('Ter Ahe', '09-03-2565', '081-111-1111', 'port'),
+    createData('Aet yoghurt', '09-03-2565', '086-666-6666', 'air'),
   ];
   useEffect(() => {
     UsersGet()
@@ -422,14 +428,14 @@ export default function Table1() {
     window.location = '/detail'
   }
   const handleDetailClick = id => {
-    window.location = '/update/' + id
+    // window.location = '/detail/' + id
   }
-  const  formatDate =(d) =>{
-    const date = new Date(d*1000).toLocaleString('fr-FR')
+  const formatDate = (d) => {
+    const date = new Date(d * 1000).toLocaleString('fr-FR')
     return date
   }
   return (
-    <Box sx={{ width: '100%'}}>
+    <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
@@ -460,7 +466,7 @@ export default function Table1() {
                       hover
                       // onClick={(event) => handleClick(event, row.fname)}
                       role="checkbox"
-                      // onClick={() => handleDetailClick(row.id)}
+                      onClick={() => handleDetailClick(row.id)}
                       aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={row.fname}
@@ -488,11 +494,11 @@ export default function Table1() {
                       </TableCell>
                       {/* <TableCell align="right">{row.lname}</TableCell> */}
                       <TableCell align="right">{formatDate(row.starts_at.seconds)}</TableCell>
+                      <TableCell align="right">{row.description}</TableCell>
                       <TableCell align="right">{row.telephone}</TableCell>
                       <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">
-                        <Button disable={true} 
-                        // onClick={() => handleDetailClick(row.id)}
-                        >View</Button>
+                        <Button disable={true}
+                          onClick={() => handleDetailClick(row.appointment_id)}>View</Button>
                         <Button onClick={() => UserDelete(row.id)}>Del</Button>
                       </ButtonGroup>
                       </TableCell>
