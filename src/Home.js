@@ -577,7 +577,7 @@ export default function EnhancedTable() {
                       <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">
                         <Button onClick={() => viewUser(row.appointment_id)}
                         >View</Button>
-                        <Button onClick={() => UserDelete(row.id)}>Del</Button>
+                        {/* <Button onClick={() => UserDelete(row.id)}>Del</Button> */}
                       </ButtonGroup>
                       </TableCell>
 

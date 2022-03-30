@@ -28,10 +28,6 @@ export default function Login() {
   const [password, setPassword] = useState();
   const handleSubmit = (event) => {
     event.preventDefault();
-    // handleOnClick();
-    // const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-
     var data = {
       username: username,
       password: password
