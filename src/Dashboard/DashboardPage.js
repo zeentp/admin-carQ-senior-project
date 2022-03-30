@@ -8,6 +8,7 @@ import { Paper } from "@mui/material";
 import Table1 from './Table1';
 import Table2 from './Table2';
 import Table3 from './Table3';
+import Reject from './Rejected';
 
 
 
@@ -56,9 +57,11 @@ export default function BasicTabs() {
             <Paper elevation={6} sx={{ pt: 20, p: 5, width: '95%', backgroundColor: 'white' ,   }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs textColor='' value={value} onChange={handleChange} aria-label="basic tabs example">
-                        <Tab sx={{ color: 'grey' }} label="Pending" {...a11yProps(0)} />
+                        <Tab sx={{ color: 'grey' }} label="Booking" {...a11yProps(0)} />
                         <Tab sx={{ color: '#003c8f' }} label="On track" {...a11yProps(1)} />
                         <Tab sx={{ color: 'green' }} label="Completed" {...a11yProps(2)} />
+                        <Tab sx={{ color: 'red' }} label="Rejected" {...a11yProps(3)} />
+
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
@@ -69,6 +72,9 @@ export default function BasicTabs() {
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                     <Table3></Table3>
+                </TabPanel>
+                <TabPanel value={value} index={3}>
+                    <Reject></Reject>
                 </TabPanel>
             </Paper>
         </Box>

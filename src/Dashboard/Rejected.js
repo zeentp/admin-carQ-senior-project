@@ -10,8 +10,7 @@ import Divider from "@mui/material/Divider";
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import { Table, InputAdornment, } from '@mui/material';
+import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -33,12 +32,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { useEffect, useState } from "react";
-import UserUpdate from './UserUpdate';
-import SearchIcon from "@mui/icons-material/Search";
-import { filter } from "lodash";
-import { URL as url}  from './Constant';
-import NotifyBox from './component/NotifyBox';
-import Chart from './component/Chart';
+import UserUpdate from '../UserUpdate';
+import { URL as url } from '../Constant';
+
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -165,23 +161,16 @@ const EnhancedTableToolbar = (props) => {
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
   const [username, setUsername] = useState('');
-  const [description, setDescription] = useState('');
-  const [mechanics, setMechanics] = React.useState([]);
+  const [avatar, setAvatar] = useState('');
   const [disableApplyButton, setDisableApplyButton] = React.useState(false);
-  const [anchorFilter, setAnchorFilter] = React.useState(null);
-  const { filterName, onFilterName } = props;
+
   useEffect(() => {
-    // const user = JSON.parse(localStorage.getItem('user'));
-    // console.log(user)
     if (fname !== '' && lname !== '') {
       setDisableApplyButton(false)
     } else {
       setDisableApplyButton(true)
     }
   }, [fname, lname]);
-  const handleSearchFilter = (event) => {
-    setAnchorFilter(event.currentTarget);
-  };
   const handleSubmit = (event) => {
     event.preventDefault();
     var data = {
@@ -189,6 +178,7 @@ const EnhancedTableToolbar = (props) => {
       'lname': lname,
       'username': username,
       'email': 'email',
+      'avatar': avatar,
     }
     fetch('https://www.mecallapi.com/api/users/create', {
       method: 'POST',
@@ -207,9 +197,6 @@ const EnhancedTableToolbar = (props) => {
           }
         }
       )
-  };
-  const handleClickFilter = (event) => {
-    setAnchorFilter(event.currentTarget);
   };
   const handleClickOpen = () => {
     setOpen(true);
@@ -238,27 +225,6 @@ const EnhancedTableToolbar = (props) => {
       >
         Appointments
       </Typography>
-      <TextField
-        value={filterName}
-        onChange={onFilterName}
-        // sx={{width:'200px',height:'10px'}}
-        // label="ค้นหา"
-        placeholder="ค้นหา"
-        size="small" 
-        InputProps={{
-          
-          startAdornment: (
-            <InputAdornment  position="start">
-              <IconButton  >
-                <SearchIcon  />
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
-      {/* <Button onClick={handleClickOpen} variant="contained" color="primary">
-        CREATE
-      </Button> */}
       <Dialog
         open={open}
         onClose={handleClose}
@@ -323,6 +289,15 @@ const EnhancedTableToolbar = (props) => {
                 onChange={(e) => setUsername(e.target.value)}
               />
             </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                id="avatar"
+                label="avatar"
+                variant="outlined"
+                onChange={(e) => setAvatar(e.target.value)}
+              />
+            </Grid>
           </Grid>
         </DialogContent>
         <Divider />
@@ -344,11 +319,10 @@ const EnhancedTableToolbar = (props) => {
 
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
-  filterName: PropTypes.string,
-  onFilterName: PropTypes.func,
 };
 
-export default function EnhancedTable() {
+export default function Rejected() {
+  const axios = require("axios");
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -356,87 +330,26 @@ export default function EnhancedTable() {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [users, setUsers] = useState([]);
-  const [filterName, setFilterName] = React.useState("");
-   const axios = require("axios");
   function createData(name, date, telephone, status, issue) {
     return { name, date, telephone, status, issue };
   }
-  
+
   const rows = [
-    createData('Frozen yoghurt', '09-03-2565',null, 'air-filter'),
-    createData('Ray yoghurt', '09-03-2565',null, 'engine'),
-    createData('Zee yoghurt', '09-03-2565',null, 'port'),
-    createData('Aet yoghurt', '09-03-2565',null, 'air'),
+    createData('Frozen Bey', '09-03-2565', '089-999-8888', 'air-filter'),
+    createData('Jin yoghurt', '09-03-2565', '080-000-0000', 'engine'),
+    createData('Ter Ahe', '09-03-2565', '081-111-1111', 'port'),
+    createData('Aet yoghurt', '09-03-2565', '086-666-6666', 'air'),
   ];
-  const handleFilterByName = (event) => {
-    setFilterName(event.target.value);
-  };
-
-  const filteredInvoice = applySortFilter(
-    users,
-    getComparator(order, orderBy),
-    filterName
-  );
-
-  function applySortFilter(array, comparator, query) {
-    console.log("applySortFilter");
-    const stabilizedThis = array.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
-      const order = comparator(a[0], b[0]);
-      if (order !== 0) return order;
-      return a[1] - b[1];
-    });
-    if (query) {
-      return filter(
-        array,
-        (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
-      );
-    }
-    return stabilizedThis.map((el) => el[0]);
-  }
-
-
-
-
   useEffect(() => {
-    getAppointment()
-    // UsersGet()
+    UsersGet()
   }, []);
-  // const getAvaliableMechanic = () =>{
-  //   axios.get(url + "/a/details?id=" + users.mechanic)
-  //   .then(
-  //       (result) => {
-  //           console.log(result.data)
-  //           setMechanics(result.data.mechanic)
-  //       })
-  // }
-  const getAppointment = () => {
-    axios.get(url + "/a/appointments").then((res) => {
+  const UsersGet = () => {
+    axios.get(url + "/a/appointmentsPending").then((res) => {
       console.log(res.data);
       const list = res.data.map((d) => d);
       setUsers(list);
     });
   }
-  const  formatDate =(d) =>{
-    const date = new Date(d*1000).toLocaleString('fr-FR')
-    return date
-  }
-  const UsersGet = () => {
-    fetch("https://www.mecallapi.com/api/users")
-      .then(res => res.json())
-      .then(
-        (result) => {
-          setUsers(result)
-        }
-      )
-    // axios.get(url + "/a/appointments").then((res) => {
-    //   console.log(res.data);
-    //   const list = res.data.map((d) => d);
-    //   setUsers(list);
-    // });
-    // console.log(users)
-  }
-
   const UserDelete = id => {
     var data = {
       'id': id
@@ -454,7 +367,7 @@ export default function EnhancedTable() {
         (result) => {
           alert(result['message'])
           if (result['status'] === 'ok') {
-            getAppointment();
+            UsersGet();
           }
         }
       )
@@ -511,28 +424,20 @@ export default function EnhancedTable() {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
 
-  const viewUser = id => {
-    window.location = '/detail/'+id
+  const UpdateUser = id => {
+    window.location = '/detail'
   }
   const handleDetailClick = id => {
-    window.location = '/update/' + id
+    // window.location = '/detail/' + id
+  }
+  const formatDate = (d) => {
+    const date = new Date(d * 1000).toLocaleString('fr-FR')
+    return date
   }
   return (
-    <Box  sx={{ width: '95%', pl: 30,}}>
-      <Stack direction={'row'} pb={2} spacing={2}>
-        <Grid item xs={6}>
-        <NotifyBox isLoading={true} title={'Appointments'} notification={users.length}></NotifyBox>
-        {/* <Chart></Chart> */}
-        </Grid>
-        <Grid item xs={6}>
-        <NotifyBox isLoading={true} icon={'mechanic'} title={'Avaliable Mechanics'} notification={users.length}></NotifyBox>
-        {/* <Chart></Chart> */}
-        </Grid>
-        </Stack>
-      <Paper elevation={6}  sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar filterName={filterName}
-          onFilterName={handleFilterByName} 
-          numSelected={selected.length} />
+    <Box sx={{ width: '100%' }}>
+      <Paper sx={{ width: '100%', mb: 2 }}>
+        <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -550,21 +455,21 @@ export default function EnhancedTable() {
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-              {/* {stableSort(users, getComparator(order, orderBy)) */}
-              {filteredInvoice
+              {stableSort(users, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.fname);
                   const labelId = `enhanced-table-checkbox-${index}`;
+
                   return (
                     <TableRow
                       hover
                       // onClick={(event) => handleClick(event, row.fname)}
                       role="checkbox"
-                      // onClick={() => handleDetailClick(row.id)}
+                      onClick={() => handleDetailClick(row.id)}
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.fname}
                       selected={isItemSelected}
                     >
                       <TableCell
@@ -584,6 +489,7 @@ export default function EnhancedTable() {
                         scope="row"
                         padding="none"
                       >
+                        {/* {row.fname + '\t' + row.lname} */}
                         {row.name}
                       </TableCell>
                       {/* <TableCell align="right">{row.lname}</TableCell> */}
@@ -591,16 +497,15 @@ export default function EnhancedTable() {
                       <TableCell align="right">{row.description}</TableCell>
                       <TableCell align="right">{row.telephone}</TableCell>
                       <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">
-                        <Button onClick={() => viewUser(row.appointment_id)}
-                        >View</Button>
-                        {/* <Button onClick={() => UserDelete(row.id)}>Del</Button> */}
+                        <Button disable={true}
+                          onClick={() => handleDetailClick(row.appointment_id)}>View</Button>
+                        <Button onClick={() => UserDelete(row.id)}>Del</Button>
                       </ButtonGroup>
                       </TableCell>
 
                     </TableRow>
                   );
                 })}
-              
               {emptyRows > 0 && (
                 <TableRow
                   style={{

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 // material-ui
 import { styled, useTheme } from "@mui/material/styles";
+import EngineeringIcon from '@mui/icons-material/Engineering';
 import {
   Avatar,
   Box,
@@ -38,7 +39,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
 
 // ===========================|| DASHBOARD DEFAULT - EARNING CARD ||=========================== //
 
-const NotifyBox = ({ isLoading, notification }) => {
+const NotifyBox = ({ isLoading, notification, icon, title }) => {
   const theme = useTheme();
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -68,7 +69,12 @@ const NotifyBox = ({ isLoading, notification }) => {
                       mt: 1,
                     }}>
                     <Badge badgeContent={notification} color="primary">
-                      <NotificationsNoneOutlinedIcon color="action" />
+                    {icon !== 'mechanic' ? 
+                    <NotificationsNoneOutlinedIcon color="action" />
+                    : 
+                    <EngineeringIcon color="action" />
+
+                  }
                     </Badge>
                   </Avatar>
                 </Grid>
@@ -85,9 +91,10 @@ const NotifyBox = ({ isLoading, notification }) => {
                       mt: 1.75,
                       mb: 0.75,
                     }}>
+                      {/* {title} */}
                     {notification === 0
-                      ? "No Appointments today"
-                      : notification + " Appointments Today"}
+                      ? "No "+title+" today"
+                      : notification +' ' + title +" Today"}
                   </Typography>
                 </Grid>
                 <Grid item>
@@ -126,6 +133,9 @@ const NotifyBox = ({ isLoading, notification }) => {
 NotifyBox.propTypes = {
   isLoading: PropTypes.bool,
   notification: PropTypes.string,
+  icon: PropTypes.string,
+  title: PropTypes.string,
+
 };
 
 export default NotifyBox;
