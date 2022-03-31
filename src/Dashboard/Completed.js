@@ -33,7 +33,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { useEffect, useState } from "react";
 import UserUpdate from '../UserUpdate';
-import { URL as url } from '../Constant';
+import { URL as url}  from '../Constant';
 
 
 function descendingComparator(a, b, orderBy) {
@@ -74,10 +74,10 @@ const headCells = [
     label: 'ClientName',
   },
   {
-    id: 'date',
+    id: 'booking-date',
     numeric: true,
     disablePadding: false,
-    label: 'Date',
+    label: 'Booking Date',
   },
   {
     id: 'description',
@@ -204,7 +204,7 @@ const EnhancedTableToolbar = (props) => {
   const handleClose = () => {
     setOpen(false);
   };
-
+ 
   return (
     <Toolbar
       sx={{
@@ -321,7 +321,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function Table1() {
+export default function Completed() {
   const axios = require("axios");
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
@@ -333,18 +333,18 @@ export default function Table1() {
   function createData(name, date, telephone, status, issue) {
     return { name, date, telephone, status, issue };
   }
-
+  
   const rows = [
-    createData('Frozen Bey', '09-03-2565', '089-999-8888', 'air-filter'),
-    createData('Jin yoghurt', '09-03-2565', '080-000-0000', 'engine'),
-    createData('Ter Ahe', '09-03-2565', '081-111-1111', 'port'),
-    createData('Aet yoghurt', '09-03-2565', '086-666-6666', 'air'),
+    createData('Frozen Bey', '09-03-2565','089-999-8888', 'air-filter'),
+    createData('Jin yoghurt', '09-03-2565','080-000-0000', 'engine'),
+    createData('Ter Ahe', '09-03-2565','081-111-1111', 'port'),
+    createData('Aet yoghurt', '09-03-2565','086-666-6666', 'air'),
   ];
   useEffect(() => {
     UsersGet()
   }, []);
   const UsersGet = () => {
-    axios.get(url + "/a/appointmentsPending").then((res) => {
+    axios.get(url + "/a/appointments/completed").then((res) => {
       console.log(res.data);
       const list = res.data.map((d) => d);
       setUsers(list);
@@ -428,14 +428,24 @@ export default function Table1() {
     window.location = '/detail'
   }
   const handleDetailClick = id => {
-    // window.location = '/detail/' + id
+    window.location = '/update/' + id
   }
-  const formatDate = (d) => {
-    const date = new Date(d * 1000).toLocaleString('fr-FR')
+  const  formatDate =(d) =>{
+    const date = new Date(d*1000).toLocaleString('fr-FR')
     return date
   }
+  const formatPhone = (telephone) => {
+    var val = telephone.replace(/[^0-9]/g, "");
+      let a = val;
+      a = val.slice(0, 3);
+      a += val.length > 3 ? "-" + val.slice(3, 6) : "";
+      a += val.length > 6 ? "-" + val.slice(6) : "";
+      val = a;
+  
+    return val
+  };
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%'}}>
       <Paper sx={{ width: '100%', mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
@@ -466,7 +476,7 @@ export default function Table1() {
                       hover
                       // onClick={(event) => handleClick(event, row.fname)}
                       role="checkbox"
-                      onClick={() => handleDetailClick(row.id)}
+                      // onClick={() => handleDetailClick(row.id)}
                       aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={row.fname}
@@ -495,10 +505,11 @@ export default function Table1() {
                       {/* <TableCell align="right">{row.lname}</TableCell> */}
                       <TableCell align="right">{formatDate(row.starts_at.seconds)}</TableCell>
                       <TableCell align="right">{row.description}</TableCell>
-                      <TableCell align="right">{row.telephone}</TableCell>
+                      <TableCell align="right">{formatPhone(row.telephone)}</TableCell>
                       <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">
-                        <Button disable={true}
-                          onClick={() => handleDetailClick(row.appointment_id)}>View</Button>
+                        <Button disable={true} 
+                        // onClick={() => handleDetailClick(row.id)}
+                        >View</Button>
                         <Button onClick={() => UserDelete(row.id)}>Del</Button>
                       </ButtonGroup>
                       </TableCell>

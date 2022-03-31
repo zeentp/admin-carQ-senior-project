@@ -321,7 +321,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function Rejected() {
+export default function Booking() {
   const axios = require("axios");
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
@@ -344,7 +344,7 @@ export default function Rejected() {
     UsersGet()
   }, []);
   const UsersGet = () => {
-    axios.get(url + "/a/appointments/rejected").then((res) => {
+    axios.get(url + "/a/appointments/booking").then((res) => {
       console.log(res.data);
       const list = res.data.map((d) => d);
       setUsers(list);

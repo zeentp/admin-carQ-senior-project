@@ -5,9 +5,10 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Paper } from "@mui/material";
-import Table1 from './Table1';
-import Table2 from './Table2';
-import Table3 from './Table3';
+import Booking from './Booking';
+import Pending from './Pending';
+import Ontrack from './Ontrack';
+import Completed from './Completed';
 import Reject from './Rejected';
 
 
@@ -58,22 +59,27 @@ export default function BasicTabs() {
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs textColor='' value={value} onChange={handleChange} aria-label="basic tabs example">
                         <Tab sx={{ color: 'grey' }} label="Booking" {...a11yProps(0)} />
+                        <Tab sx={{ color: '#6a1b9a' }} label="Pending" {...a11yProps(3)} />
                         <Tab sx={{ color: '#003c8f' }} label="On track" {...a11yProps(1)} />
                         <Tab sx={{ color: 'green' }} label="Completed" {...a11yProps(2)} />
                         <Tab sx={{ color: 'red' }} label="Rejected" {...a11yProps(3)} />
+                        
 
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
-                    <Table1></Table1>
+                    <Booking></Booking>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <Table2></Table2>
+                    <Pending></Pending>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                    <Table3></Table3>
+                    <Ontrack></Ontrack>
                 </TabPanel>
                 <TabPanel value={value} index={3}>
+                    <Completed></Completed>
+                </TabPanel>
+                <TabPanel value={value} index={4}>
                     <Reject></Reject>
                 </TabPanel>
             </Paper>

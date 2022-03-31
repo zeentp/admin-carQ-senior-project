@@ -94,7 +94,7 @@ const NotifyBox = ({ isLoading, notification, icon, title }) => {
                       {/* {title} */}
                     {notification === 0
                       ? "No "+title+" today"
-                      : notification +' ' + title +" Today"}
+                      : notification +' ' + title}
                   </Typography>
                 </Grid>
                 <Grid item>

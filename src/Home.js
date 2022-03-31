@@ -78,10 +78,10 @@ const headCells = [
     label: 'ClientName',
   },
   {
-    id: 'date',
+    id: 'booking-date',
     numeric: true,
     disablePadding: false,
-    label: 'Date',
+    label: 'Booking Date',
   },
   {
     id: 'description',
@@ -166,7 +166,6 @@ const EnhancedTableToolbar = (props) => {
   const [lname, setLname] = useState('');
   const [username, setUsername] = useState('');
   const [description, setDescription] = useState('');
-  const [mechanics, setMechanics] = React.useState([]);
   const [disableApplyButton, setDisableApplyButton] = React.useState(false);
   const [anchorFilter, setAnchorFilter] = React.useState(null);
   const { filterName, onFilterName } = props;
@@ -357,6 +356,7 @@ export default function EnhancedTable() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [users, setUsers] = useState([]);
   const [filterName, setFilterName] = React.useState("");
+  const [mechanics, setMechanics] = React.useState([]);
    const axios = require("axios");
   function createData(name, date, telephone, status, issue) {
     return { name, date, telephone, status, issue };
@@ -398,18 +398,20 @@ export default function EnhancedTable() {
 
 
 
-  useEffect(() => {
-    getAppointment()
-    // UsersGet()
-  }, []);
-  // const getAvaliableMechanic = () =>{
-  //   axios.get(url + "/a/details?id=" + users.mechanic)
-  //   .then(
-  //       (result) => {
-  //           console.log(result.data)
-  //           setMechanics(result.data.mechanic)
-  //       })
-  // }
+    useEffect(() => {
+      getAppointment()
+      getAvaliableMechanic()
+      // UsersGet()
+    }, []);
+  const getAvaliableMechanic = () =>{
+    axios.get(url + "/m/getByStatus")
+    .then(
+        (result) => {
+            console.log(result)
+            const list = result.data.map((d) => d);
+            setMechanics(list);
+        })
+  }
   const getAppointment = () => {
     axios.get(url + "/a/appointments").then((res) => {
       console.log(res.data);
@@ -418,8 +420,10 @@ export default function EnhancedTable() {
     });
   }
   const  formatDate =(d) =>{
+    if(d!== null){
     const date = new Date(d*1000).toLocaleString('fr-FR')
     return date
+    } return 0
   }
   const UsersGet = () => {
     fetch("https://www.mecallapi.com/api/users")
@@ -517,6 +521,16 @@ export default function EnhancedTable() {
   const handleDetailClick = id => {
     window.location = '/update/' + id
   }
+  const formatPhone = (telephone) => {
+    var val = telephone.replace(/[^0-9]/g, "");
+      let a = val;
+      a = val.slice(0, 3);
+      a += val.length > 3 ? "-" + val.slice(3, 6) : "";
+      a += val.length > 6 ? "-" + val.slice(6) : "";
+      val = a;
+  
+    return val
+  };
   return (
     <Box  sx={{ width: '95%', pl: 30,}}>
       <Stack direction={'row'} pb={2} spacing={2}>
@@ -525,7 +539,7 @@ export default function EnhancedTable() {
         {/* <Chart></Chart> */}
         </Grid>
         <Grid item xs={6}>
-        <NotifyBox isLoading={true} icon={'mechanic'} title={'Avaliable Mechanics'} notification={users.length}></NotifyBox>
+        <NotifyBox isLoading={true} icon={'mechanic'} title={'Avaliable Mechanics'} notification={mechanics.length}></NotifyBox>
         {/* <Chart></Chart> */}
         </Grid>
         </Stack>
@@ -589,7 +603,7 @@ export default function EnhancedTable() {
                       {/* <TableCell align="right">{row.lname}</TableCell> */}
                       <TableCell align="right">{formatDate(row.starts_at.seconds)}</TableCell>
                       <TableCell align="right">{row.description}</TableCell>
-                      <TableCell align="right">{row.telephone}</TableCell>
+                      <TableCell align="right">{formatPhone(row.telephone)}</TableCell>
                       <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">
                         <Button onClick={() => viewUser(row.appointment_id)}
                         >View</Button>

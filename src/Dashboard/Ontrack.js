@@ -74,10 +74,10 @@ const headCells = [
     label: 'ClientName',
   },
   {
-    id: 'date',
+    id: 'booking-date',
     numeric: true,
     disablePadding: false,
-    label: 'Date',
+    label: 'Booking Date',
   },
   {
     id: 'description',
@@ -321,7 +321,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function Table3() {
+export default function Ontrack() {
   const axios = require("axios");
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
@@ -344,7 +344,7 @@ export default function Table3() {
     UsersGet()
   }, []);
   const UsersGet = () => {
-    axios.get(url + "/a/appointmentsCompleted").then((res) => {
+    axios.get(url + "/a/appointments/onTrack").then((res) => {
       console.log(res.data);
       const list = res.data.map((d) => d);
       setUsers(list);
@@ -428,12 +428,22 @@ export default function Table3() {
     window.location = '/detail'
   }
   const handleDetailClick = id => {
-    window.location = '/update/' + id
+    window.location = '/detail/' + id
   }
   const  formatDate =(d) =>{
     const date = new Date(d*1000).toLocaleString('fr-FR')
     return date
   }
+  const formatPhone = (telephone) => {
+    var val = telephone.replace(/[^0-9]/g, "");
+      let a = val;
+      a = val.slice(0, 3);
+      a += val.length > 3 ? "-" + val.slice(3, 6) : "";
+      a += val.length > 6 ? "-" + val.slice(6) : "";
+      val = a;
+  
+    return val
+  };
   return (
     <Box sx={{ width: '100%'}}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -495,10 +505,10 @@ export default function Table3() {
                       {/* <TableCell align="right">{row.lname}</TableCell> */}
                       <TableCell align="right">{formatDate(row.starts_at.seconds)}</TableCell>
                       <TableCell align="right">{row.description}</TableCell>
-                      <TableCell align="right">{row.telephone}</TableCell>
+                      <TableCell align="right">{formatPhone(row.telephone)}</TableCell>
                       <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">
                         <Button disable={true} 
-                        // onClick={() => handleDetailClick(row.id)}
+                        onClick={() => handleDetailClick(row.appointment_id)}
                         >View</Button>
                         <Button onClick={() => UserDelete(row.id)}>Del</Button>
                       </ButtonGroup>

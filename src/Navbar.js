@@ -26,7 +26,7 @@ const pathname = window.location.pathname
 
 
 export default function Navbar() {
-    const [menu, setMenu] = React.useState(pathname);
+    const [menu, setMenu] = React.useState('');
     const listMenuTitle = ['Home', 'Crew', 'Dashboard']
     const [anchorEl, setAnchorEl] = React.useState(null);
     let navigate = useNavigate();
