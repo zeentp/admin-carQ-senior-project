@@ -7,6 +7,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
+import { makeStyles } from '@mui/styles';
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -37,6 +38,13 @@ import { URL as url } from '../Constant';
 import CircularProgress from '@mui/material/CircularProgress';
 import LinearProgress from '@mui/material/LinearProgress';
 
+const useStyles = makeStyles((theme) => ({
+  deleteButton: {
+    // to make a red delete button
+    color: theme.palette.getContrastText(theme.palette.error.main),
+    background: theme.palette.error.main,
+  }
+}));  
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -450,8 +458,10 @@ export default function Booking() {
 
     return val
   };
+  // const classes = useStyles();
+ 
+  const classes = useStyles();
   return (
-
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
       {isLoading && <LinearProgress />}
@@ -518,7 +528,9 @@ export default function Booking() {
                       <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">
                         <Button
                           onClick={() => handleDetailClick(row.appointment_id)}>View</Button>
-                        <Button onClick={() => UserDelete(row.id)}>Del</Button>
+                        <Button 
+                        color="error"
+                         onClick={() => UserDelete(row.id)}>Del</Button>
                       </ButtonGroup>
                       </TableCell>
 

@@ -2,6 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
+import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
@@ -9,6 +10,7 @@ import Drawer from '@mui/material/Drawer';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import Avatar from '@mui/material/Avatar';
 import List from '@mui/material/List';
 import { Container, Grid, MenuItem, Menu, IconButton } from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
@@ -30,6 +32,7 @@ export default function Navbar() {
     const listMenuTitle = ['Home', 'Crew', 'Dashboard']
     const [anchorEl, setAnchorEl] = React.useState(null);
     let navigate = useNavigate();
+    const user = JSON.parse(localStorage.getItem('user'));
 
     useEffect(() => {
         // setMenu(pathname)
@@ -57,7 +60,6 @@ export default function Navbar() {
 
     const handleClose = () => {
         setAnchorEl(null);
-        window.location.href = '/account';
 
     };
 
@@ -81,6 +83,16 @@ export default function Navbar() {
                         <Typography sx={{ flexGrow: 1, textAlign: 'start', color: 'white' }} variant="h6" noWrap component="div">
                             {menu}
                         </Typography>
+                            {/* <Chip
+                            sx={{color:'white'}}
+                            clickable
+                                onClick={handleMenu}
+                                // avatar={<AccountCircle/>}
+                                    avatar={<Avatar>M</Avatar>}
+                                color='primary' variant="outlined" label={user.firstName + ' ' + user.lastName} /> */}
+                        <Typography sx={{ textAlign: 'flex-end', color: 'white' }} variant="h6" noWrap component="div">
+                            {user.firstName + ' ' + user.lastName}
+                        </Typography>
                         <div>
                             <IconButton
                                 size="large"
@@ -91,7 +103,7 @@ export default function Navbar() {
                                 color="inherit"
 
                             >
-                                <AccountCircle sx={{ color: 'white' ,fontSize:30}} />
+                                <AccountCircle sx={{ color: 'white', fontSize: 30 }} />
                             </IconButton>
                             <Menu
                                 id="menu-appbar"
@@ -142,7 +154,7 @@ export default function Navbar() {
                     </Stack>
                 </Toolbar>
                 <Divider />
-                <List sx={{ ml: 2,mr:2 }} >
+                <List sx={{ ml: 2, mr: 2 }} >
                     {listMenuTitle.map((text, index) => (
                         <ListItem button key={text} onClick={() => changePage(text)} >
                             <ListItemIcon sx={{ pb: 3 }} >

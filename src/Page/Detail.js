@@ -102,6 +102,7 @@ const MultipleSelect = () => {
     const { id } = useParams();
 
     useEffect(() => {
+        console.log(personName)
         axios.get(url + "/a/details?id=" + id)
             .then(
                 (result) => {
@@ -112,7 +113,7 @@ const MultipleSelect = () => {
 
 
 
-    const handleChange = (event) => {
+    const handleChangeMechanic = (event) => {
         const {
             target: { value },
         } = event;
@@ -132,7 +133,7 @@ const MultipleSelect = () => {
                     id="demo-multiple-name"
                     multiple
                     value={personName}
-                    onChange={handleChange}
+                    onChange={handleChangeMechanic}
                     input={<OutlinedInput label="Mechanic" />}
                     MenuProps={MenuProps}
                 >
@@ -162,6 +163,7 @@ export default function UserUpdate() {
 
     useEffect(() => {
         console.log(id)
+        getMechanics()
         axios.get(url + "/a/details?id=" + id)
             // .then(res => console.log(res.data))
             .then(
@@ -177,6 +179,11 @@ export default function UserUpdate() {
                     setPlateNumber(result.data.plate_no)
                     setDateTime(result.data.starts_at.seconds)
                     setStatus(result.data.status)
+                    setAppointmentId(result.data.appointment_id)
+                    // console.log(status)
+                    // console.log(result.data.status)
+                    console.log(result.data.appointment_id)
+
                 })
         // fetch("https://www.mecallapi.com/api/users/"+id)
         //   .then(res => res.json())
@@ -197,18 +204,23 @@ export default function UserUpdate() {
     };
     const handleSubmit = event => {
         event.preventDefault();
+        console.log(personName)
         console.log(isCheck1)
 
         var data = {
-            id: id,
-            status: true,
-            firstName: fname,
-            lastName: lname,
-            telephone: telephone,
-            email: email,
-            gender: gender,
-            age: 22,
+            appointment_id: appointmentId,
+            mechanic_id: personName,
+            note:note,
+            status:status,
+            // ends_at:,
+            //note:,
+            //status:,
         }
+        console.log(data)
+        axios.put(url + "/a/details/update", data).then((res) => {
+            console.log(res);
+            // window.location.href = '/mechanic';
+        });
     }
     const [editFlag, setEditFlag] = useState(false);
 
@@ -224,8 +236,45 @@ export default function UserUpdate() {
     const [isCheck1, setIscheck1] = useState(false);
     const [isCheck2, setIscheck2] = useState(false);
     const [dateTime, setDateTime] = useState('');
+    const [appointmentId, setAppointmentId] = useState('');
     const [status, setStatus] = useState('');
+    const [listMechanic, setListMechanic] = useState([]);
+    const [note, setNote] = useState('');
 
+
+
+    const theme = useTheme();
+    const [mechanics, setMechanics] = React.useState([]);
+    const [personName, setPersonName] = React.useState([]);
+
+    // useEffect(() => {
+    //     console.log('person',personName)
+    //     axios.get(url + "/a/details?id=" + id)
+    //         .then(
+    //             (result) => {
+    //                 console.log(result.data)
+    //                 setMechanics(result.data.mechanic)
+    //             })
+    // }, [id,personName])
+
+    function getMechanics() {
+        axios.get(url + "/a/details?id=" + id)
+            .then(
+                (result) => {
+                    console.log(result.data)
+                    setMechanics(result.data.mechanic)
+                })
+    }
+
+    const handleChangeMechanic = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setPersonName(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+    };
 
     const formatDate = (d) => {
         const date = new Date(d * 1000).toLocaleString('fr-FR')
@@ -421,7 +470,42 @@ export default function UserUpdate() {
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <MultipleSelect></MultipleSelect>
+                                <TextField
+                                    variant="outlined"
+                                    fullWidth
+                                    value={issue}
+                                    id="issue"
+                                    label="Person in charge"
+                                    disabled={disableEditButton}
+                                // onChange={(e) => setTelephone(e.target.value)}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <div>
+                                    <FormControl sx={{ width: "100%" }}>
+                                        <InputLabel id="demo-multiple-name-label">Mechanic</InputLabel>
+                                        <Select
+                                            sx={{ textAlign: 'start' }}
+                                            labelId="demo-multiple-name-label"
+                                            id="demo-multiple-name"
+                                            multiple
+                                            value={personName}
+                                            onChange={handleChangeMechanic}
+                                            input={<OutlinedInput label="Mechanic" />}
+                                            MenuProps={MenuProps}
+                                        >
+                                            {mechanics.map((name) => (
+                                                <MenuItem
+                                                    key={name}
+                                                    value={name}
+                                                    style={getStyles(name, personName, theme)}
+                                                >
+                                                    {name}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </div>
                             </Grid>
                             <Grid item xs={12}>
                                 {status === 'booking' ?
@@ -453,7 +537,8 @@ export default function UserUpdate() {
                                                     // label="Status"
                                                     onChange={handleChangeSelect}
                                                 >
-                                                    <MenuItem value={'pedding'}>pedding</MenuItem>
+                                                    <MenuItem value={'pending'}>pending</MenuItem>
+                                                    <MenuItem value={'on-track'}>on-track</MenuItem>
                                                     <MenuItem value={'completed'}>completed</MenuItem>
                                                 </Select>
                                             </Box>
@@ -467,7 +552,7 @@ export default function UserUpdate() {
                                     id="note"
                                     label="note"
                                     multiline
-                                // onChange={(e) => setTelephone(e.target.value)}
+                                    onChange={(e) => setNote(e.target.value)}
                                 />
                             </Grid>
                         </Grid>

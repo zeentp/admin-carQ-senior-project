@@ -35,6 +35,13 @@ const theme = createTheme({
         },
       },
     },
+    MuiChip: {
+      root: {
+          padding: '3px 4px',
+          fontFamily: "sans-serif",
+          fontSize: "40"
+      },
+  },
   },
 });
 const pathname = window.location.pathname
