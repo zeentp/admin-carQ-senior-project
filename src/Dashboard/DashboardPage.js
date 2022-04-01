@@ -63,8 +63,6 @@ export default function BasicTabs() {
                         <Tab sx={{ color: '#003c8f' }} label="On track" {...a11yProps(1)} />
                         <Tab sx={{ color: 'green' }} label="Completed" {...a11yProps(2)} />
                         <Tab sx={{ color: 'red' }} label="Rejected" {...a11yProps(3)} />
-                        
-
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>

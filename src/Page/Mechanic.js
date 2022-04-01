@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { URL as url}  from '../Constant';
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -7,12 +8,13 @@ import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
+import FormControl from '@mui/material/FormControl';
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import { Table, InputAdornment, } from '@mui/material';
+import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
+import MuiAlert from '@mui/material/Alert';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
@@ -21,24 +23,26 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from "@mui/material/Button";
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
+import {InputAdornment,Toolbar} from '@mui/material';
 import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import { useEffect, useState } from "react";
-import UserUpdate from './UserUpdate';
 import SearchIcon from "@mui/icons-material/Search";
+import  {Snackbar,Paper} from "@mui/material";
+// import Snackbar from '@mui/material/Snackbar';
+
+import { useEffect, useState } from "react";
+import { v4 as uuid } from 'uuid';
 import { filter } from "lodash";
-import { URL as url}  from './Constant';
-import NotifyBox from './component/NotifyBox';
-import Chart from './component/Chart';
+
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -72,22 +76,22 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'fname',
+    id: 'firstName',
     numeric: false,
     disablePadding: true,
-    label: 'ClientName',
+    label: 'Name',
   },
   {
-    id: 'booking-date',
+    id: 'status',
     numeric: true,
     disablePadding: false,
-    label: 'Booking Date',
+    label: 'Status',
   },
   {
-    id: 'description',
+    id: 'email',
     numeric: true,
     disablePadding: false,
-    label: 'Description',
+    label: 'Email',
   },
   {
     id: 'telephone',
@@ -164,51 +168,58 @@ const EnhancedTableToolbar = (props) => {
   const [open, setOpen] = React.useState(false);
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
+  const [telephone, setTelephone] = useState('');
+  const [gender, setGender] = useState('');
   const [username, setUsername] = useState('');
-  const [description, setDescription] = useState('');
-  const [disableApplyButton, setDisableApplyButton] = React.useState(false);
-  const [anchorFilter, setAnchorFilter] = React.useState(null);
+  const [email, setEmail] = useState('');
+  const [avatar, setAvatar] = useState('');
   const { filterName, onFilterName } = props;
+  const unique_id = uuid();
+  const [disableApplyButton, setDisableApplyButton] = React.useState(false);
+  const axios = require("axios");
+
   useEffect(() => {
-    // const user = JSON.parse(localStorage.getItem('user'));
-    // console.log(user)
-    if (fname !== '' && lname !== '') {
+    if (fname !== '' && lname !== '' && email !== ''&& telephone !== ''&& telephone.length === 12) {
       setDisableApplyButton(false)
     } else {
       setDisableApplyButton(true)
     }
-  }, [fname, lname]);
-  const handleSearchFilter = (event) => {
-    setAnchorFilter(event.currentTarget);
-  };
+  }, [fname, lname,email,telephone]);
   const handleSubmit = (event) => {
     event.preventDefault();
     var data = {
-      'fname': fname,
-      'lname': lname,
-      'username': username,
-      'email': 'email',
+      id: unique_id,
+      status: true,
+      firstName: fname,
+      lastName: lname,
+      telephone: telephone,
+      email: email,
     }
-    fetch('https://www.mecallapi.com/api/users/create', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/form-data',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then(res => res.json())
-      .then(
-        (result) => {
-          alert(result['message'])
-          if (result['status'] === 'ok') {
-            window.location.href = '/home';
-          }
-        }
-      )
+    
+    axios.post(url + "/m/create", data).then((res) => {
+      console.log(res.status);
+      window.location.href = '/mechanic';
+    });
+    // fetch('https://www.mecallapi.com/api/users/create', {
+    //   method: 'POST',
+    //   headers: {
+    //     Accept: 'application/form-data',
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify(data),
+    // })
+    // .then(res => res.json())
+    // .then(
+    //   (result) => {
+    //     alert(result['message'])
+    //     if (result['status'] === 'ok') {
+    //       window.location.href = '/home';
+    //     }
+    //   }
+    // )
   };
-  const handleClickFilter = (event) => {
-    setAnchorFilter(event.currentTarget);
+  const handleChange = (event) => {
+    setGender(event.target.value);    
   };
   const handleClickOpen = () => {
     setOpen(true);
@@ -216,7 +227,20 @@ const EnhancedTableToolbar = (props) => {
   const handleClose = () => {
     setOpen(false);
   };
-
+  const handlePhoneChange = (event) => {
+    var val = event.target.value.replace(/[^0-9]/g, "");
+    console.log(val)
+    if (val[0] === "0") {
+      let a = val;
+      a = val.slice(0, 3);
+      a += val.length > 3 ? "-" + val.slice(3, 6) : "";
+      a += val.length > 6 ? "-" + val.slice(6) : "";
+      val = a;
+    } else {
+      val = "";
+    }
+    setTelephone(val);
+    };
   return (
     <Toolbar
       sx={{
@@ -229,35 +253,33 @@ const EnhancedTableToolbar = (props) => {
       }}
     >
       <Typography
-        sx={{ flex: '1 1 100%' }}
+        sx={{ flex: '1 1 100%',textAlign: "start" }}
         variant="h6"
         id="tableTitle"
         component="div"
-        textAlign={'start'}
       >
-        Appointments
+        Mechanic
       </Typography>
       <TextField
+        sx={{pr:2}}
         value={filterName}
         onChange={onFilterName}
-        // sx={{width:'200px',height:'10px'}}
         // label="ค้นหา"
-        placeholder="ค้นหา"
         size="small" 
+        placeholder="ค้นหา"
         InputProps={{
-          
           startAdornment: (
-            <InputAdornment  position="start">
-              <IconButton  >
-                <SearchIcon  />
+            <InputAdornment position="start">
+              <IconButton>
+                <SearchIcon />
               </IconButton>
             </InputAdornment>
           ),
         }}
       />
-      {/* <Button onClick={handleClickOpen} variant="contained" color="primary">
+      <Button onClick={handleClickOpen} variant="contained" color="primary">
         CREATE
-      </Button> */}
+      </Button>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -294,32 +316,25 @@ const EnhancedTableToolbar = (props) => {
                 onChange={(e) => setLname(e.target.value)}
               />
             </Grid>
-            {/* <Grid item xs={6}>
+            <Grid item xs={6}>
               <TextField
                 fullWidth
                 id="Email"
                 label="Email"
                 variant="outlined"
+                onChange={(e) => setEmail(e.target.value)}
               />
-            </Grid> */}
-            {/* <Grid item xs={6}>
-              <TextField
-                fullWidth
-                id="Age"
-                label="Age"
-                type="number"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </Grid> */}
+            </Grid>
             <Grid item xs={6}>
               <TextField
                 fullWidth
-                id="username"
-                label="username"
+                id="telephone"
+                label="telephone"
                 variant="outlined"
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={handlePhoneChange}
+                inputProps={{ maxLength: 12 }}
+                value={telephone}
+                // onChange={(e) => setTelephone(e.target.value)}
               />
             </Grid>
           </Grid>
@@ -355,19 +370,47 @@ export default function EnhancedTable() {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [users, setUsers] = useState([]);
+  const axios = require("axios");
   const [filterName, setFilterName] = React.useState("");
-  const [mechanics, setMechanics] = React.useState([]);
-   const axios = require("axios");
-  function createData(name, date, telephone, status, issue) {
-    return { name, date, telephone, status, issue };
-  }
+  const [alertOpen, setAlertOpen] = React.useState(false);
+
   
-  const rows = [
-    createData('Frozen yoghurt', '09-03-2565',null, 'air-filter'),
-    createData('Ray yoghurt', '09-03-2565',null, 'engine'),
-    createData('Zee yoghurt', '09-03-2565',null, 'port'),
-    createData('Aet yoghurt', '09-03-2565',null, 'air'),
-  ];
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
+  const handleAlertClose = (event, reason) => {
+    window.location.href = '/mechanic';
+    if (reason === 'clickaway') {
+      return;
+    }
+    setAlertOpen(false);
+  };
+
+  useEffect(() => {
+    UsersGet()
+  }, []);
+  const UsersGet = () => {
+    axios.get(url + "/m/mechanics").then((res) => {
+      console.log(res.data);
+      const list = res.data.map((d) => d);
+      setUsers(list);
+    });
+  }
+  const UserDelete = id => {
+    setAlertOpen(true)
+    console.log(id)
+    axios.put(url + "/m/delete?id="+id).then((res) => {
+      console.log(res);
+      // window.location.href = '/mechanic';
+    });
+
+  }
+
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
@@ -377,6 +420,14 @@ export default function EnhancedTable() {
     getComparator(order, orderBy),
     filterName
   );
+  const handleSelectAllClick = (event) => {
+    if (event.target.checked) {
+      const newSelecteds = users.map((n) => n.name);
+      setSelected(newSelecteds);
+      return;
+    }
+    setSelected([]);
+  };
 
   function applySortFilter(array, comparator, query) {
     console.log("applySortFilter");
@@ -389,96 +440,11 @@ export default function EnhancedTable() {
     if (query) {
       return filter(
         array,
-        (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+        (_user) => _user.firstName.toLowerCase().indexOf(query.toLowerCase()) !== -1
       );
     }
     return stabilizedThis.map((el) => el[0]);
   }
-
-
-
-
-    useEffect(() => {
-      getAppointment()
-      getAvaliableMechanic()
-      // UsersGet()
-    }, []);
-  const getAvaliableMechanic = () =>{
-    axios.get(url + "/m/getByStatus")
-    .then(
-        (result) => {
-            console.log(result)
-            const list = result.data.map((d) => d);
-            setMechanics(list);
-        })
-  }
-  const getAppointment = () => {
-    axios.get(url + "/a/appointments").then((res) => {
-      console.log(res.data);
-      const list = res.data.map((d) => d);
-      setUsers(list);
-    });
-  }
-  const  formatDate =(d) =>{
-    if(d!== null){
-    const date = new Date(d*1000).toLocaleString('fr-FR')
-    return date
-    } return 0
-  }
-  const UsersGet = () => {
-    fetch("https://www.mecallapi.com/api/users")
-      .then(res => res.json())
-      .then(
-        (result) => {
-          setUsers(result)
-        }
-      )
-    // axios.get(url + "/a/appointments").then((res) => {
-    //   console.log(res.data);
-    //   const list = res.data.map((d) => d);
-    //   setUsers(list);
-    // });
-    // console.log(users)
-  }
-
-  const UserDelete = id => {
-    var data = {
-      'id': id
-    }
-    fetch('https://www.mecallapi.com/api/users/delete', {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/form-data',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then(res => res.json())
-      .then(
-        (result) => {
-          alert(result['message'])
-          if (result['status'] === 'ok') {
-            getAppointment();
-          }
-        }
-      )
-  }
-
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
-
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = users.map((n) => n.name);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
-
   const handleClick = (event, name) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
@@ -515,36 +481,15 @@ export default function EnhancedTable() {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
 
-  const viewUser = id => {
-    window.location = '/detail/'+id
-  }
-  const handleDetailClick = id => {
+  const UpdateUser = id => {
     window.location = '/update/' + id
   }
-  const formatPhone = (telephone) => {
-    var val = telephone.replace(/[^0-9]/g, "");
-      let a = val;
-      a = val.slice(0, 3);
-      a += val.length > 3 ? "-" + val.slice(3, 6) : "";
-      a += val.length > 6 ? "-" + val.slice(6) : "";
-      val = a;
-  
-    return val
-  };
+
   return (
-    <Box  sx={{ width: '95%', pl: 30,}}>
-      <Stack direction={'row'} pb={2} spacing={2}>
-        <Grid item xs={6}>
-        <NotifyBox isLoading={true} title={'Appointments'} notification={users.length}></NotifyBox>
-        {/* <Chart></Chart> */}
-        </Grid>
-        <Grid item xs={6}>
-        <NotifyBox isLoading={true} icon={'mechanic'} title={'Avaliable Mechanics'} notification={mechanics.length}></NotifyBox>
-        {/* <Chart></Chart> */}
-        </Grid>
-        </Stack>
-      <Paper elevation={6}  sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar filterName={filterName}
+    <Box sx={{ width: '95%', pl: 30,}}>
+      <Paper elevation={6} sx={{ width: '100%', mb: 2,}}>
+
+        <EnhancedTableToolbar  filterName={filterName}
           onFilterName={handleFilterByName} 
           numSelected={selected.length} />
         <TableContainer>
@@ -564,26 +509,23 @@ export default function EnhancedTable() {
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-              {/* {stableSort(users, getComparator(order, orderBy)) */}
               {filteredInvoice
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.firstName);
                   const labelId = `enhanced-table-checkbox-${index}`;
+
                   return (
                     <TableRow
                       hover
                       // onClick={(event) => handleClick(event, row.fname)}
                       role="checkbox"
-                      // onClick={() => handleDetailClick(row.id)}
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.firstName}
                       selected={isItemSelected}
                     >
-                      <TableCell
-
-                        padding="checkbox">
+                      <TableCell padding="checkbox">
                         {/* <Checkbox
                           color="primary"
                           checked={isItemSelected}
@@ -598,23 +540,20 @@ export default function EnhancedTable() {
                         scope="row"
                         padding="none"
                       >
-                        {row.name}
+                        {row.firstName + '\t' + row.lastName}
                       </TableCell>
-                      {/* <TableCell align="right">{row.lname}</TableCell> */}
-                      <TableCell align="right">{formatDate(row.starts_at.seconds)}</TableCell>
-                      <TableCell align="right">{row.description}</TableCell>
-                      <TableCell align="right">{formatPhone(row.telephone)}</TableCell>
+                      <TableCell align="right">{row.status === true ? "avaliable" : "unavaliable"}</TableCell>
+                      <TableCell align="right">{row.email}</TableCell>
+                      <TableCell align="right">{row.telephone}</TableCell>
                       <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">
-                        <Button onClick={() => viewUser(row.appointment_id)}
-                        >View</Button>
-                        {/* <Button onClick={() => UserDelete(row.id)}>Del</Button> */}
+                        <Button onClick={() => UpdateUser(row.id)} >Edit</Button>
+                        <Button onClick={() => UserDelete(row.id)}>Del</Button>
                       </ButtonGroup>
                       </TableCell>
 
                     </TableRow>
                   );
                 })}
-              
               {emptyRows > 0 && (
                 <TableRow
                   style={{
@@ -637,7 +576,11 @@ export default function EnhancedTable() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-
+      <Snackbar open={alertOpen} autoHideDuration={3000} onClose={handleAlertClose}>
+          <Alert onClose={handleAlertClose} severity="info" sx={{ width: '100%' }}>
+            Deleting
+          </Alert>
+        </Snackbar>
     </Box>
   );
 }

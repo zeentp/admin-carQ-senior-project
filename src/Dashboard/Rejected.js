@@ -32,8 +32,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { useEffect, useState } from "react";
-import UserUpdate from '../UserUpdate';
+import UserUpdate from '../Page/UserUpdate';
 import { URL as url } from '../Constant';
+import LinearProgress from '@mui/material/LinearProgress';
+
 
 
 function descendingComparator(a, b, orderBy) {
@@ -330,6 +332,7 @@ export default function Rejected() {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = React.useState(true);
   function createData(name, date, telephone, status, issue) {
     return { name, date, telephone, status, issue };
   }
@@ -347,6 +350,7 @@ export default function Rejected() {
     axios.get(url + "/a/appointments/rejected").then((res) => {
       console.log(res.data);
       const list = res.data.map((d) => d);
+      setIsLoading(false)
       setUsers(list);
     });
   }
@@ -428,7 +432,7 @@ export default function Rejected() {
     window.location = '/detail'
   }
   const handleDetailClick = id => {
-    // window.location = '/detail/' + id
+    window.location = '/detail/' + id
   }
   const formatDate = (d) => {
     const date = new Date(d * 1000).toLocaleString('fr-FR')
@@ -447,6 +451,7 @@ export default function Rejected() {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
+      {isLoading && <LinearProgress />}
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
@@ -476,7 +481,7 @@ export default function Rejected() {
                       hover
                       // onClick={(event) => handleClick(event, row.fname)}
                       role="checkbox"
-                      onClick={() => handleDetailClick(row.id)}
+                      // onClick={() => handleDetailClick(row.id)}
                       aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={row.fname}

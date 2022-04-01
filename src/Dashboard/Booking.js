@@ -32,8 +32,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { useEffect, useState } from "react";
-import UserUpdate from '../UserUpdate';
+import UserUpdate from '../Page/UserUpdate';
 import { URL as url } from '../Constant';
+import CircularProgress from '@mui/material/CircularProgress';
+import LinearProgress from '@mui/material/LinearProgress';
 
 
 function descendingComparator(a, b, orderBy) {
@@ -216,6 +218,7 @@ const EnhancedTableToolbar = (props) => {
         }),
       }}
     >
+
       <Typography
         sx={{ flex: '1 1 100%' }}
         variant="h6"
@@ -330,6 +333,7 @@ export default function Booking() {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = React.useState(true);
   function createData(name, date, telephone, status, issue) {
     return { name, date, telephone, status, issue };
   }
@@ -347,6 +351,7 @@ export default function Booking() {
     axios.get(url + "/a/appointments/booking").then((res) => {
       console.log(res.data);
       const list = res.data.map((d) => d);
+      setIsLoading(false)
       setUsers(list);
     });
   }
@@ -428,7 +433,8 @@ export default function Booking() {
     window.location = '/detail'
   }
   const handleDetailClick = id => {
-    // window.location = '/detail/' + id
+    console.log('id before :',id)
+    window.location = '/detail/' + id
   }
   const formatDate = (d) => {
     const date = new Date(d * 1000).toLocaleString('fr-FR')
@@ -436,17 +442,19 @@ export default function Booking() {
   }
   const formatPhone = (telephone) => {
     var val = telephone.replace(/[^0-9]/g, "");
-      let a = val;
-      a = val.slice(0, 3);
-      a += val.length > 3 ? "-" + val.slice(3, 6) : "";
-      a += val.length > 6 ? "-" + val.slice(6) : "";
-      val = a;
-  
+    let a = val;
+    a = val.slice(0, 3);
+    a += val.length > 3 ? "-" + val.slice(3, 6) : "";
+    a += val.length > 6 ? "-" + val.slice(6) : "";
+    val = a;
+
     return val
   };
   return (
+
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
+      {isLoading && <LinearProgress />}
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
@@ -463,6 +471,7 @@ export default function Booking() {
               rowCount={users.length}
             />
             <TableBody>
+
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
               {stableSort(users, getComparator(order, orderBy))
@@ -476,7 +485,7 @@ export default function Booking() {
                       hover
                       // onClick={(event) => handleClick(event, row.fname)}
                       role="checkbox"
-                      onClick={() => handleDetailClick(row.id)}
+                      // onClick={() => handleDetailClick(row.id)}
                       aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={row.fname}
@@ -507,7 +516,7 @@ export default function Booking() {
                       <TableCell align="right">{row.description}</TableCell>
                       <TableCell align="right">{formatPhone(row.telephone)}</TableCell>
                       <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">
-                        <Button disable={true}
+                        <Button
                           onClick={() => handleDetailClick(row.appointment_id)}>View</Button>
                         <Button onClick={() => UserDelete(row.id)}>Del</Button>
                       </ButtonGroup>

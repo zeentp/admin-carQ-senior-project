@@ -29,6 +29,7 @@ import ArchiveTwoToneIcon from "@mui/icons-material/ArchiveOutlined";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const CardWrapper = styled(MainCard)(({ theme }) => ({
   backgroundColor: blue[800],
@@ -58,47 +59,52 @@ const NotifyBox = ({ isLoading, notification, icon, title }) => {
     <>
       <CardWrapper border={false} content={false}>
         <Box sx={{ p: 2.5 }}>
-          <Grid container direction="column">
-            <Grid item>
-              <Grid container justifyContent="space-between">
-                <Grid item>
-                  <Avatar
-                    variant="rounded"
-                    sx={{
-                      bgcolor: indigo[500],
-                      mt: 1,
-                    }}>
-                    <Badge badgeContent={notification} color="primary">
-                    {icon !== 'mechanic' ? 
-                    <NotificationsNoneOutlinedIcon color="action" />
-                    : 
-                    <EngineeringIcon color="action" />
+          {isLoading === true ?
+            <CircularProgress />
+            :
+            <Grid container direction="column">
+              <Grid item>
+                <Grid container justifyContent="space-between">
+                  <Grid item>
 
-                  }
-                    </Badge>
-                  </Avatar>
+                    <Avatar
+                      variant="rounded"
+                      sx={{
+                        bgcolor: indigo[500],
+                        mt: 1,
+                      }}>
+                      <Badge badgeContent={notification} color="primary">
+                        {icon !== 'mechanic' ?
+                          <NotificationsNoneOutlinedIcon color="action" />
+                          :
+                          <EngineeringIcon color="action" />
+
+                        }
+                      </Badge>
+                    </Avatar>
+
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-            <Grid item>
-              <Grid container alignItems="center">
-                <Grid item>
-                  <Typography
-                    sx={{
-                      fontSize: "2.125rem",
-                      fontWeight: 500,
-                      mr: 1,
-                      mt: 1.75,
-                      mb: 0.75,
-                    }}>
+              <Grid item>
+                <Grid container alignItems="center">
+                  <Grid item>
+                    <Typography
+                      sx={{
+                        fontSize: "2.125rem",
+                        fontWeight: 500,
+                        mr: 1,
+                        mt: 1.75,
+                        mb: 0.75,
+                      }}>
                       {/* {title} */}
-                    {notification === 0
-                      ? "No "+title+" today"
-                      : notification +' ' + title}
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  {/* <Avatar
+                      {notification === 0
+                        ? "No " + title + " today"
+                        : notification + ' ' + title}
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    {/* <Avatar
                     sx={{
                       cursor: "pointer",
                       ...theme.typography.smallAvatar,
@@ -110,10 +116,10 @@ const NotifyBox = ({ isLoading, notification, icon, title }) => {
                       sx={{ transform: "rotate3d(1, 1, 1, 45deg)" }}
                     />
                   </Avatar> */}
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
-            {/* <Grid item sx={{ mb: 1.25 }}>
+              {/* <Grid item sx={{ mb: 1.25 }}>
               <Typography
                 sx={{
                   fontSize: "1rem",
@@ -123,7 +129,8 @@ const NotifyBox = ({ isLoading, notification, icon, title }) => {
                 ขอให้เป็นวันที่ดีนะครับ
               </Typography>
             </Grid> */}
-          </Grid>
+            </Grid>
+          }
         </Box>
       </CardWrapper>
     </>

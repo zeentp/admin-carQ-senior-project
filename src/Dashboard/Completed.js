@@ -32,8 +32,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { useEffect, useState } from "react";
-import UserUpdate from '../UserUpdate';
+import UserUpdate from '../Page/UserUpdate';
 import { URL as url}  from '../Constant';
+import LinearProgress from '@mui/material/LinearProgress';
 
 
 function descendingComparator(a, b, orderBy) {
@@ -330,6 +331,7 @@ export default function Completed() {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = React.useState(true);
   function createData(name, date, telephone, status, issue) {
     return { name, date, telephone, status, issue };
   }
@@ -347,6 +349,7 @@ export default function Completed() {
     axios.get(url + "/a/appointments/completed").then((res) => {
       console.log(res.data);
       const list = res.data.map((d) => d);
+      setIsLoading(false)
       setUsers(list);
     });
   }
@@ -428,7 +431,7 @@ export default function Completed() {
     window.location = '/detail'
   }
   const handleDetailClick = id => {
-    window.location = '/update/' + id
+    window.location = '/detail/' + id
   }
   const  formatDate =(d) =>{
     const date = new Date(d*1000).toLocaleString('fr-FR')
@@ -447,6 +450,7 @@ export default function Completed() {
   return (
     <Box sx={{ width: '100%'}}>
       <Paper sx={{ width: '100%', mb: 2 }}>
+      {isLoading && <LinearProgress />}
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
@@ -508,7 +512,7 @@ export default function Completed() {
                       <TableCell align="right">{formatPhone(row.telephone)}</TableCell>
                       <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">
                         <Button disable={true} 
-                        // onClick={() => handleDetailClick(row.id)}
+                        onClick={() => handleDetailClick(row.appointment_id)}
                         >View</Button>
                         <Button onClick={() => UserDelete(row.id)}>Del</Button>
                       </ButtonGroup>

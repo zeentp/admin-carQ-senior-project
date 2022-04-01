@@ -1,66 +1,45 @@
 import * as React from 'react';
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import Divider from "@mui/material/Divider";
 import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
+import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import { Paper } from "@mui/material";
-import Table from '@mui/material/Table';
+import Stack from '@mui/material/Stack';
+import { Table, InputAdornment, } from '@mui/material';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import { useEffect, useState } from "react";
-import TableSortLabel from '@mui/material/TableSortLabel';
-import { visuallyHidden } from '@mui/utils';
-import Divider from "@mui/material/Divider";
-import DialogActions from "@mui/material/DialogActions";
-import Toolbar from '@mui/material/Toolbar';
-import Button from "@mui/material/Button";
-import ButtonGroup from '@mui/material/ButtonGroup';
-import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import { alpha } from '@mui/material/styles';
 import TablePagination from '@mui/material/TablePagination';
-
-
-
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Button from "@mui/material/Button";
+import TableRow from '@mui/material/TableRow';
+import TableSortLabel from '@mui/material/TableSortLabel';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import CircularProgress from '@mui/material/CircularProgress';
+import Paper from '@mui/material/Paper';
+import Checkbox from '@mui/material/Checkbox';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import DeleteIcon from '@mui/icons-material/Delete';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import { visuallyHidden } from '@mui/utils';
+import { useEffect, useState } from "react";
+import UserUpdate from './UserUpdate';
+import SearchIcon from "@mui/icons-material/Search";
+import { filter } from "lodash";
+import { URL as url } from '../Constant';
+import NotifyBox from '../component/NotifyBox';
+import LinearProgress from '@mui/material/LinearProgress';
 
 
 function descendingComparator(a, b, orderBy) {
@@ -100,20 +79,26 @@ const headCells = [
     disablePadding: true,
     label: 'ClientName',
   },
-  // {
-  //   id: 'lname',
-  //   numeric: true,
-  //   disablePadding: false,
-  //   label: 'lname',
-  // },
   {
-    id: 'username',
+    id: 'booking-date',
     numeric: true,
     disablePadding: false,
-    label: 'Date',
+    label: 'Booking Date',
   },
   {
-    id: 'avatar',
+    id: 'plate-no',
+    numeric: true,
+    disablePadding: false,
+    label: 'Plate Number',
+  },
+  {
+    id: 'description',
+    numeric: true,
+    disablePadding: false,
+    label: 'Description',
+  },
+  {
+    id: 'telephone',
     numeric: true,
     disablePadding: false,
     label: 'Telephone',
@@ -125,6 +110,7 @@ const headCells = [
     label: 'action',
   },
 ];
+
 function EnhancedTableHead(props) {
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
     props;
@@ -171,22 +157,38 @@ function EnhancedTableHead(props) {
     </TableHead>
   );
 }
+
+EnhancedTableHead.propTypes = {
+  numSelected: PropTypes.number.isRequired,
+  onRequestSort: PropTypes.func.isRequired,
+  onSelectAllClick: PropTypes.func.isRequired,
+  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  orderBy: PropTypes.string.isRequired,
+  rowCount: PropTypes.number.isRequired,
+};
+
 const EnhancedTableToolbar = (props) => {
   const { numSelected } = props;
   const [open, setOpen] = React.useState(false);
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
   const [username, setUsername] = useState('');
-  const [avatar, setAvatar] = useState('');
+  const [description, setDescription] = useState('');
   const [disableApplyButton, setDisableApplyButton] = React.useState(false);
-
+  const [anchorFilter, setAnchorFilter] = React.useState(null);
+  const { filterName, onFilterName } = props;
   useEffect(() => {
+    // const user = JSON.parse(localStorage.getItem('user'));
+    // console.log(user)
     if (fname !== '' && lname !== '') {
       setDisableApplyButton(false)
     } else {
       setDisableApplyButton(true)
     }
   }, [fname, lname]);
+  const handleSearchFilter = (event) => {
+    setAnchorFilter(event.currentTarget);
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
     var data = {
@@ -194,7 +196,6 @@ const EnhancedTableToolbar = (props) => {
       'lname': lname,
       'username': username,
       'email': 'email',
-      'avatar': avatar,
     }
     fetch('https://www.mecallapi.com/api/users/create', {
       method: 'POST',
@@ -213,6 +214,9 @@ const EnhancedTableToolbar = (props) => {
           }
         }
       )
+  };
+  const handleClickFilter = (event) => {
+    setAnchorFilter(event.currentTarget);
   };
   const handleClickOpen = () => {
     setOpen(true);
@@ -237,12 +241,31 @@ const EnhancedTableToolbar = (props) => {
         variant="h6"
         id="tableTitle"
         component="div"
+        textAlign={'start'}
       >
         Appointments
       </Typography>
-      <Button onClick={handleClickOpen} variant="contained" color="primary">
+      <TextField
+        value={filterName}
+        onChange={onFilterName}
+        // sx={{width:'200px',height:'10px'}}
+        // label="ค้นหา"
+        placeholder="ค้นหา"
+        size="small"
+        InputProps={{
+
+          startAdornment: (
+            <InputAdornment position="start">
+              <IconButton  >
+                <SearchIcon />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />
+      {/* <Button onClick={handleClickOpen} variant="contained" color="primary">
         CREATE
-      </Button>
+      </Button> */}
       <Dialog
         open={open}
         onClose={handleClose}
@@ -307,15 +330,6 @@ const EnhancedTableToolbar = (props) => {
                 onChange={(e) => setUsername(e.target.value)}
               />
             </Grid>
-            <Grid item xs={6}>
-              <TextField
-                fullWidth
-                id="avatar"
-                label="avatar"
-                variant="outlined"
-                onChange={(e) => setAvatar(e.target.value)}
-              />
-            </Grid>
           </Grid>
         </DialogContent>
         <Divider />
@@ -337,16 +351,11 @@ const EnhancedTableToolbar = (props) => {
 
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
+  filterName: PropTypes.string,
+  onFilterName: PropTypes.func,
 };
-EnhancedTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
-};
-const EnhancedTable =()=> {
+
+export default function EnhancedTable() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -354,9 +363,82 @@ const EnhancedTable =()=> {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [users, setUsers] = useState([]);
+  const [filterName, setFilterName] = React.useState("");
+  const [mechanics, setMechanics] = React.useState([]);
+  const axios = require("axios");
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  function createData(name, date, telephone, status, issue) {
+    return { name, date, telephone, status, issue };
+  }
+
+  const rows = [
+    createData('Frozen yoghurt', '09-03-2565', null, 'air-filter'),
+    createData('Ray yoghurt', '09-03-2565', null, 'engine'),
+    createData('Zee yoghurt', '09-03-2565', null, 'port'),
+    createData('Aet yoghurt', '09-03-2565', null, 'air'),
+  ];
+  const handleFilterByName = (event) => {
+    setFilterName(event.target.value);
+  };
+
+  const filteredInvoice = applySortFilter(
+    users,
+    getComparator(order, orderBy),
+    filterName
+  );
+
+  function applySortFilter(array, comparator, query) {
+    console.log("applySortFilter");
+    const stabilizedThis = array.map((el, index) => [el, index]);
+    stabilizedThis.sort((a, b) => {
+      const order = comparator(a[0], b[0]);
+      if (order !== 0) return order;
+      return a[1] - b[1];
+    });
+    if (query) {
+      return filter(
+        array,
+        (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      );
+    }
+    return stabilizedThis.map((el) => el[0]);
+  }
+
+
+
+
   useEffect(() => {
-    UsersGet()
+    getAppointment()
+    getAvaliableMechanic()
+    // UsersGet()
   }, []);
+  async function getAvaliableMechanic() {
+    await axios.get(url + "/m/getByStatus")
+      .then(
+        (result) => {
+          setTimeout(() => {
+            setIsLoading(false)
+          }, 2000)
+          console.log(result)
+          const list = result.data.map((d) => d);
+          setMechanics(list);
+        })
+  }
+  async function getAppointment() {
+    await axios.get(url + "/a/appointments").then((res) => {
+      console.log(res.data);
+      const list = res.data.map((d) => d);
+      setUsers(list);
+      setIsLoading(false)
+    });
+  }
+  const formatDate = (d) => {
+    if (d !== null) {
+      const date = new Date(d * 1000).toLocaleString('fr-FR')
+      return date
+    } return 0
+  }
   const UsersGet = () => {
     fetch("https://www.mecallapi.com/api/users")
       .then(res => res.json())
@@ -365,7 +447,14 @@ const EnhancedTable =()=> {
           setUsers(result)
         }
       )
+    // axios.get(url + "/a/appointments").then((res) => {
+    //   console.log(res.data);
+    //   const list = res.data.map((d) => d);
+    //   setUsers(list);
+    // });
+    // console.log(users)
   }
+
   const UserDelete = id => {
     var data = {
       'id': id
@@ -383,7 +472,7 @@ const EnhancedTable =()=> {
         (result) => {
           alert(result['message'])
           if (result['status'] === 'ok') {
-            UsersGet();
+            getAppointment();
           }
         }
       )
@@ -440,22 +529,47 @@ const EnhancedTable =()=> {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
 
-  // const UpdateUser = id => {
-  //   window.location = '/detail'
-  // }
-  const UpdateUser = id => {
+  const viewUser = id => {
+    window.location = '/detail/' + id
+  }
+  const handleDetailClick = id => {
     window.location = '/update/' + id
   }
+  const formatPhone = (telephone) => {
+    var val = telephone.replace(/[^0-9]/g, "");
+    let a = val;
+    a = val.slice(0, 3);
+    a += val.length > 3 ? "-" + val.slice(3, 6) : "";
+    a += val.length > 6 ? "-" + val.slice(6) : "";
+    val = a;
+
+    return val
+  };
   return (
-    <Box sx={{ width: '95%', pl: 45, pt: 15 }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+    <Box sx={{ width: '95%', pl: 30, }}>             
+      <Stack direction={'row'} pb={2} spacing={2}>
+        <Grid item xs={6}>
+          <NotifyBox isLoading={isLoading} title={'Appointments'} notification={users.length}></NotifyBox>
+          {
+          }
+        </Grid>
+        <Grid item xs={6}>
+          <NotifyBox isLoading={isLoading} icon={'mechanic'} title={'Avaliable Mechanics'} notification={mechanics.length}></NotifyBox>
+          {/* <Chart></Chart> */}
+        </Grid>
+      </Stack>
+      <Paper elevation={6} sx={{ width: '100%', mb: 2 }}>
+      {isLoading && <LinearProgress />}
+        <EnhancedTableToolbar filterName={filterName}
+          onFilterName={handleFilterByName}
+          numSelected={selected.length} />
         <TableContainer>
           <Table
-            sx={{ minWidth: 750 }}
+            sx={{ minWidth: 750}}
             aria-labelledby="tableTitle"
             size={dense ? 'small' : 'medium'}
           >
+              
             <EnhancedTableHead
               numSelected={selected.length}
               order={order}
@@ -464,16 +578,18 @@ const EnhancedTable =()=> {
               onRequestSort={handleRequestSort}
               rowCount={users.length}
             />
+
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(users, getComparator(order, orderBy))
+              {/* {stableSort(users, getComparator(order, orderBy)) */}
+              {filteredInvoice
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.fname);
+                  const isItemSelected = isSelected(row.name);
                   const labelId = `enhanced-table-checkbox-${index}`;
-
                   return (
+
                     <TableRow
                       hover
                       // onClick={(event) => handleClick(event, row.fname)}
@@ -481,9 +597,10 @@ const EnhancedTable =()=> {
                       // onClick={() => handleDetailClick(row.id)}
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.fname}
+                      key={row.name}
                       selected={isItemSelected}
                     >
+
                       <TableCell
 
                         padding="checkbox">
@@ -501,21 +618,24 @@ const EnhancedTable =()=> {
                         scope="row"
                         padding="none"
                       >
-                        {row.fname + '\t' + row.lname}
+                        {row.name}
                       </TableCell>
                       {/* <TableCell align="right">{row.lname}</TableCell> */}
-                      <TableCell align="right">{row.username}</TableCell>
-                      <TableCell align="right">{row.avatar}</TableCell>
+                      <TableCell align="right">{formatDate(row.starts_at.seconds)}</TableCell>
+                      <TableCell align="right">{row.plate_no}</TableCell>
+                      <TableCell align="right">{row.description}</TableCell>
+                      <TableCell align="right">{formatPhone(row.telephone)}</TableCell>
                       <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">
-                        <Button onClick={() => UpdateUser(row.id)}
+                        <Button onClick={() => viewUser(row.appointment_id)}
                         >View</Button>
-                        <Button onClick={() => UserDelete(row.id)}>Del</Button>
+                        {/* <Button onClick={() => UserDelete(row.id)}>Del</Button> */}
                       </ButtonGroup>
                       </TableCell>
 
                     </TableRow>
                   );
                 })}
+
               {emptyRows > 0 && (
                 <TableRow
                   style={{
@@ -540,92 +660,5 @@ const EnhancedTable =()=> {
       </Paper>
 
     </Box>
-  );
-}
-export default function BasicTabs() {
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-  // const [users, setUsers] = useState([]);
-  const [open, setOpen] = React.useState(false);
-  const [fname, setFname] = useState('');
-  const [lname, setLname] = useState('');
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [avatar, setAvatar] = useState('');
-
-
-  function createData(name, lastname,) {
-    return { name, lastname };
-  }
-  const users = [
-    createData('Frozen yoghurt', 'yoghurt'),
-   
-  ];
-  return (
-    <Box sx={{ width: '100%', pt: 20, pl: 40 }}>
-      <Paper sx={{ pt: 20, p: 5, width: '95%' ,backgroundColor:'#4b636e'}}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-            <Tab sx={{color: 'white'}} label="Today" {...a11yProps(0)} />
-            <Tab sx={{color: 'white'}} label="Item Two" {...a11yProps(1)} />
-            <Tab sx={{color: 'white'}} label="Item Three" {...a11yProps(2)} />
-          </Tabs>
-        </Box>
-        <TabPanel value={value} index={0}>
-          <TableContainer component={Paper}>
-            <Box display="flex">
-              <Box flexGrow={1}>
-                <Typography textAlign='start'  variant="h6" color="primary" gutterBottom>
-                  USERS
-                </Typography>
-              </Box>
-              <Box>
-              </Box>
-            </Box>
-            <Table sx={{ Width: '50%' }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>ID</TableCell>
-                  <TableCell align="right">Fname</TableCell>
-                  <TableCell align="right">Lname</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {users.map((user) => (
-                  <TableRow
-                    key={user.id}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {user.id}
-                    </TableCell>
-
-                    <TableCell align="right">{user.name + "\t" + user.lastName}</TableCell>
-                    {/* <TableCell align="right">{user.telephone}</TableCell> */}
-                    <TableCell align="right">
-                      {/* <ButtonGroup color="primary" aria-label="outlined primary button group">
-                <Button onClick={() => UpdateUser(user.id)}>Edit</Button>
-                <Button onClick={() => UserDelete(user.id)}>Del</Button>
-              </ButtonGroup> */}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <EnhancedTable
-          ></EnhancedTable>
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          Item Three
-        </TabPanel>
-      </Paper>
-    </Box>
-
   );
 }

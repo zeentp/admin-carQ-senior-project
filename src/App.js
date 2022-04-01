@@ -5,15 +5,14 @@ import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Details, Update } from '@mui/icons-material';
 // Admin side
-import Navbar from './Navbar';
-import Mechanic from './Mechanic';
-import Home from './Home';
+import Navbar from './component/Navbar';
+import Mechanic from './Page/Mechanic';
+import Home from './Page/Home';
 import Login from './Login';
-import Dashboard from './Dashboard';
-import UserUpdate from './UserUpdate';
+import UserUpdate from './Page/UserUpdate';
 import TestTable from './TestTable';
 import Create from './Create';
-import Detail from './Detail';
+import Detail from './Page/Detail';
 import Account from './Page/Account';
 import Test from './Page/Test';
 import Landing from './Page/Landing';
@@ -46,7 +45,7 @@ function App() {
     // console.log(pathname !== '/detail/:id')
     // console.log(pathname.includes('/detail/:id'));
     console.log(pathname)
-    console.log(token)
+    console.log('token',token)
   }, []);
   const token = localStorage.getItem('accessToken');
 
@@ -71,7 +70,6 @@ function App() {
           <Route path="home" element={<Home />} />
           <Route path="testTable" element={<TestTable />} />
           <Route path="mechanic" element={<Mechanic />} />
-          <Route path="dashboard" element={<Dashboard />} />
           <Route path="/detail/:id" element={<Detail />} />
           <Route path="create" element={<Create />} />
           <Route path='/update/:id' element={<UserUpdate />} />

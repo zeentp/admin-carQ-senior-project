@@ -28,8 +28,8 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import "./Css/Button.css";
-import { URL as url } from './Constant';
+import "../Css/Button.css";
+import { URL as url } from '../Constant';
 
 
 
@@ -94,12 +94,13 @@ function getStyles(name, personName, theme) {
 
 const MultipleSelect = () => {
     const theme = useTheme();
-    const { id } = useParams();
     const [mechanics, setMechanics] = React.useState([]);
     const [personName, setPersonName] = React.useState([]);
     const [users, setUsers] = useState([]);
     const [names, setNames] = useState([]);
     const axios = require("axios");
+    const { id } = useParams();
+
     useEffect(() => {
         axios.get(url + "/a/details?id=" + id)
             .then(
@@ -160,6 +161,7 @@ export default function UserUpdate() {
 
 
     useEffect(() => {
+        console.log(id)
         axios.get(url + "/a/details?id=" + id)
             // .then(res => console.log(res.data))
             .then(
@@ -207,29 +209,7 @@ export default function UserUpdate() {
             gender: gender,
             age: 22,
         }
-        // axios.put(url + "/m/update", data).then((res) => {
-        //     console.log(res);
-        //     window.location.href = '/mechanic';
-        // });
-        // fetch('https://www.mecallapi.com/api/users/update', {
-        //   method: 'PUT',
-        //   headers: {
-        //     Accept: 'application/form-data',
-        //     'Content-Type': 'application/json',
-        //   },
-        //   body: JSON.stringify(data),
-        // })
-        // .then(res => res.json())
-        // .then(
-        //   (result) => {
-        //     alert(result['message'])
-        //     if (result['status'] === 'ok') {
-        //       window.location.href = '/testtable';
-        //     }
-        //   }
-        // )
     }
-    // const [textEdit, setTextEdit] = useState('');
     const [editFlag, setEditFlag] = useState(false);
 
     const [fname, setFname] = useState('');
@@ -444,7 +424,7 @@ export default function UserUpdate() {
                                 <MultipleSelect></MultipleSelect>
                             </Grid>
                             <Grid item xs={12}>
-                                {status !== 'pending' ?
+                                {status === 'booking' ?
 
                                     <FormGroup>
                                         <Grid container spacing={2}>
@@ -459,7 +439,7 @@ export default function UserUpdate() {
                                     : <Box>
                                         <FormControl>
                                             <Box sx={{
-                                                "& .MuiSelect-select": { width: "60.5ch" },
+                                                "& .MuiSelect-select": { width: "63ch" },
                                             }}>
                                                 <InputLabel id="demo-simple-select-label">
                                                     Status

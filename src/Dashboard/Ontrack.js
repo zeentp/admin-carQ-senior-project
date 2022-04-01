@@ -32,8 +32,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { useEffect, useState } from "react";
-import UserUpdate from '../UserUpdate';
+import UserUpdate from '../Page/UserUpdate';
 import { URL as url}  from '../Constant';
+import LinearProgress from '@mui/material/LinearProgress';
 
 
 function descendingComparator(a, b, orderBy) {
@@ -330,6 +331,8 @@ export default function Ontrack() {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = React.useState(true);
+
   function createData(name, date, telephone, status, issue) {
     return { name, date, telephone, status, issue };
   }
@@ -347,6 +350,7 @@ export default function Ontrack() {
     axios.get(url + "/a/appointments/onTrack").then((res) => {
       console.log(res.data);
       const list = res.data.map((d) => d);
+      setIsLoading(false)
       setUsers(list);
     });
   }
@@ -447,6 +451,7 @@ export default function Ontrack() {
   return (
     <Box sx={{ width: '100%'}}>
       <Paper sx={{ width: '100%', mb: 2 }}>
+      {isLoading && <LinearProgress />}
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
