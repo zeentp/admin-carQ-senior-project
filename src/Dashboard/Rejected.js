@@ -514,7 +514,7 @@ export default function Rejected() {
                       <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">
                         <Button disable={true}
                           onClick={() => handleDetailClick(row.appointment_id)}>View</Button>
-                        <Button onClick={() => UserDelete(row.id)}>Del</Button>
+                        <Button color='error' onClick={() => UserDelete(row.id)}>Del</Button>
                       </ButtonGroup>
                       </TableCell>
 

@@ -62,6 +62,11 @@ export default function Navbar() {
         setAnchorEl(null);
 
     };
+    const handleProfile = () => {
+        window.location.href = '/account';
+        setAnchorEl(null);
+
+    };
 
     const handleSignout = () => {
         setAnchorEl(null);
@@ -120,7 +125,7 @@ export default function Navbar() {
                                 open={Boolean(anchorEl)}
                                 onClose={handleClose}
                             >
-                                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                                <MenuItem onClick={handleProfile}>Profile</MenuItem>
                                 <MenuItem onClick={handleSignout}>Sign Out</MenuItem>
                             </Menu>
                         </div>

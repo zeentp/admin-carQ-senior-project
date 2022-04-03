@@ -30,6 +30,8 @@ import { useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import "../Css/Button.css";
 import { URL as url } from '../Constant';
+import CircularProgress from '@mui/material/CircularProgress';
+import LinearProgress from '@mui/material/LinearProgress';
 
 
 
@@ -106,6 +108,7 @@ const MultipleSelect = () => {
         axios.get(url + "/a/details?id=" + id)
             .then(
                 (result) => {
+
                     console.log(result.data)
                     setMechanics(result.data.mechanic)
                 })
@@ -168,6 +171,7 @@ export default function UserUpdate() {
             // .then(res => console.log(res.data))
             .then(
                 (result) => {
+                    setIsLoading(false)
                     console.log(result.data)
                     setFname(result.data.firstName)
                     setLname(result.data.lastName)
@@ -203,27 +207,28 @@ export default function UserUpdate() {
         setStatus(event.target.value);
     };
     const handleSubmit = event => {
+        setAlertOpen(true)
+     
         event.preventDefault();
         console.log(personName)
-        console.log(isCheck1)
-
         var data = {
             appointment_id: appointmentId,
             mechanic_id: personName,
-            note:note,
-            status:status,
+            note: note,
+            status: isCheck1 === true ? 'pending' : isCheck2 === true ? 'rejected' : status,
             // ends_at:,
             //note:,
             //status:,
         }
-        console.log(data)
         axios.put(url + "/a/details/update", data).then((res) => {
             console.log(res);
-            // window.location.href = '/mechanic';
+            setTimeout(() => {
+                window.location.href = '/dashboardPage';
+            }, 3000)
         });
     }
     const [editFlag, setEditFlag] = useState(false);
-
+    const [isLoading, setIsLoading] = React.useState(true);
     const [fname, setFname] = useState('');
     const inputRef = React.useRef(null);
     const [lname, setLname] = useState('');
@@ -238,7 +243,6 @@ export default function UserUpdate() {
     const [dateTime, setDateTime] = useState('');
     const [appointmentId, setAppointmentId] = useState('');
     const [status, setStatus] = useState('');
-    const [listMechanic, setListMechanic] = useState([]);
     const [note, setNote] = useState('');
 
 
@@ -286,6 +290,7 @@ export default function UserUpdate() {
         if (isCheck1 === true) {
             setIscheck1(false)
         }
+        // setStatus('pending')
 
 
     }
@@ -295,6 +300,7 @@ export default function UserUpdate() {
         if (isCheck2 === true) {
             setIscheck2(false)
         }
+        // setStatus('rejected')
 
     }
     const handleEditClick = () => {
@@ -349,7 +355,7 @@ export default function UserUpdate() {
 
 
     return (
-        <Box sx={{ pl: 90, pb: 5 }} >
+        <Box sx={{ pl: 80, pb: 5 }} >
             <Paper sx={{ pt: 10, p: 5, width: '666px' }}>
                 <div className={classes.paper}>
                     <Typography sx={{ pb: 2 }} component="h1" variant="h5">
@@ -366,6 +372,9 @@ export default function UserUpdate() {
                             variant="outlined"
                             onClick={() => refreshPage()}>cancel</Button>
                     } */}
+                    {isLoading ===true ?<CircularProgress />
+                    :
+
                     <form className={classes.form} onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
@@ -569,6 +578,7 @@ export default function UserUpdate() {
                         {/* <button type="submit" id = "setHomebtn">Calculate</button> */}
 
                     </form>
+}   
                 </div>
             </Paper >
             <Dialog
@@ -622,8 +632,8 @@ export default function UserUpdate() {
                 </DialogActions>
             </Dialog>
             <Snackbar open={alertOpen} autoHideDuration={6000} onClose={handleAlertClose}>
-                <Alert onClose={handleAlertClose} severity="info" sx={{ width: '100%' }}>
-                    Editing
+                <Alert onClose={handleAlertClose} severity="success" sx={{ width: '100%' }}>
+                    Updating
                 </Alert>
             </Snackbar>
         </Box>

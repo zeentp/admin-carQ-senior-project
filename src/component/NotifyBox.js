@@ -44,7 +44,6 @@ const NotifyBox = ({ isLoading, notification, icon, title }) => {
   const theme = useTheme();
 
   const [anchorEl, setAnchorEl] = useState(null);
-  const [name, setname] = useState("สินชัย มั่นคง");
   // const [unred, setunred] = useState(4)
 
   const handleClick = (event) => {
