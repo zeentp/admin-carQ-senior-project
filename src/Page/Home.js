@@ -74,19 +74,19 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'fname',
+    id: 'name',
     numeric: false,
     disablePadding: true,
     label: 'ClientName',
   },
   {
-    id: 'booking-date',
+    id: 'starts_at.seconds',
     numeric: true,
     disablePadding: false,
     label: 'Booking Date',
   },
   {
-    id: 'plate-no',
+    id: 'plate_no',
     numeric: true,
     disablePadding: false,
     label: 'Plate Number',
@@ -546,7 +546,7 @@ export default function EnhancedTable() {
     return val
   };
   return (
-    <Box sx={{ width: '95%', pl: 30, }}>             
+    <Box sx={{ width: '95%', pl: 30 }}>             
       <Stack direction={'row'} pb={2} spacing={2}>
         <Grid item xs={6}>
           <NotifyBox isLoading={isLoading} title={'Appointments'} notification={users.length}></NotifyBox>

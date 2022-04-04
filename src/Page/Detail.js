@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useParams } from 'react-router-dom';
+import Autocomplete from '@mui/material/Autocomplete';
 import Select from '@mui/material/Select';
 import Fab from '@mui/material/Fab';
 import EditIcon from '@mui/icons-material/Edit';
@@ -208,23 +209,24 @@ export default function UserUpdate() {
     };
     const handleSubmit = event => {
         setAlertOpen(true)
-     
+
         event.preventDefault();
         console.log(personName)
         var data = {
             appointment_id: appointmentId,
             mechanic_id: personName,
             note: note,
-            status: isCheck1 === true ? 'pending' : isCheck2 === true ? 'rejected' : status,
-            // ends_at:,
+            status: isCheck1 === true && isCheck2 === false ? 'pending' : isCheck2 === true && isCheck1 === false ? 'rejected' : status,
+            //  ends_at:,
             //note:,
             //status:,
         }
+        console.log(data)
         axios.put(url + "/a/details/update", data).then((res) => {
             console.log(res);
-            setTimeout(() => {
-                window.location.href = '/dashboardPage';
-            }, 3000)
+            // setTimeout(() => {
+            //     window.location.href = '/dashboardPage';
+            // }, 3000)
         });
     }
     const [editFlag, setEditFlag] = useState(false);
@@ -244,30 +246,33 @@ export default function UserUpdate() {
     const [appointmentId, setAppointmentId] = useState('');
     const [status, setStatus] = useState('');
     const [note, setNote] = useState('');
+    const [pic, setPic] = useState('');
+
 
 
 
     const theme = useTheme();
     const [mechanics, setMechanics] = React.useState([]);
+    const propertyNames = Object.keys(mechanics);
     const [personName, setPersonName] = React.useState([]);
 
-    // useEffect(() => {
-    //     console.log('person',personName)
-    //     axios.get(url + "/a/details?id=" + id)
-    //         .then(
-    //             (result) => {
-    //                 console.log(result.data)
-    //                 setMechanics(result.data.mechanic)
-    //             })
-    // }, [id,personName])
+    useEffect(() => {
+        console.log(propertyNames)
+        console.log(typeof propertyNames)
 
+    }, [])
+    const test = [
+
+    ]
     function getMechanics() {
         axios.get(url + "/a/details?id=" + id)
             .then(
                 (result) => {
                     console.log(result.data)
+                    setPic(result.data.pic)
                     setMechanics(result.data.mechanic)
                 })
+        console.log(typeof mechanics)
     }
 
     const handleChangeMechanic = (event) => {
@@ -372,127 +377,145 @@ export default function UserUpdate() {
                             variant="outlined"
                             onClick={() => refreshPage()}>cancel</Button>
                     } */}
-                    {isLoading ===true ?<CircularProgress />
-                    :
+                    {isLoading === true ? <CircularProgress />
+                        :
 
-                    <form className={classes.form} onSubmit={handleSubmit}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    autoComplete="fname"
-                                    name="firstName"
-                                    variant="outlined"
-                                    fullWidth
-                                    id="firstName"
-                                    label="First Name"
-                                    value={fname}
-                                    onChange={(e) => setFname(e.target.value)}
-                                    autoFocus
-                                    disabled={disableEditButton}
-                                />
-                            </Grid>
+                        <form className={classes.form} onSubmit={handleSubmit}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        autoComplete="fname"
+                                        name="firstName"
+                                        variant="outlined"
+                                        fullWidth
+                                        id="firstName"
+                                        label="First Name"
+                                        value={fname}
+                                        onChange={(e) => setFname(e.target.value)}
+                                        autoFocus
+                                        disabled={disableEditButton}
+                                    />
+                                </Grid>
 
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    id="lastName"
-                                    label="Last Name"
-                                    value={lname}
-                                    onChange={(e) => setLname(e.target.value)}
-                                    disabled={disableEditButton}
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    id="email"
-                                    label="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    disabled={disableEditButton}
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    id="plateNumber"
-                                    label="plateNumber"
-                                    value={plateNumber}
-                                    onChange={(e) => setPlateNumber(e.target.value)}
-                                    disabled={disableEditButton}
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    id="brand"
-                                    label="brand"
-                                    value={brand}
-                                    onChange={(e) => setBrand(e.target.value)}
-                                    disabled={disableEditButton}
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    id="telephone"
-                                    label="Telephone"
-                                    value={telephone}
-                                    inputProps={{ maxLength: 12 }}
-                                    onChange={handlePhoneChange}
-                                    disabled={disableEditButton}
-                                // onChange={(e) => setTelephone(e.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    id="Date"
-                                    label="Date"
-                                    value={formatDate(dateTime)}
-                                    disabled={disableEditButton}
-                                // onChange={(e) => setTelephone(e.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    value={issue}
-                                    id="issue"
-                                    label="issue"
-                                    disabled={disableEditButton}
-                                // onChange={(e) => setTelephone(e.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth
-                                    value={issue}
-                                    id="issue"
-                                    label="Person in charge"
-                                    disabled={disableEditButton}
-                                // onChange={(e) => setTelephone(e.target.value)}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <div>
-                                    <FormControl sx={{ width: "100%" }}>
-                                        <InputLabel id="demo-multiple-name-label">Mechanic</InputLabel>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        id="lastName"
+                                        label="Last Name"
+                                        value={lname}
+                                        onChange={(e) => setLname(e.target.value)}
+                                        disabled={disableEditButton}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <TextField
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        id="email"
+                                        label="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        disabled={disableEditButton}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <TextField
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        id="plateNumber"
+                                        label="plateNumber"
+                                        value={plateNumber}
+                                        onChange={(e) => setPlateNumber(e.target.value)}
+                                        disabled={disableEditButton}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <TextField
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        id="brand"
+                                        label="brand"
+                                        value={brand}
+                                        onChange={(e) => setBrand(e.target.value)}
+                                        disabled={disableEditButton}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <TextField
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        id="telephone"
+                                        label="Telephone"
+                                        value={telephone}
+                                        inputProps={{ maxLength: 12 }}
+                                        onChange={handlePhoneChange}
+                                        disabled={disableEditButton}
+                                    // onChange={(e) => setTelephone(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        id="Date"
+                                        label="Date"
+                                        value={formatDate(dateTime)}
+                                        disabled={disableEditButton}
+                                    // onChange={(e) => setTelephone(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        value={issue}
+                                        id="issue"
+                                        label="issue"
+                                        disabled={disableEditButton}
+                                    // onChange={(e) => setTelephone(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        variant="outlined"
+                                        fullWidth
+                                        value={pic}
+                                        id="issue"
+                                        label="Person in charge"
+                                        disabled={disableEditButton}
+                                    // onChange={(e) => setTelephone(e.target.value)}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <div>
+                                        <FormControl sx={{ width: "100%" }}>
+                                            <Autocomplete
+                                                multiple
+                                                onChange={(event, newValue) => {
+                                                    setPersonName(newValue);
+                                                }}
+                                                id="tags-outlined"
+                                                options={mechanics}
+                                                // getOptionLabel={(option) => option.title}
+                                                defaultValue={pic}
+                                                filterSelectedOptions
+                                                renderInput={(params) => (
+                                                    <TextField
+                                                        {...params}
+                                                        label="Mechanics"
+                                                        placeholder="Mechanics"
+                                                    />
+                                                )}
+                                            />
+                                            {/* <InputLabel id="demo-multiple-name-label">Mechanic</InputLabel>
                                         <Select
                                             sx={{ textAlign: 'start' }}
                                             labelId="demo-multiple-name-label"
@@ -512,73 +535,73 @@ export default function UserUpdate() {
                                                     {name}
                                                 </MenuItem>
                                             ))}
-                                        </Select>
-                                    </FormControl>
-                                </div>
-                            </Grid>
-                            <Grid item xs={12}>
-                                {status === 'booking' ?
-
-                                    <FormGroup>
-                                        <Grid container spacing={2}>
-                                            <Grid item xs={6}>
-                                                <FormControlLabel onChange={check1} checked={isCheck1} control={<Checkbox defaultChecked />} label="Accept" />
-                                            </Grid>
-                                            <Grid item xs={6}>
-                                                <FormControlLabel onChange={check2} checked={isCheck2} control={<Checkbox />} label="Decline" />
-                                            </Grid>
-                                        </Grid>
-                                    </FormGroup>
-                                    : <Box>
-                                        <FormControl>
-                                            <Box sx={{
-                                                "& .MuiSelect-select": { width: "63ch" },
-                                            }}>
-                                                <InputLabel id="demo-simple-select-label">
-                                                    Status
-                                                </InputLabel>
-                                                <Select
-                                                    sx={{ textAlign: 'start' }}
-                                                    labelId="demo-simple-select-label"
-                                                    id="demo-simple-select"
-                                                    value={status}
-                                                    label="Status"
-                                                    // label="Status"
-                                                    onChange={handleChangeSelect}
-                                                >
-                                                    <MenuItem value={'pending'}>pending</MenuItem>
-                                                    <MenuItem value={'on-track'}>on-track</MenuItem>
-                                                    <MenuItem value={'completed'}>completed</MenuItem>
-                                                </Select>
-                                            </Box>
+                                        </Select> */}
                                         </FormControl>
-                                    </Box>}
+                                    </div>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    {status === 'booking' ?
+                                        <FormGroup>
+                                            <Grid container spacing={2}>
+                                                <Grid item xs={6}>
+                                                    <FormControlLabel onChange={check1} checked={isCheck1} control={<Checkbox defaultChecked />} label="Accept" />
+                                                </Grid>
+                                                <Grid item xs={6}>
+                                                    <FormControlLabel onChange={check2} checked={isCheck2} control={<Checkbox />} label="Decline" />
+                                                </Grid>
+                                            </Grid>
+                                        </FormGroup>
+                                        : <Box>
+                                            <FormControl>
+                                                <Box sx={{
+                                                    "& .MuiSelect-select": { width: "63ch" },
+                                                }}>
+                                                    <InputLabel id="demo-simple-select-label">
+                                                        Status
+                                                    </InputLabel>
+                                                    <Select
+                                                        sx={{ textAlign: 'start' }}
+                                                        labelId="demo-simple-select-label"
+                                                        id="demo-simple-select"
+                                                        value={status}
+                                                        label="Status"
+                                                        // label="Status"
+                                                        onChange={handleChangeSelect}
+                                                    >
+                                                        
+                                                        <MenuItem value={'pending'}>pending</MenuItem>
+                                                        <MenuItem value={'on-track'}>on-track</MenuItem>
+                                                        <MenuItem value={'completed'}>completed</MenuItem> 
+                                                    </Select>
+                                                </Box>
+                                            </FormControl>
+                                        </Box>}
+                                </Grid>
+                                <Grid sx={{ pb: 2 }} item xs={12}>
+                                    <TextField
+                                        variant="outlined"
+                                        fullWidth
+                                        id="note"
+                                        label="note"
+                                        multiline
+                                        onChange={(e) => setNote(e.target.value)}
+                                    />
+                                </Grid>
                             </Grid>
-                            <Grid sx={{ pb: 2 }} item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth
-                                    id="note"
-                                    label="note"
-                                    multiline
-                                    onChange={(e) => setNote(e.target.value)}
-                                />
-                            </Grid>
-                        </Grid>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            // className={classes.submit}
-                            className="setHomebtn"
-                        >
-                            Submit
-                        </Button>
-                        {/* <button type="submit" id = "setHomebtn">Calculate</button> */}
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                // className={classes.submit}
+                                className="setHomebtn"
+                            >
+                                Submit
+                            </Button>
+                            {/* <button type="submit" id = "setHomebtn">Calculate</button> */}
 
-                    </form>
-}   
+                        </form>
+                    }
                 </div>
             </Paper >
             <Dialog
