@@ -37,6 +37,8 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import SearchIcon from "@mui/icons-material/Search";
 import  {Snackbar,Paper} from "@mui/material";
+import LinearProgress from '@mui/material/LinearProgress';
+
 // import Snackbar from '@mui/material/Snackbar';
 
 import { useEffect, useState } from "react";
@@ -373,7 +375,8 @@ export default function EnhancedTable() {
   const axios = require("axios");
   const [filterName, setFilterName] = React.useState("");
   const [alertOpen, setAlertOpen] = React.useState(false);
-
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [mechanicName, setMechanicName] = React.useState("");
   
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -393,6 +396,7 @@ export default function EnhancedTable() {
     axios.get(url + "/m/mechanics").then((res) => {
       console.log(res.data);
       const list = res.data.map((d) => d);
+      setIsLoading(false)
       setUsers(list);
     });
   }
@@ -488,7 +492,7 @@ export default function EnhancedTable() {
   return (
     <Box sx={{ width: '95%', pl: 30,}}>
       <Paper elevation={6} sx={{ width: '100%', mb: 2,}}>
-
+      {isLoading && <LinearProgress />}
         <EnhancedTableToolbar  filterName={filterName}
           onFilterName={handleFilterByName} 
           numSelected={selected.length} />

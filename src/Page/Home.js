@@ -74,6 +74,12 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
+    id: 'appointment_id',
+    numeric: false,
+    disablePadding: false,
+    label: 'appointment_id',
+  },
+  {
     id: 'name',
     numeric: false,
     disablePadding: true,
@@ -546,7 +552,7 @@ export default function EnhancedTable() {
     return val
   };
   return (
-    <Box sx={{ width: '95%', pl: 30 }}>             
+    <Box sx={{ width: '95%', pl: 30 }}>
       <Stack direction={'row'} pb={2} spacing={2}>
         <Grid item xs={6}>
           <NotifyBox isLoading={isLoading} title={'Appointments'} notification={users.length}></NotifyBox>
@@ -559,17 +565,17 @@ export default function EnhancedTable() {
         </Grid>
       </Stack>
       <Paper elevation={6} sx={{ width: '100%', mb: 2 }}>
-      {isLoading && <LinearProgress />}
+        {isLoading && <LinearProgress />}
         <EnhancedTableToolbar filterName={filterName}
           onFilterName={handleFilterByName}
           numSelected={selected.length} />
         <TableContainer>
           <Table
-            sx={{ minWidth: 750}}
+            sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
             size={dense ? 'small' : 'medium'}
           >
-              
+
             <EnhancedTableHead
               numSelected={selected.length}
               order={order}
@@ -602,8 +608,7 @@ export default function EnhancedTable() {
                     >
 
                       <TableCell
-
-                        padding="checkbox">
+                        >
                         {/* <Checkbox
                           color="primary"
                           checked={isItemSelected}
@@ -612,6 +617,7 @@ export default function EnhancedTable() {
                           }}
                         /> */}
                       </TableCell>
+                      <TableCell>{row.appointment_id}</TableCell>
                       <TableCell
                         component="th"
                         id={labelId}
@@ -620,7 +626,6 @@ export default function EnhancedTable() {
                       >
                         {row.name}
                       </TableCell>
-                      {/* <TableCell align="right">{row.lname}</TableCell> */}
                       <TableCell align="right">{formatDate(row.starts_at.seconds)}</TableCell>
                       <TableCell align="right">{row.plate_no}</TableCell>
                       <TableCell align="right">{row.description}</TableCell>

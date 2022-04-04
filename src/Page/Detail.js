@@ -560,6 +560,7 @@ export default function UserUpdate() {
                                                         Status
                                                     </InputLabel>
                                                     <Select
+                                                        autoFocus
                                                         sx={{ textAlign: 'start' }}
                                                         labelId="demo-simple-select-label"
                                                         id="demo-simple-select"
