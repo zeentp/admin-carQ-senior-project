@@ -40,7 +40,7 @@ import { filter } from "lodash";
 import { URL as url } from '../Constant';
 import NotifyBox from '../component/NotifyBox';
 import LinearProgress from '@mui/material/LinearProgress';
-
+import SearchNotFound from '../component/SearchNotFound';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -374,16 +374,7 @@ export default function EnhancedTable() {
   const axios = require("axios");
   const [isLoading, setIsLoading] = React.useState(true);
 
-  function createData(name, date, telephone, status, issue) {
-    return { name, date, telephone, status, issue };
-  }
 
-  const rows = [
-    createData('Frozen yoghurt', '09-03-2565', null, 'air-filter'),
-    createData('Ray yoghurt', '09-03-2565', null, 'engine'),
-    createData('Zee yoghurt', '09-03-2565', null, 'port'),
-    createData('Aet yoghurt', '09-03-2565', null, 'air'),
-  ];
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
   };
@@ -393,6 +384,10 @@ export default function EnhancedTable() {
     getComparator(order, orderBy),
     filterName
   );
+
+    
+  const filteredUsers = applySortFilter(users, getComparator(order, orderBy), filterName);
+  const isUserNotFound = filteredUsers.length === 0;
 
   function applySortFilter(array, comparator, query) {
     console.log("applySortFilter");
@@ -453,12 +448,7 @@ export default function EnhancedTable() {
           setUsers(result)
         }
       )
-    // axios.get(url + "/a/appointments").then((res) => {
-    //   console.log(res.data);
-    //   const list = res.data.map((d) => d);
-    //   setUsers(list);
-    // });
-    // console.log(users)
+
   }
 
   const UserDelete = id => {
@@ -651,6 +641,15 @@ export default function EnhancedTable() {
                 </TableRow>
               )}
             </TableBody>
+            {isUserNotFound && (
+                  <TableBody>
+                    <TableRow>
+                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                        <SearchNotFound searchQuery={filterName} />
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                )}
           </Table>
         </TableContainer>
         <TablePagination
