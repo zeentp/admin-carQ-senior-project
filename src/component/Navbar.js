@@ -86,7 +86,7 @@ export default function Navbar() {
                 >
                     <Toolbar sx={{ bgcolor: '#132b42' }} >
                         <Typography sx={{ flexGrow: 1, textAlign: 'start', color: 'white' }} variant="h6" noWrap component="div">
-                            {menu}
+                            
                         </Typography>
                             {/* <Chip
                             sx={{color:'white'}}

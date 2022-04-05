@@ -17,7 +17,7 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
-import { Paper } from "@mui/material";
+import { Chip, Paper } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -216,6 +216,7 @@ export default function UserUpdate() {
             appointment_id: appointmentId,
             mechanic_id: personName,
             note: note,
+            pic:pic,
             status: isCheck1 === true && isCheck2 === false ? 'pending' : isCheck2 === true && isCheck1 === false ? 'rejected' : status,
             //  ends_at:,
             //note:,
@@ -246,7 +247,7 @@ export default function UserUpdate() {
     const [appointmentId, setAppointmentId] = useState('');
     const [status, setStatus] = useState('');
     const [note, setNote] = useState('');
-    const [pic, setPic] = useState('');
+    const [pic, setPic] = useState([]);
 
 
 
@@ -260,7 +261,7 @@ export default function UserUpdate() {
         console.log(propertyNames)
         console.log(typeof propertyNames)
 
-    }, [])
+    }, [pic])
     const test = [
 
     ]
@@ -356,7 +357,17 @@ export default function UserUpdate() {
     };
     // const loadInfo = {};
     const { register, errors, reset } = useForm();
-
+    const removeOption =(a) =>{
+        console.log('before')
+        console.log(pic)
+        pic.map((i)=> {
+            if(i===a){
+                pic.pop(a)
+            }
+        }
+        )
+        console.log(pic)
+    }
 
 
     return (
@@ -501,12 +512,27 @@ export default function UserUpdate() {
                                                 multiple
                                                 onChange={(event, newValue) => {
                                                     setPersonName(newValue);
+                                                    // setPic(newValue);
+                                                    console.log(newValue)
                                                 }}
                                                 id="tags-outlined"
                                                 options={mechanics}
-                                                // getOptionLabel={(option) => option.title}
+                                                disableCloseOnSelect
+                                                    // getOptionLabel={(option) => option.title}
                                                 defaultValue={pic}
+                                                // value={pic}
                                                 filterSelectedOptions
+                                                // renderTags={(values) =>
+                                                //     values.map((value) => (
+                                                //       <Chip
+                                                //         key={value}
+                                                //         label={value}
+                                                //         onDelete={() => {
+                                                //           removeOption(value);
+                                                //         }}
+                                                //       />
+                                                //     ))
+                                                //   }
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
@@ -662,5 +688,5 @@ export default function UserUpdate() {
             </Snackbar>
         </Box>
     );
-
+    // https://codesandbox.io/s/material-ui-autocomplete-unchecking-checkboxes-in-renderoption-using-redux-dis-0nrho?fontsize=14&hidenavigation=1&theme=dark&file=/src/App.js
 }

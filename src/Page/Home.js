@@ -376,6 +376,7 @@ export default function EnhancedTable() {
 
 
   const handleFilterByName = (event) => {
+    console.log(event.target.value)
     setFilterName(event.target.value);
   };
 
