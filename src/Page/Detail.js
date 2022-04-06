@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useReducer  } from "react";
 import { makeStyles } from '@mui/styles';
 import Button from '@mui/material/Button';
 import TextField from "@mui/material/TextField";
@@ -214,7 +214,7 @@ export default function UserUpdate() {
         console.log(personName)
         var data = {
             appointment_id: appointmentId,
-            mechanic_id: personName,
+            mechanic_id: state.selectedOptions,
             note: note,
             pic:pic,
             status: isCheck1 === true && isCheck2 === false ? 'pending' : isCheck2 === true && isCheck1 === false ? 'rejected' : status,
@@ -223,12 +223,12 @@ export default function UserUpdate() {
             //status:,
         }
         console.log(data)
-        axios.put(url + "/a/details/update", data).then((res) => {
-            console.log(res);
-            // setTimeout(() => {
-            //     window.location.href = '/dashboardPage';
-            // }, 3000)
-        });
+        // axios.put(url + "/a/details/update", data).then((res) => {
+        //     console.log(res);
+        //     // setTimeout(() => {
+        //     //     window.location.href = '/dashboardPage';
+        //     // }, 3000)
+        // });
     }
     const [editFlag, setEditFlag] = useState(false);
     const [isLoading, setIsLoading] = React.useState(true);
@@ -250,6 +250,23 @@ export default function UserUpdate() {
     const [pic, setPic] = useState([]);
 
 
+    const initialState = { selectedOptions: [] };
+    const [state, dispatch] = useReducer(reducer, initialState);
+    function reducer(state, action) {
+        switch (action.type) {
+          case "SET_SELECTED_OPTIONS":
+            return { selectedOptions: action.payload.pic };
+      
+          case "REMOVE_OPTION":
+            return {
+              selectedOptions: state.selectedOptions.filter(
+                (pic) => pic !== action.payload.pic
+              )
+            };
+          default:
+            throw new Error();
+        }
+      }
 
 
     const theme = useTheme();
@@ -258,10 +275,9 @@ export default function UserUpdate() {
     const [personName, setPersonName] = React.useState([]);
 
     useEffect(() => {
-        console.log(propertyNames)
-        console.log(typeof propertyNames)
 
-    }, [pic])
+
+    }, [])
     const test = [
 
     ]
@@ -357,17 +373,26 @@ export default function UserUpdate() {
     };
     // const loadInfo = {};
     const { register, errors, reset } = useForm();
-    const removeOption =(a) =>{
-        console.log('before')
-        console.log(pic)
-        pic.map((i)=> {
-            if(i===a){
-                pic.pop(a)
-            }
-        }
-        )
-        console.log(pic)
-    }
+    const removeOption = (id) => {
+        console.log(id)
+        dispatch({ type: "REMOVE_OPTION", payload: { pic: id } });
+      };
+    
+      const handleChange = (event, values) => {
+        dispatch({ type: "SET_SELECTED_OPTIONS", payload: { pic: values } });
+      };
+    
+    // const removeOption =(a) =>{
+    //     console.log('before')
+    //     console.log(pic)
+    //     pic.map((i)=> {
+    //         if(i===a){
+    //             pic.pop(a)
+    //         }
+    //     }
+    //     )
+    //     console.log(pic)
+    // }
 
 
     return (
@@ -510,29 +535,32 @@ export default function UserUpdate() {
                                         <FormControl sx={{ width: "100%" }}>
                                             <Autocomplete
                                                 multiple
-                                                onChange={(event, newValue) => {
-                                                    setPersonName(newValue);
-                                                    // setPic(newValue);
-                                                    console.log(newValue)
-                                                }}
+                                                onChange={handleChange}
+                                                // onChange={(event, newValue) => {
+                                                    
+                                                //     setPersonName(newValue);
+                                                //     // setPic(newValue);
+                                                //     console.log(newValue)
+                                                // }}
                                                 id="tags-outlined"
                                                 options={mechanics}
                                                 disableCloseOnSelect
                                                     // getOptionLabel={(option) => option.title}
-                                                defaultValue={pic}
+                                                // defaultValue={pic}
+                                                value={state.selectedOptions}
                                                 // value={pic}
                                                 filterSelectedOptions
-                                                // renderTags={(values) =>
-                                                //     values.map((value) => (
-                                                //       <Chip
-                                                //         key={value}
-                                                //         label={value}
-                                                //         onDelete={() => {
-                                                //           removeOption(value);
-                                                //         }}
-                                                //       />
-                                                //     ))
-                                                //   }
+                                                renderTags={(values) =>
+                                                    values.map((value) => (
+                                                      <Chip
+                                                        key={value}
+                                                        label={value}
+                                                        onDelete={() => {
+                                                          removeOption(value);
+                                                        }}
+                                                      />
+                                                    ))
+                                                  }
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
