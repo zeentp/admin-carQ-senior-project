@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useReducer  } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import { makeStyles } from '@mui/styles';
 import Button from '@mui/material/Button';
 import TextField from "@mui/material/TextField";
@@ -95,66 +95,53 @@ function getStyles(name, personName, theme) {
     };
 }
 
-const MultipleSelect = () => {
-    const theme = useTheme();
-    const [mechanics, setMechanics] = React.useState([]);
-    const [personName, setPersonName] = React.useState([]);
-    const [users, setUsers] = useState([]);
-    const [names, setNames] = useState([]);
-    const axios = require("axios");
-    const { id } = useParams();
-
-    useEffect(() => {
-        console.log(personName)
-        axios.get(url + "/a/details?id=" + id)
-            .then(
-                (result) => {
-
-                    console.log(result.data)
-                    setMechanics(result.data.mechanic)
-                })
-    }, [id])
+// const MultipleSelect = () => {
+//     const theme = useTheme();
+//     const [users, setUsers] = useState([]);
+//     const [names, setNames] = useState([]);
+//     const axios = require("axios");
+//     const { id } = useParams();
 
 
 
-    const handleChangeMechanic = (event) => {
-        const {
-            target: { value },
-        } = event;
-        setPersonName(
-            // On autofill we get a stringified value.
-            typeof value === 'string' ? value.split(',') : value,
-        );
-    };
+//     const handleChangeMechanic = (event) => {
+//         const {
+//             target: { value },
+//         } = event;
+//         setPersonName(
+//             // On autofill we get a stringified value.
+//             typeof value === 'string' ? value.split(',') : value,
+//         );
+//     };
 
-    return (
-        <div>
-            <FormControl sx={{ width: "100%" }}>
-                <InputLabel id="demo-multiple-name-label">Mechanic</InputLabel>
-                <Select
-                    sx={{ textAlign: 'start' }}
-                    labelId="demo-multiple-name-label"
-                    id="demo-multiple-name"
-                    multiple
-                    value={personName}
-                    onChange={handleChangeMechanic}
-                    input={<OutlinedInput label="Mechanic" />}
-                    MenuProps={MenuProps}
-                >
-                    {mechanics.map((name) => (
-                        <MenuItem
-                            key={name}
-                            value={name}
-                            style={getStyles(name, personName, theme)}
-                        >
-                            {name}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
-        </div>
-    );
-}
+//     return (
+//         <div>
+//             <FormControl sx={{ width: "100%" }}>
+//                 <InputLabel id="demo-multiple-name-label">Mechanic</InputLabel>
+//                 <Select
+//                     sx={{ textAlign: 'start' }}
+//                     labelId="demo-multiple-name-label"
+//                     id="demo-multiple-name"
+//                     multiple
+//                     value={personName}
+//                     onChange={handleChangeMechanic}
+//                     input={<OutlinedInput label="Mechanic" />}
+//                     MenuProps={MenuProps}
+//                 >
+//                     {mechanics.map((name) => (
+//                         <MenuItem
+//                             key={name}
+//                             value={name}
+//                             style={getStyles(name, personName, theme)}
+//                         >
+//                             {name}
+//                         </MenuItem>
+//                     ))}
+//                 </Select>
+//             </FormControl>
+//         </div>
+//     );
+// }
 export default function UserUpdate() {
     const [open, setOpen] = React.useState(false);
     const [alertOpen, setAlertOpen] = React.useState(false);
@@ -162,6 +149,8 @@ export default function UserUpdate() {
     const { id } = useParams();
     const [disableEditButton, setDisableEditButton] = React.useState(true);
     const axios = require("axios");
+    const [personName, setPersonName] = React.useState([]);
+    const [mechanics, setMechanics] = React.useState([]);
 
 
 
@@ -169,7 +158,6 @@ export default function UserUpdate() {
         console.log(id)
         getMechanics()
         axios.get(url + "/a/details?id=" + id)
-            // .then(res => console.log(res.data))
             .then(
                 (result) => {
                     setIsLoading(false)
@@ -188,21 +176,10 @@ export default function UserUpdate() {
                     // console.log(status)
                     // console.log(result.data.status)
                     console.log(result.data.appointment_id)
+                    setMechanics(result.data.mechanic)
 
                 })
-        // fetch("https://www.mecallapi.com/api/users/"+id)
-        //   .then(res => res.json())
-        //   .then(
-        //     (result) => {
-        //       setFname(result.user.fname)
-        //       setLname(result.user.lname)
-        //       setUsername(result.user.username)
-        //       setEmail(result.user.email)
-        //       setAvatar(result.user.avatar)
-        //     }
-        //   )
     }, [id])
-
 
     const handleChangeSelect = (event) => {
         setStatus(event.target.value);
@@ -211,24 +188,59 @@ export default function UserUpdate() {
         setAlertOpen(true)
 
         event.preventDefault();
+        console.log('before')
+        console.log(state.selectedOptions)
         console.log(personName)
+        // personName.forEach((i) =>{
+        //     if(state.selectedOptions.includes(i)){
+        //         console.log('1')
+        //     }else{
+        //         removeMechanic.push(i)
+        //         console.log('2')
+        //     }
+        // })
+        pic.forEach((m)=>{
+            if(!state.selectedOptions.includes(m)){
+                removeMechanic.push(m)
+            }
+        })
+        console.log(personName)
+        console.log('---------------------')
+        console.log(removeMechanic)
+
+
         var data = {
             appointment_id: appointmentId,
             mechanic_id: state.selectedOptions,
             note: note,
-            pic:pic,
+            pic: pic,
+            removeMechanic: removeMechanic,
             status: isCheck1 === true && isCheck2 === false ? 'pending' : isCheck2 === true && isCheck1 === false ? 'rejected' : status,
             //  ends_at:,
             //note:,
             //status:,
         }
+
+
         console.log(data)
-        // axios.put(url + "/a/details/update", data).then((res) => {
-        //     console.log(res);
-        //     // setTimeout(() => {
-        //     //     window.location.href = '/dashboardPage';
-        //     // }, 3000)
-        // });
+        axios.put(url + "/a/details/update", data).then((res) => {
+            console.log(res);
+            // setTimeout(() => {
+            //     window.location.href = '/dashboardPage';
+            // }, 3000)
+        });
+        var data2 ={
+            removeMechanic: removeMechanic,
+        }
+        setTimeout(() => {
+            axios.put(url + "/a/status", data2).then((res) => {
+                console.log(res);
+                // setTimeout(() => {
+                //     window.location.href = '/dashboardPage';
+                // }, 3000)
+            });
+          }, 6000)
+       
     }
     const [editFlag, setEditFlag] = useState(false);
     const [isLoading, setIsLoading] = React.useState(true);
@@ -254,29 +266,28 @@ export default function UserUpdate() {
     const [state, dispatch] = useReducer(reducer, initialState);
     function reducer(state, action) {
         switch (action.type) {
-          case "SET_SELECTED_OPTIONS":
-            return { selectedOptions: action.payload.pic };
-      
-          case "REMOVE_OPTION":
-            return {
-              selectedOptions: state.selectedOptions.filter(
-                (pic) => pic !== action.payload.pic
-              )
-            };
-          default:
-            throw new Error();
+            case "SET_SELECTED_OPTIONS":
+                return { selectedOptions: action.payload.pic };
+
+            case "REMOVE_OPTION":
+                return {
+                    selectedOptions: state.selectedOptions.filter(
+                        (pic) => pic !== action.payload.pic
+                    )
+                };
+            default:
+                throw new Error();
         }
-      }
+    }
 
 
     const theme = useTheme();
-    const [mechanics, setMechanics] = React.useState([]);
     const propertyNames = Object.keys(mechanics);
-    const [personName, setPersonName] = React.useState([]);
+    const [removeMechanic, setRemoveMechanic] = React.useState([]);
+
 
     useEffect(() => {
-
-
+        // state.selectedOptions.join(pic)
     }, [])
     const test = [
 
@@ -287,9 +298,14 @@ export default function UserUpdate() {
                 (result) => {
                     console.log(result.data)
                     setPic(result.data.pic)
+                    dispatch({ type: "SET_SELECTED_OPTIONS", payload: { pic: result.data.pic } });
                     setMechanics(result.data.mechanic)
+                    if (!mechanics.includes(result.data.pic)) {
+                        console.log(result.data.pic)
+                        mechanics.push(result.data.pic)
+                        // setMechanics([...result.data.mechanic, result.data.pic])
+                    }
                 })
-        console.log(typeof mechanics)
     }
 
     const handleChangeMechanic = (event) => {
@@ -374,14 +390,32 @@ export default function UserUpdate() {
     // const loadInfo = {};
     const { register, errors, reset } = useForm();
     const removeOption = (id) => {
+        // state.selectedOptions.map((n) => {
+        //     if (n !== id) {
+        //         if (!personName.includes(id)) {
+        //             personName.push(id)
+        //         }
+        //     }
+        // }
+        // )
+    
+        // setMechanics([...mechanics,pic])
+        if (!personName.includes(id)) {
+            personName.push(id)
+        }
         console.log(id)
+        console.log(state.selectedOptions)
+        // setPersonName(id)
+
         dispatch({ type: "REMOVE_OPTION", payload: { pic: id } });
-      };
-    
-      const handleChange = (event, values) => {
+    };
+
+    const handleChange = (event, values) => {
+        // setMechanics([...mechanics,pic])
+        console.log(state.selectedOptions)
         dispatch({ type: "SET_SELECTED_OPTIONS", payload: { pic: values } });
-      };
-    
+    };
+
     // const removeOption =(a) =>{
     //     console.log('before')
     //     console.log(pic)
@@ -537,7 +571,7 @@ export default function UserUpdate() {
                                                 multiple
                                                 onChange={handleChange}
                                                 // onChange={(event, newValue) => {
-                                                    
+
                                                 //     setPersonName(newValue);
                                                 //     // setPic(newValue);
                                                 //     console.log(newValue)
@@ -545,22 +579,22 @@ export default function UserUpdate() {
                                                 id="tags-outlined"
                                                 options={mechanics}
                                                 disableCloseOnSelect
-                                                    // getOptionLabel={(option) => option.title}
+                                                // getOptionLabel={(option) => option.title}
                                                 // defaultValue={pic}
                                                 value={state.selectedOptions}
                                                 // value={pic}
                                                 filterSelectedOptions
                                                 renderTags={(values) =>
                                                     values.map((value) => (
-                                                      <Chip
-                                                        key={value}
-                                                        label={value}
-                                                        onDelete={() => {
-                                                          removeOption(value);
-                                                        }}
-                                                      />
+                                                        <Chip
+                                                            key={value}
+                                                            label={value}
+                                                            onDelete={() => {
+                                                                removeOption(value);
+                                                            }}
+                                                        />
                                                     ))
-                                                  }
+                                                }
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
@@ -623,10 +657,10 @@ export default function UserUpdate() {
                                                         // label="Status"
                                                         onChange={handleChangeSelect}
                                                     >
-                                                        
+
                                                         <MenuItem value={'pending'}>pending</MenuItem>
                                                         <MenuItem value={'on-track'}>on-track</MenuItem>
-                                                        <MenuItem value={'completed'}>completed</MenuItem> 
+                                                        <MenuItem value={'completed'}>completed</MenuItem>
                                                     </Select>
                                                 </Box>
                                             </FormControl>
