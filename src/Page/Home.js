@@ -256,7 +256,7 @@ const EnhancedTableToolbar = (props) => {
         onChange={onFilterName}
         // sx={{width:'200px',height:'10px'}}
         // label="ค้นหา"
-        placeholder="ค้นหา"
+        placeholder="Search"
         size="small"
         InputProps={{
 
@@ -592,10 +592,10 @@ export default function EnhancedTable() {
                       // onClick={(event) => handleClick(event, row.fname)}
                       role="checkbox"
                       // onClick={() => handleDetailClick(row.id)}
-                      aria-checked={isItemSelected}
+                      // aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
-                      selected={isItemSelected}
+                      key={row.appointment_id}
+                      // selected={isItemSelected}
                     >
 
                       <TableCell
@@ -642,7 +642,7 @@ export default function EnhancedTable() {
                 </TableRow>
               )}
             </TableBody>
-            {isUserNotFound && (
+            {/* {isUserNotFound && (
                   <TableBody>
                     <TableRow>
                       <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
@@ -650,7 +650,7 @@ export default function EnhancedTable() {
                       </TableCell>
                     </TableRow>
                   </TableBody>
-                )}
+                )} */}
           </Table>
         </TableContainer>
         <TablePagination

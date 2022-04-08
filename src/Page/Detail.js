@@ -157,6 +157,7 @@ export default function UserUpdate() {
     useEffect(() => {
         console.log(id)
         getMechanics()
+
         axios.get(url + "/a/details?id=" + id)
             .then(
                 (result) => {
@@ -176,9 +177,12 @@ export default function UserUpdate() {
                     // console.log(status)
                     // console.log(result.data.status)
                     console.log(result.data.appointment_id)
-                    setMechanics(result.data.mechanic)
+                    // mechanics.push(result.data.pic)
+                    console.log(result.data.pic)
 
                 })
+        // setMechanics(mechanics => [...mechanics, {pic: pic}]);
+
     }, [id])
 
     const handleChangeSelect = (event) => {
@@ -186,11 +190,7 @@ export default function UserUpdate() {
     };
     const handleSubmit = event => {
         setAlertOpen(true)
-
         event.preventDefault();
-        console.log('before')
-        console.log(state.selectedOptions)
-        console.log(personName)
         // personName.forEach((i) =>{
         //     if(state.selectedOptions.includes(i)){
         //         console.log('1')
@@ -199,8 +199,8 @@ export default function UserUpdate() {
         //         console.log('2')
         //     }
         // })
-        pic.forEach((m)=>{
-            if(!state.selectedOptions.includes(m)){
+        pic.forEach((m) => {
+            if (!state.selectedOptions.includes(m)) {
                 removeMechanic.push(m)
             }
         })
@@ -240,7 +240,7 @@ export default function UserUpdate() {
                 // }, 3000)
             });
           }, 6000)
-       
+
     }
     const [editFlag, setEditFlag] = useState(false);
     const [isLoading, setIsLoading] = React.useState(true);
@@ -260,8 +260,7 @@ export default function UserUpdate() {
     const [status, setStatus] = useState('');
     const [note, setNote] = useState('');
     const [pic, setPic] = useState([]);
-
-
+    const produce = [...mechanics, ...pic]; 
     const initialState = { selectedOptions: [] };
     const [state, dispatch] = useReducer(reducer, initialState);
     function reducer(state, action) {
@@ -296,15 +295,15 @@ export default function UserUpdate() {
         axios.get(url + "/a/details?id=" + id)
             .then(
                 (result) => {
-                    console.log(result.data)
                     setPic(result.data.pic)
                     dispatch({ type: "SET_SELECTED_OPTIONS", payload: { pic: result.data.pic } });
                     setMechanics(result.data.mechanic)
-                    if (!mechanics.includes(result.data.pic)) {
-                        console.log(result.data.pic)
-                        mechanics.push(result.data.pic)
-                        // setMechanics([...result.data.mechanic, result.data.pic])
+                    result.data.pic.map((n) => {
+                        mechanics.push(n)
+                        console.log('1')
                     }
+                    )
+                    console.log(mechanics)
                 })
     }
 
@@ -328,7 +327,7 @@ export default function UserUpdate() {
         if (isCheck1 === true) {
             setIscheck1(false)
         }
-        // setStatus('pending')
+
 
 
     }
@@ -352,10 +351,7 @@ export default function UserUpdate() {
     function refreshPage() {
         window.location.reload(false);
     }
-    // const handleOnClick = () => {
-    //     setDisableEditButton(false)
-    //     handleEditClick()
-    // }
+
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -398,7 +394,7 @@ export default function UserUpdate() {
         //     }
         // }
         // )
-    
+
         // setMechanics([...mechanics,pic])
         if (!personName.includes(id)) {
             personName.push(id)
@@ -577,24 +573,24 @@ export default function UserUpdate() {
                                                 //     console.log(newValue)
                                                 // }}
                                                 id="tags-outlined"
-                                                options={mechanics}
+                                                options={produce}
                                                 disableCloseOnSelect
                                                 // getOptionLabel={(option) => option.title}
-                                                // defaultValue={pic}
-                                                value={state.selectedOptions}
+                                                defaultValue={pic}
+                                                // value={state.selectedOptions}
                                                 // value={pic}
                                                 filterSelectedOptions
-                                                renderTags={(values) =>
-                                                    values.map((value) => (
-                                                        <Chip
-                                                            key={value}
-                                                            label={value}
-                                                            onDelete={() => {
-                                                                removeOption(value);
-                                                            }}
-                                                        />
-                                                    ))
-                                                }
+                                                // renderTags={(values) =>
+                                                //     values.map((value) => (
+                                                //         <Chip
+                                                //             key={value}
+                                                //             label={value}
+                                                //             onDelete={() => {
+                                                //                 removeOption(value);
+                                                //             }}
+                                                //         />
+                                                //     ))
+                                                // }
                                                 renderInput={(params) => (
                                                     <TextField
                                                         {...params}
