@@ -239,7 +239,7 @@ export default function UserUpdate() {
                 //     window.location.href = '/dashboardPage';
                 // }, 3000)
             });
-          }, 6000)
+          }, 3500)
 
     }
     const [editFlag, setEditFlag] = useState(false);

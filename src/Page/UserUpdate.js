@@ -176,7 +176,7 @@ export default function UserUpdate() {
             <Typography component="h1" variant="h5">
               Crew
             </Typography>
-            {editFlag === false ? <Fab
+            {/* {editFlag === false ? <Fab
               color=""
               aria-label="edit"
               onClick={handleEditClick}
@@ -186,7 +186,7 @@ export default function UserUpdate() {
               <Button
                 variant="outlined"
 
-                onClick={() => refreshPage()}>cancel</Button>}
+                onClick={() => refreshPage()}>cancel</Button>} */}
             <form className={classes.form} onSubmit={handleSubmit}>
               <Grid sx={{ display: 'flex' }} container spacing={2}>
                 <Grid item xs={12}>
@@ -204,7 +204,7 @@ export default function UserUpdate() {
                       value={fname}
                       onChange={(e) => setFname(e.target.value)}
                       autoFocus
-                      disabled={disableEditButton}
+                      // disabled={disableEditButton}
                     />
                     <TextField
                       variant="outlined"
@@ -214,7 +214,7 @@ export default function UserUpdate() {
                       label="Last Name"
                       value={lname}
                       onChange={(e) => setLname(e.target.value)}
-                      disabled={disableEditButton}
+                      // disabled={disableEditButton}
                     />
                   </Stack>
                   <Grid sx={{ pt: 2 }} item xs={12}>
@@ -229,7 +229,7 @@ export default function UserUpdate() {
                         label="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        disabled={disableEditButton}
+                        // disabled={disableEditButton}
                       />
 
                       <TextField
@@ -241,7 +241,7 @@ export default function UserUpdate() {
                         value={telephone}
                         inputProps={{ maxLength: 12 }}
                         onChange={handlePhoneChange}
-                        disabled={disableEditButton}
+                        // disabled={disableEditButton}
                       // onChange={(e) => setTelephone(e.target.value)}
                       />
                     </Stack>
@@ -265,7 +265,7 @@ export default function UserUpdate() {
                               label="Status"
                               // label="Status"
                               onChange={handleChangeSelect}
-                              disabled={disableEditButton}
+                              // disabled={disableEditButton}
                             >
                               <MenuItem value={true}>avaliable</MenuItem>
                               <MenuItem value={false}>unavaliable</MenuItem>

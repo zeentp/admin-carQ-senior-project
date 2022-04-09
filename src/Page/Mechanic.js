@@ -444,7 +444,7 @@ export default function EnhancedTable() {
     if (query) {
       return filter(
         array,
-        (_user) => _user.firstName.toLowerCase().indexOf(query.toLowerCase()) !== -1
+        (_user) => (_user.firstName+_user.lastName).toLowerCase().indexOf(query.toLowerCase()) !== -1
       );
     }
     return stabilizedThis.map((el) => el[0]);
