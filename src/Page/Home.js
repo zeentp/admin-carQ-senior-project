@@ -23,6 +23,7 @@ import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import '../Css/Card.css'
 import CircularProgress from '@mui/material/CircularProgress';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
@@ -386,7 +387,7 @@ export default function EnhancedTable() {
     filterName
   );
 
-    
+
   const filteredUsers = applySortFilter(users, getComparator(order, orderBy), filterName);
   const isUserNotFound = filteredUsers.length === 0;
 
@@ -595,11 +596,11 @@ export default function EnhancedTable() {
                       // aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={row.appointment_id}
-                      // selected={isItemSelected}
+                    // selected={isItemSelected}
                     >
 
                       <TableCell
-                        >
+                      >
                         {/* <Checkbox
                           color="primary"
                           checked={isItemSelected}
@@ -619,7 +620,16 @@ export default function EnhancedTable() {
                       </TableCell>
                       <TableCell align="right">{formatDate(row.starts_at.seconds)}</TableCell>
                       <TableCell align="right">{row.plate_no}</TableCell>
-                      <TableCell align="right">{row.description}</TableCell>
+                      <TableCell
+                        className="textContainer"
+                        // sx={{display:'flex'}}
+                        align="right"
+                      // sx={{ display: 'block',width: '200px',white-space: 'nowrap',overflow: 'hidden',textOverflow: "ellipsis",}}
+                      >
+                        <div className="textContainer">
+                          {row.description}
+                        </div>
+                      </TableCell>
                       <TableCell align="right">{formatPhone(row.telephone)}</TableCell>
                       <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">
                         <Button onClick={() => viewUser(row.appointment_id)}

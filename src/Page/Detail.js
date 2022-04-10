@@ -17,10 +17,11 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Box from '@mui/material/Box';
-import { Chip, Paper } from "@mui/material";
+import { Chip, Paper, Stack } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
+import Divider from "@mui/material/Divider";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -33,6 +34,7 @@ import "../Css/Button.css";
 import { URL as url } from '../Constant';
 import CircularProgress from '@mui/material/CircularProgress';
 import LinearProgress from '@mui/material/LinearProgress';
+import { withStyles } from '@mui/styles';
 
 
 
@@ -40,7 +42,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 const useStyles = makeStyles((theme) => ({
     paper: {
         // marginTop: theme.spacing(8),
-        display: 'flex',
+        // display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
     },
@@ -50,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
     },
     form: {
         width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(3),
+        // marginTop: theme.spacing(3),
         // marginLeft: theme.spacing(3),
 
     },
@@ -64,6 +66,11 @@ const useStyles = makeStyles((theme) => ({
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
+const StyleChip = withStyles({
+    root: {
+        backgroundColor: 'grey'
+    }
+})(Chip);
 const MenuProps = {
     PaperProps: {
         style: {
@@ -73,18 +80,6 @@ const MenuProps = {
     },
 };
 
-// const names = [
-//     'Oliver Hansen',
-//     'Van Henry',
-//     'April Tucker',
-//     'Ralph Hubbard',
-//     'Omar Alexander',
-//     'Carlos Abbott',
-//     'Miriam Wagner',
-//     'Bradley Wilkerson',
-//     'Virginia Andrews',
-//     'Kelly Snyder',
-// ];
 
 function getStyles(name, personName, theme) {
     return {
@@ -229,17 +224,15 @@ export default function UserUpdate() {
             //     window.location.href = '/dashboardPage';
             // }, 3000)
         });
-        var data2 ={
+        var data2 = {
             removeMechanic: removeMechanic,
         }
         setTimeout(() => {
             axios.put(url + "/a/status", data2).then((res) => {
                 console.log(res);
-                // setTimeout(() => {
-                //     window.location.href = '/dashboardPage';
-                // }, 3000)
+                window.location.href = '/dashboardPage';
             });
-          }, 3500)
+        }, 3500)
 
     }
     const [editFlag, setEditFlag] = useState(false);
@@ -260,7 +253,7 @@ export default function UserUpdate() {
     const [status, setStatus] = useState('');
     const [note, setNote] = useState('');
     const [pic, setPic] = useState([]);
-    const produce = [...mechanics, ...pic]; 
+    const produce = [...mechanics, ...pic];
     const initialState = { selectedOptions: [] };
     const [state, dispatch] = useReducer(reducer, initialState);
     function reducer(state, action) {
@@ -429,9 +422,11 @@ export default function UserUpdate() {
         <Box sx={{ pl: 80, pb: 5 }} >
             <Paper sx={{ pt: 10, p: 5, width: '666px' }}>
                 <div className={classes.paper}>
-                    <Typography sx={{ pb: 2 }} component="h1" variant="h5">
-                        Accepting an appointment card
-                    </Typography>
+                    <Box sx={{ py: 2, px: 4, bgcolor: '#2c344c', color: 'white' }} >
+                        <Typography variant='h5'>
+                            Appointment Details
+                        </Typography>
+                    </Box>
                     {/* {editFlag === false ? <Fab
                         color=""
                         aria-label="edit"
@@ -445,161 +440,299 @@ export default function UserUpdate() {
                     } */}
                     {isLoading === true ? <CircularProgress />
                         :
+                        <div>
+                            <Box sx={{ py: 2, px: 1 }} >
 
-                        <form className={classes.form} onSubmit={handleSubmit}>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        autoComplete="fname"
-                                        name="firstName"
-                                        variant="outlined"
-                                        fullWidth
-                                        id="firstName"
-                                        label="First Name"
-                                        value={fname}
-                                        onChange={(e) => setFname(e.target.value)}
-                                        autoFocus
-                                        disabled={disableEditButton}
-                                    />
-                                </Grid>
+                                <Box
+                                    sx={{ display: 'flex' }}
+                                >
+                                    <Typography textAlign={'left'} sx={{ flexGrow: 1, fontWeight: 'bold', pb: 2 }}>
 
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        variant="outlined"
-                                        required
-                                        fullWidth
-                                        id="lastName"
-                                        label="Last Name"
-                                        value={lname}
-                                        onChange={(e) => setLname(e.target.value)}
-                                        disabled={disableEditButton}
-                                    />
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <TextField
-                                        variant="outlined"
-                                        required
-                                        fullWidth
-                                        id="email"
-                                        label="email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        disabled={disableEditButton}
-                                    />
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <TextField
-                                        variant="outlined"
-                                        required
-                                        fullWidth
-                                        id="plateNumber"
-                                        label="plateNumber"
-                                        value={plateNumber}
-                                        onChange={(e) => setPlateNumber(e.target.value)}
-                                        disabled={disableEditButton}
-                                    />
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <TextField
-                                        variant="outlined"
-                                        required
-                                        fullWidth
-                                        id="brand"
-                                        label="brand"
-                                        value={brand}
-                                        onChange={(e) => setBrand(e.target.value)}
-                                        disabled={disableEditButton}
-                                    />
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <TextField
-                                        variant="outlined"
-                                        required
-                                        fullWidth
-                                        id="telephone"
-                                        label="Telephone"
-                                        value={telephone}
-                                        inputProps={{ maxLength: 12 }}
-                                        onChange={handlePhoneChange}
-                                        disabled={disableEditButton}
-                                    // onChange={(e) => setTelephone(e.target.value)}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        variant="outlined"
-                                        required
-                                        fullWidth
-                                        id="Date"
-                                        label="Date"
-                                        value={formatDate(dateTime)}
-                                        disabled={disableEditButton}
-                                    // onChange={(e) => setTelephone(e.target.value)}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        variant="outlined"
-                                        required
-                                        fullWidth
-                                        value={issue}
-                                        id="issue"
-                                        label="issue"
-                                        disabled={disableEditButton}
-                                    // onChange={(e) => setTelephone(e.target.value)}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        variant="outlined"
-                                        fullWidth
-                                        value={pic}
-                                        id="issue"
-                                        label="Person in charge"
-                                        disabled={disableEditButton}
-                                    // onChange={(e) => setTelephone(e.target.value)}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <div>
-                                        <FormControl sx={{ width: "100%" }}>
-                                            <Autocomplete
-                                                multiple
-                                                onChange={handleChange}
-                                                // onChange={(event, newValue) => {
+                                    </Typography>
+                                    {status === 'booking' ? <StyleChip color='primary' label={'booking'} /> :
+                                        <Chip label={status}
+                                            color={status === 'completed' ? "success" : status === 'on-track' ? "primary" : status === 'pending' ? 'secondary' : 'error'}
+                                        />
+                                    }
+                                </Box>
+                                <Box
+                                    sx={{ display: 'flex', bgcolor: 'background.paper', borderRadius: 1 }}
+                                >
+                                    <Typography textAlign={'left'} sx={{ flexGrow: 1, fontWeight: 'bold' }}>Name</Typography>
+                                    <Typography> {fname + ' ' + lname}</Typography>
+                                </Box>
+                                <Box
+                                    sx={{ display: 'flex', bgcolor: 'background.paper', borderRadius: 1 }}
+                                >
+                                    <Typography textAlign={'left'} sx={{ flexGrow: 1, fontWeight: 'bold' }}>
+                                        Telephone
+                                    </Typography>
+                                    <Typography>
+                                        {telephone}
+                                    </Typography>
+                                </Box>
+                                <Box
+                                    sx={{ display: 'flex' }}
+                                >
+                                    <Typography textAlign={'left'} sx={{ flexGrow: 1, fontWeight: 'bold' }}>
+                                        Email
+                                    </Typography>
+                                    <Typography>
+                                        {email}
+                                    </Typography>
 
-                                                //     setPersonName(newValue);
-                                                //     // setPic(newValue);
-                                                //     console.log(newValue)
-                                                // }}
-                                                id="tags-outlined"
-                                                options={produce}
-                                                disableCloseOnSelect
-                                                // getOptionLabel={(option) => option.title}
-                                                defaultValue={pic}
-                                                // value={state.selectedOptions}
-                                                // value={pic}
-                                                filterSelectedOptions
-                                                // renderTags={(values) =>
-                                                //     values.map((value) => (
-                                                //         <Chip
-                                                //             key={value}
-                                                //             label={value}
-                                                //             onDelete={() => {
-                                                //                 removeOption(value);
-                                                //             }}
-                                                //         />
-                                                //     ))
-                                                // }
-                                                renderInput={(params) => (
-                                                    <TextField
-                                                        {...params}
-                                                        label="Mechanics"
-                                                        placeholder="Mechanics"
-                                                    />
-                                                )}
-                                            />
-                                            {/* <InputLabel id="demo-multiple-name-label">Mechanic</InputLabel>
+                                </Box>
+                                <Box
+                                    sx={{ display: 'flex' }}
+                                >
+                                    <Typography textAlign={'left'} sx={{ flexGrow: 1, fontWeight: 'bold' }}>
+                                        Plate Number
+                                    </Typography>
+                                    <Typography>
+                                        {plateNumber}
+                                        {/* {bookingData.data.plateNumber} */}
+                                    </Typography>
+                                </Box>
+                                <Stack spacing={3}>
+                                    <Box></Box>
+                                </Stack>
+                                <Box
+                                    sx={{ display: 'flex' }}
+                                >
+                                    <Typography textAlign={'left'} sx={{ flexGrow: 1, fontWeight: 'bold' }}>
+                                        Carbrand
+                                    </Typography>
+                                    <Typography>
+                                        {brand}
+                                        {/* {bookingData.data.brand} */}
+                                    </Typography>
+                                </Box>
+                                <Box
+                                    sx={{ display: 'flex' }}
+                                >
+                                    <Typography textAlign={'left'} sx={{ flexGrow: 1, fontWeight: 'bold' }}>
+                                        Services
+                                    </Typography>
+                                    <Typography>
+                                        test
+                                        {/* {bookingData.data.issue} */}
+                                    </Typography>
+                                </Box>
+                                <Box
+                                    sx={{ display: 'flex' }}
+                                >
+                                    <Typography textAlign={'left'} sx={{ flexGrow: 1, fontWeight: 'bold' }}>
+                                        Description
+                                    </Typography>
+                                    <Typography>
+                                        {issue}
+                                    </Typography>
+                                </Box>
+                                <Box
+                                    sx={{ display: 'flex' }}
+                                >
+                                    <Typography textAlign={'left'} sx={{ flexGrow: 1, fontWeight: 'bold' }}>
+                                        PIC
+                                    </Typography>
+                                    <Typography>
+                                        {pic}
+                                    </Typography>
+                                </Box>
+                                <Divider sx={{ pb: 2 }}></Divider>
+                            </Box>
+                            <form className={classes.form} onSubmit={handleSubmit}>
+                                <Grid container spacing={2}>
+                                    {/* <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            autoComplete="fname"
+                                            name="firstName"
+                                            variant="outlined"
+                                            fullWidth
+                                            id="firstName"
+                                            label="First Name"
+                                            value={fname}
+                                            onChange={(e) => setFname(e.target.value)}
+                                            autoFocus
+                                            disabled={disableEditButton}
+                                        />
+                                    </Grid>
+
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            variant="outlined"
+                                            required
+                                            fullWidth
+                                            id="lastName"
+                                            label="Last Name"
+                                            value={lname}
+                                            onChange={(e) => setLname(e.target.value)}
+                                            disabled={disableEditButton}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <TextField
+                                            variant="outlined"
+                                            required
+                                            fullWidth
+                                            id="email"
+                                            label="email"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            disabled={disableEditButton}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <TextField
+                                            variant="outlined"
+                                            required
+                                            fullWidth
+                                            id="plateNumber"
+                                            label="plateNumber"
+                                            value={plateNumber}
+                                            onChange={(e) => setPlateNumber(e.target.value)}
+                                            disabled={disableEditButton}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <TextField
+                                            variant="outlined"
+                                            required
+                                            fullWidth
+                                            id="brand"
+                                            label="brand"
+                                            value={brand}
+                                            onChange={(e) => setBrand(e.target.value)}
+                                            disabled={disableEditButton}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <TextField
+                                            variant="outlined"
+                                            required
+                                            fullWidth
+                                            id="telephone"
+                                            label="Telephone"
+                                            value={telephone}
+                                            inputProps={{ maxLength: 12 }}
+                                            onChange={handlePhoneChange}
+                                            disabled={disableEditButton}
+                                        // onChange={(e) => setTelephone(e.target.value)}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            variant="outlined"
+                                            required
+                                            fullWidth
+                                            id="Date"
+                                            label="Date"
+                                            value={formatDate(dateTime)}
+                                            disabled={disableEditButton}
+                                        // onChange={(e) => setTelephone(e.target.value)}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            variant="outlined"
+                                            required
+                                            fullWidth
+                                            value={issue}
+                                            id="issue"
+                                            label="issue"
+                                            disabled={disableEditButton}
+                                        // onChange={(e) => setTelephone(e.target.value)}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            variant="outlined"
+                                            fullWidth
+                                            value={pic}
+                                            id="issue"
+                                            label="Person in charge"
+                                            disabled={disableEditButton}
+                                        // onChange={(e) => setTelephone(e.target.value)}
+                                        />
+                                    </Grid> */}
+                                    <Grid item xs={12}>
+                                        {status === 'booking' ?
+                                            <FormGroup>
+                                                <Grid container spacing={2}>
+                                                    <Grid item xs={6}>
+                                                        <FormControlLabel onChange={check1} checked={isCheck1} control={<Checkbox defaultChecked />} label="Accept" />
+                                                    </Grid>
+                                                    <Grid item xs={6}>
+                                                        <FormControlLabel onChange={check2} checked={isCheck2} control={<Checkbox />} label="Decline" />
+                                                    </Grid>
+                                                </Grid>
+                                            </FormGroup>
+                                            : <Box>
+                                                <FormControl sx={{ width: "100%" }}>
+                                                    <Box >
+                                                        <InputLabel id="demo-simple-select-label">
+                                                            Status
+                                                        </InputLabel>
+                                                        <Select
+                                                            fullWidth
+                                                            autoFocus
+                                                            sx={{ textAlign: 'start' }}
+                                                            labelId="demo-simple-select-label"
+                                                            id="demo-simple-select"
+                                                            value={status}
+                                                            label="Status"
+                                                            // label="Status"
+                                                            onChange={handleChangeSelect}
+                                                        >
+
+                                                            <MenuItem value={'pending'}>pending</MenuItem>
+                                                            <MenuItem value={'on-track'}>on-track</MenuItem>
+                                                            <MenuItem value={'completed'}>completed</MenuItem>
+                                                        </Select>
+                                                    </Box>
+                                                </FormControl>
+                                            </Box>}
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <div>
+                                            <FormControl sx={{ width: "100%" }}>
+                                                <Autocomplete
+                                                    disabled={isCheck2 === true ? true : false}
+                                                    multiple
+                                                    onChange={handleChange}
+                                                    // onChange={(event, newValue) => {
+
+                                                    //     setPersonName(newValue);
+                                                    //     // setPic(newValue);
+                                                    //     console.log(newValue)
+                                                    // }}
+                                                    id="tags-outlined"
+                                                    options={produce}
+                                                    disableCloseOnSelect
+                                                    // getOptionLabel={(option) => option.title}
+                                                    defaultValue={pic}
+                                                    // value={state.selectedOptions}
+                                                    // value={pic}
+                                                    filterSelectedOptions
+                                                    // renderTags={(values) =>
+                                                    //     values.map((value) => (
+                                                    //         <Chip
+                                                    //             key={value}
+                                                    //             label={value}
+                                                    //             onDelete={() => {
+                                                    //                 removeOption(value);
+                                                    //             }}
+                                                    //         />
+                                                    //     ))
+                                                    // }
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                            label="Mechanics"
+                                                            placeholder="Mechanics"
+                                                        />
+                                                    )}
+                                                />
+                                                {/* <InputLabel id="demo-multiple-name-label">Mechanic</InputLabel>
                                         <Select
                                             sx={{ textAlign: 'start' }}
                                             labelId="demo-multiple-name-label"
@@ -620,72 +753,34 @@ export default function UserUpdate() {
                                                 </MenuItem>
                                             ))}
                                         </Select> */}
-                                        </FormControl>
-                                    </div>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    {status === 'booking' ?
-                                        <FormGroup>
-                                            <Grid container spacing={2}>
-                                                <Grid item xs={6}>
-                                                    <FormControlLabel onChange={check1} checked={isCheck1} control={<Checkbox defaultChecked />} label="Accept" />
-                                                </Grid>
-                                                <Grid item xs={6}>
-                                                    <FormControlLabel onChange={check2} checked={isCheck2} control={<Checkbox />} label="Decline" />
-                                                </Grid>
-                                            </Grid>
-                                        </FormGroup>
-                                        : <Box>
-                                            <FormControl>
-                                                <Box sx={{
-                                                    "& .MuiSelect-select": { width: "63ch" },
-                                                }}>
-                                                    <InputLabel id="demo-simple-select-label">
-                                                        Status
-                                                    </InputLabel>
-                                                    <Select
-                                                        autoFocus
-                                                        sx={{ textAlign: 'start' }}
-                                                        labelId="demo-simple-select-label"
-                                                        id="demo-simple-select"
-                                                        value={status}
-                                                        label="Status"
-                                                        // label="Status"
-                                                        onChange={handleChangeSelect}
-                                                    >
-
-                                                        <MenuItem value={'pending'}>pending</MenuItem>
-                                                        <MenuItem value={'on-track'}>on-track</MenuItem>
-                                                        <MenuItem value={'completed'}>completed</MenuItem>
-                                                    </Select>
-                                                </Box>
                                             </FormControl>
-                                        </Box>}
+                                        </div>
+                                    </Grid>
+                                    <Grid sx={{ pb: 2 }} item xs={12}>
+                                        <TextField
+                                            variant="outlined"
+                                            fullWidth
+                                            id="note"
+                                            label="note"
+                                            multiline
+                                            onChange={(e) => setNote(e.target.value)}
+                                        />
+                                    </Grid>
                                 </Grid>
-                                <Grid sx={{ pb: 2 }} item xs={12}>
-                                    <TextField
-                                        variant="outlined"
-                                        fullWidth
-                                        id="note"
-                                        label="note"
-                                        multiline
-                                        onChange={(e) => setNote(e.target.value)}
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                color="primary"
-                                // className={classes.submit}
-                                className="setHomebtn"
-                            >
-                                Submit
-                            </Button>
-                            {/* <button type="submit" id = "setHomebtn">Calculate</button> */}
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    color="primary"
+                                    // className={classes.submit}
+                                    className="setHomebtn"
+                                >
+                                    Submit
+                                </Button>
+                                {/* <button type="submit" id = "setHomebtn">Calculate</button> */}
+                            </form>
+                        </div>
 
-                        </form>
                     }
                 </div>
             </Paper >

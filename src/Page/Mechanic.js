@@ -1,14 +1,12 @@
 import * as React from 'react';
-import { URL as url}  from '../Constant';
+import { URL as url } from '../Constant';
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
-import FormControl from '@mui/material/FormControl';
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -23,7 +21,7 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from "@mui/material/Button";
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import {InputAdornment,Toolbar} from '@mui/material';
+import { InputAdornment, Toolbar } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -36,7 +34,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import SearchIcon from "@mui/icons-material/Search";
-import  {Snackbar,Paper} from "@mui/material";
+import { Snackbar, Paper } from "@mui/material";
 import LinearProgress from '@mui/material/LinearProgress';
 
 // import Snackbar from '@mui/material/Snackbar';
@@ -181,12 +179,12 @@ const EnhancedTableToolbar = (props) => {
   const axios = require("axios");
 
   useEffect(() => {
-    if (fname !== '' && lname !== '' && email !== ''&& telephone !== ''&& telephone.length === 12) {
+    if (fname !== '' && lname !== '' && email !== '' && telephone !== '' && telephone.length === 12) {
       setDisableApplyButton(false)
     } else {
       setDisableApplyButton(true)
     }
-  }, [fname, lname,email,telephone]);
+  }, [fname, lname, email, telephone]);
   const handleSubmit = (event) => {
     event.preventDefault();
     var data = {
@@ -197,7 +195,7 @@ const EnhancedTableToolbar = (props) => {
       telephone: telephone,
       email: email,
     }
-    
+
     axios.post(url + "/m/create", data).then((res) => {
       console.log(res.status);
       window.location.href = '/mechanic';
@@ -221,7 +219,7 @@ const EnhancedTableToolbar = (props) => {
     // )
   };
   const handleChange = (event) => {
-    setGender(event.target.value);    
+    setGender(event.target.value);
   };
   const handleClickOpen = () => {
     setOpen(true);
@@ -242,7 +240,7 @@ const EnhancedTableToolbar = (props) => {
       val = "";
     }
     setTelephone(val);
-    };
+  };
   return (
     <Toolbar
       sx={{
@@ -255,7 +253,7 @@ const EnhancedTableToolbar = (props) => {
       }}
     >
       <Typography
-        sx={{ flex: '1 1 100%',textAlign: "start" }}
+        sx={{ flex: '1 1 100%', textAlign: "start" }}
         variant="h6"
         id="tableTitle"
         component="div"
@@ -263,11 +261,11 @@ const EnhancedTableToolbar = (props) => {
         Mechanic
       </Typography>
       <TextField
-        sx={{pr:2}}
+        sx={{ pr: 2 }}
         value={filterName}
         onChange={onFilterName}
         // label="ค้นหา"
-        size="small" 
+        size="small"
         placeholder="ค้นหา"
         InputProps={{
           startAdornment: (
@@ -336,7 +334,7 @@ const EnhancedTableToolbar = (props) => {
                 onChange={handlePhoneChange}
                 inputProps={{ maxLength: 12 }}
                 value={telephone}
-                // onChange={(e) => setTelephone(e.target.value)}
+              // onChange={(e) => setTelephone(e.target.value)}
               />
             </Grid>
           </Grid>
@@ -377,7 +375,7 @@ export default function EnhancedTable() {
   const [alertOpen, setAlertOpen] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
   const [mechanicName, setMechanicName] = React.useState("");
-  
+
   const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
@@ -403,7 +401,7 @@ export default function EnhancedTable() {
   const UserDelete = id => {
     setAlertOpen(true)
     console.log(id)
-    axios.put(url + "/m/delete?id="+id).then((res) => {
+    axios.put(url + "/m/delete?id=" + id).then((res) => {
       console.log(res);
       // window.location.href = '/mechanic';
     });
@@ -444,7 +442,7 @@ export default function EnhancedTable() {
     if (query) {
       return filter(
         array,
-        (_user) => (_user.firstName+_user.lastName).toLowerCase().indexOf(query.toLowerCase()) !== -1
+        (_user) => (_user.firstName + _user.lastName).toLowerCase().indexOf(query.toLowerCase()) !== -1
       );
     }
     return stabilizedThis.map((el) => el[0]);
@@ -490,11 +488,12 @@ export default function EnhancedTable() {
   }
 
   return (
-    <Box sx={{ width: '95%', pl: 30,}}>
-      <Paper elevation={6} sx={{ width: '100%', mb: 2,}}>
-      {isLoading && <LinearProgress />}
-        <EnhancedTableToolbar  filterName={filterName}
-          onFilterName={handleFilterByName} 
+    <Box sx={{ width: '95%', pl: 30, }}>
+      <Paper elevation={6} sx={{ width: '100%', mb: 2, }}>
+        {isLoading && <LinearProgress />}
+        <EnhancedTableToolbar
+          filterName={filterName}
+          onFilterName={handleFilterByName}
           numSelected={selected.length} />
         <TableContainer>
           <Table
@@ -581,10 +580,10 @@ export default function EnhancedTable() {
         />
       </Paper>
       <Snackbar open={alertOpen} autoHideDuration={3000} onClose={handleAlertClose}>
-          <Alert onClose={handleAlertClose} severity="info" sx={{ width: '100%' }}>
-            Deleting
-          </Alert>
-        </Snackbar>
+        <Alert onClose={handleAlertClose} severity="info" sx={{ width: '100%' }}>
+          Deleting
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

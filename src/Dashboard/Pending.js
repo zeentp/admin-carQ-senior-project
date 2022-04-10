@@ -10,12 +10,7 @@ import Divider from "@mui/material/Divider";
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
+import { Table, InputAdornment, TableBody, TableCell, TableHead, TablePagination, TableContainer } from '@mui/material';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from "@mui/material/Button";
 import TableRow from '@mui/material/TableRow';
@@ -23,6 +18,7 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
+import SearchIcon from "@mui/icons-material/Search";
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
@@ -35,6 +31,7 @@ import { useEffect, useState } from "react";
 import UserUpdate from '../Page/UserUpdate';
 import LinearProgress from '@mui/material/LinearProgress';
 import { URL as url } from '../Constant';
+import { filter } from "lodash";
 
 
 function descendingComparator(a, b, orderBy) {
@@ -111,15 +108,6 @@ function EnhancedTableHead(props) {
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
-          {/* <Checkbox
-              color="primary"
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={rowCount > 0 && numSelected === rowCount}
-              onChange={onSelectAllClick}
-              inputProps={{
-                'aria-label': 'select all desserts',
-              }}
-            /> */}
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
@@ -158,6 +146,7 @@ EnhancedTableHead.propTypes = {
 
 const EnhancedTableToolbar = (props) => {
   const { numSelected } = props;
+  const { filterName, onFilterName } = props;
   const [open, setOpen] = React.useState(false);
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
@@ -226,6 +215,23 @@ const EnhancedTableToolbar = (props) => {
       >
         Appointments
       </Typography>
+      <TextField
+        sx={{ pr: 2 }}
+        value={filterName}
+        onChange={onFilterName}
+        // label="ค้นหา"
+        size="small"
+        placeholder="ค้นหา"
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <IconButton>
+                <SearchIcon />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />
       <Dialog
         open={open}
         onClose={handleClose}
@@ -332,8 +338,11 @@ export default function Pending() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
+  const [filterName, setFilterName] = React.useState("");
+
   function createData(name, date, telephone, status, issue) {
     return { name, date, telephone, status, issue };
+    
   }
 
   const rows = [
@@ -381,7 +390,31 @@ export default function Pending() {
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
+  const handleFilterByName = (event) => {
+    setFilterName(event.target.value);
+  };
 
+  const filteredInvoice = applySortFilter(
+    users,
+    getComparator(order, orderBy),
+    filterName
+  );
+  function applySortFilter(array, comparator, query) {
+    console.log("applySortFilter");
+    const stabilizedThis = array.map((el, index) => [el, index]);
+    stabilizedThis.sort((a, b) => {
+      const order = comparator(a[0], b[0]);
+      if (order !== 0) return order;
+      return a[1] - b[1];
+    });
+    if (query) {
+      return filter(
+        array,
+        (_user) => (_user.name).toLowerCase().indexOf(query.toLowerCase()) !== -1
+      );
+    }
+    return stabilizedThis.map((el) => el[0]);
+  }
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelecteds = users.map((n) => n.name);
@@ -439,19 +472,22 @@ export default function Pending() {
   }
   const formatPhone = (telephone) => {
     var val = telephone.replace(/[^0-9]/g, "");
-      let a = val;
-      a = val.slice(0, 3);
-      a += val.length > 3 ? "-" + val.slice(3, 6) : "";
-      a += val.length > 6 ? "-" + val.slice(6) : "";
-      val = a;
-  
+    let a = val;
+    a = val.slice(0, 3);
+    a += val.length > 3 ? "-" + val.slice(3, 6) : "";
+    a += val.length > 6 ? "-" + val.slice(6) : "";
+    val = a;
+
     return val
   };
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-      {isLoading && <LinearProgress />}
-        <EnhancedTableToolbar numSelected={selected.length} />
+        {isLoading && <LinearProgress />}
+        <EnhancedTableToolbar 
+        filterName={filterName}
+        onFilterName={handleFilterByName} 
+        numSelected={selected.length} />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -469,7 +505,7 @@ export default function Pending() {
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(users, getComparator(order, orderBy))
+              {filteredInvoice
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.fname);
@@ -483,7 +519,7 @@ export default function Pending() {
                       // onClick={() => handleDetailClick(row.id)}
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.fname}
+                      key={row.appointment_id}
                       selected={isItemSelected}
                     >
                       <TableCell
@@ -511,7 +547,7 @@ export default function Pending() {
                       <TableCell align="right">{row.description}</TableCell>
                       <TableCell align="right">{formatPhone(row.telephone)}</TableCell>
                       <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">
-                        <Button 
+                        <Button
                           onClick={() => handleDetailClick(row.appointment_id)}>View</Button>
                         <Button color='error' onClick={() => UserDelete(row.id)}>Del</Button>
                       </ButtonGroup>

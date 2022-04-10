@@ -14,3 +14,13 @@
     max-width: 500px;
     height: auto;
   }
+  .textContainer {
+    display: block;
+    width:150px;
+    justify-items: center;
+    /* margin-bottom: 16.4px; */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align:right;
+  }

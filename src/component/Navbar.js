@@ -147,21 +147,21 @@ export default function Navbar() {
                 anchor="left"
             >
                 <Toolbar>
-                    <Stack direction="row" spacing={1} sx={{ pr: 6, alignItems: "center" }}>
-                        <Box sx={{ pl: 0 }}>
+                    <Stack direction="row" spacing={1} sx={{alignItems: "center" }}>
                             <DriveEtaIcon sx={{
-                                fontSize: 52, color: 'orange'
+                                fontSize: 52, 
+                                color: 'orange',
+                                
                                 // "& .MuiToolbar-root": { width: "25ch" },
                             }}  ></DriveEtaIcon>
-                        </Box>
 
                         {/* <Typography>CarQ-Admin</Typography> */}
                     </Stack>
                 </Toolbar>
                 <Divider />
-                <List sx={{ ml: 2, mr: 2 }} >
+                <List >
                     {listMenuTitle.map((text, index) => (
-                        <ListItem button key={text} onClick={() => changePage(text)} >
+                        <ListItem sx={{width:70,ml:1.5  }} button key={text} onClick={() => changePage(text)} >
                             <ListItemIcon sx={{ pb: 3 }} >
                                 {text === 'Home' ? <HomeIcon fontSize='large' sx={{ color: "white" }} /> : text === 'Crew' ? <EngineeringIcon fontSize='large' sx={{ color: "white" }} /> : <DashboardIcon fontSize='large' sx={{ color: "white" }} />}
                             </ListItemIcon>

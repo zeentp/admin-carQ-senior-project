@@ -25,7 +25,8 @@ import Booking from './client/page/Booking';
 import AppBarClient from './client/component/AppBarClient'
 const theme = createTheme({
   typography: {
-    fontFamily: 'font-family: monospace',
+    fontFamily: ["Kanit", "sans-serif"].join(","),
+    fontSize:16
   },
   overrides: {
     MuiInput: {
@@ -37,26 +38,26 @@ const theme = createTheme({
     },
     MuiChip: {
       root: {
-          padding: '3px 4px',
-          fontFamily: "sans-serif",
-          fontSize: "40"
+        padding: '3px 4px',
+        fontFamily: "sans-serif",
+        fontSize: "40"
       },
-  },
+    },
   },
 });
 const pathname = window.location.pathname
 
 function App() {
- 
+
   useEffect(() => {
     // console.log(pathname !== '/detail/:id')
     // console.log(pathname.includes('/detail/:id'));
     console.log(pathname)
-    console.log('token',token)
+    console.log('token', token)
   }, []);
   const token = localStorage.getItem('accessToken');
 
-  if(!token) {
+  if (!token) {
     return <Login />
   }
   return (
@@ -68,8 +69,8 @@ function App() {
             <box></box>
             :
             <Navbar></Navbar>
-            // <AppBarClient></AppBarClient>
-            // <box></box>
+          // <AppBarClient></AppBarClient>
+          // <box></box>
 
         }
         <Routes>
@@ -84,13 +85,13 @@ function App() {
           <Route path="test" element={<Test />} />
           <Route path="account" element={<Account />} />
           <Route path="admin" element={<Admin />} />
-          
+
           {/* Client */}
           <Route path="/client/clientHome" element={<ClientHome />} />
           <Route path="booking" element={<Booking />} />
-          
-          
-          
+
+
+
         </Routes>
       </ThemeProvider>
     </div>

@@ -10,13 +10,9 @@ import Divider from "@mui/material/Divider";
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
+import { Table, InputAdornment, TableBody, TableCell, TableHead, TablePagination, TableContainer } from '@mui/material';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import SearchIcon from "@mui/icons-material/Search";
 import Button from "@mui/material/Button";
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
@@ -33,8 +29,9 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { useEffect, useState } from "react";
 import UserUpdate from '../Page/UserUpdate';
-import { URL as url}  from '../Constant';
+import { URL as url } from '../Constant';
 import LinearProgress from '@mui/material/LinearProgress';
+import { filter } from "lodash";
 
 
 function descendingComparator(a, b, orderBy) {
@@ -164,6 +161,7 @@ const EnhancedTableToolbar = (props) => {
   const [username, setUsername] = useState('');
   const [avatar, setAvatar] = useState('');
   const [disableApplyButton, setDisableApplyButton] = React.useState(false);
+  const { filterName, onFilterName } = props;
 
   useEffect(() => {
     if (fname !== '' && lname !== '') {
@@ -205,7 +203,7 @@ const EnhancedTableToolbar = (props) => {
   const handleClose = () => {
     setOpen(false);
   };
- 
+
   return (
     <Toolbar
       sx={{
@@ -226,6 +224,23 @@ const EnhancedTableToolbar = (props) => {
       >
         Appointments
       </Typography>
+      <TextField
+        sx={{ pr: 2 }}
+        value={filterName}
+        onChange={onFilterName}
+        // label="ค้นหา"
+        size="small"
+        placeholder="ค้นหา"
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <IconButton>
+                <SearchIcon />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />
       <Dialog
         open={open}
         onClose={handleClose}
@@ -331,16 +346,17 @@ export default function Completed() {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [users, setUsers] = useState([]);
+  const [filterName, setFilterName] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(true);
   function createData(name, date, telephone, status, issue) {
     return { name, date, telephone, status, issue };
   }
-  
+
   const rows = [
-    createData('Frozen Bey', '09-03-2565','089-999-8888', 'air-filter'),
-    createData('Jin yoghurt', '09-03-2565','080-000-0000', 'engine'),
-    createData('Ter Ahe', '09-03-2565','081-111-1111', 'port'),
-    createData('Aet yoghurt', '09-03-2565','086-666-6666', 'air'),
+    createData('Frozen Bey', '09-03-2565', '089-999-8888', 'air-filter'),
+    createData('Jin yoghurt', '09-03-2565', '080-000-0000', 'engine'),
+    createData('Ter Ahe', '09-03-2565', '081-111-1111', 'port'),
+    createData('Aet yoghurt', '09-03-2565', '086-666-6666', 'air'),
   ];
   useEffect(() => {
     UsersGet()
@@ -375,7 +391,32 @@ export default function Completed() {
         }
       )
   }
+  const handleFilterByName = (event) => {
+    setFilterName(event.target.value);
+  };
 
+
+  const filteredInvoice = applySortFilter(
+    users,
+    getComparator(order, orderBy),
+    filterName
+  );
+  function applySortFilter(array, comparator, query) {
+    console.log("applySortFilter");
+    const stabilizedThis = array.map((el, index) => [el, index]);
+    stabilizedThis.sort((a, b) => {
+      const order = comparator(a[0], b[0]);
+      if (order !== 0) return order;
+      return a[1] - b[1];
+    });
+    if (query) {
+      return filter(
+        array,
+        (_user) => (_user.name).toLowerCase().indexOf(query.toLowerCase()) !== -1
+      );
+    }
+    return stabilizedThis.map((el) => el[0]);
+  }
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -433,25 +474,28 @@ export default function Completed() {
   const handleDetailClick = id => {
     window.location = '/detail/' + id
   }
-  const  formatDate =(d) =>{
-    const date = new Date(d*1000).toLocaleString('fr-FR')
+  const formatDate = (d) => {
+    const date = new Date(d * 1000).toLocaleString('fr-FR')
     return date
   }
   const formatPhone = (telephone) => {
     var val = telephone.replace(/[^0-9]/g, "");
-      let a = val;
-      a = val.slice(0, 3);
-      a += val.length > 3 ? "-" + val.slice(3, 6) : "";
-      a += val.length > 6 ? "-" + val.slice(6) : "";
-      val = a;
-  
+    let a = val;
+    a = val.slice(0, 3);
+    a += val.length > 3 ? "-" + val.slice(3, 6) : "";
+    a += val.length > 6 ? "-" + val.slice(6) : "";
+    val = a;
+
     return val
   };
   return (
-    <Box sx={{ width: '100%'}}>
+    <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-      {isLoading && <LinearProgress />}
-        <EnhancedTableToolbar numSelected={selected.length} />
+        {isLoading && <LinearProgress />}
+        <EnhancedTableToolbar
+          filterName={filterName}
+          onFilterName={handleFilterByName}
+          numSelected={selected.length} />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -469,7 +513,8 @@ export default function Completed() {
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(users, getComparator(order, orderBy))
+              
+              {filteredInvoice
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.fname);
@@ -511,8 +556,8 @@ export default function Completed() {
                       <TableCell align="right">{row.description}</TableCell>
                       <TableCell align="right">{formatPhone(row.telephone)}</TableCell>
                       <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">
-                        <Button disable={true} 
-                        onClick={() => handleDetailClick(row.appointment_id)}
+                        <Button disable={true}
+                          onClick={() => handleDetailClick(row.appointment_id)}
                         >View</Button>
                         <Button color='error' onClick={() => UserDelete(row.id)}>Del</Button>
                       </ButtonGroup>
