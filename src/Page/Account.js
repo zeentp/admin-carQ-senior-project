@@ -21,11 +21,46 @@ export default function Account() {
         setLastName(user.lastName)
         setEmail(user.email)
         setTelephone(user.telephone)
-
+        console.log(user)
     }, [])
+
+    // email: "pauld@gmail.com"
+    // firstName: "paul"
+    // id: "ALoqBiMufn6Hzt4lVm2B"
+    // lastName: "doe"
+    // role: "admin"
+    // telephone: "0861245541"
+    const handleSubmit = event => {
+        event.preventDefault();
+        var data = {
+            firstName : firstName,
+            lastName : lastName,
+            telephone: telephone,
+            email: email,
+        }
+        // var me = {name:'myname',age:99,gender:'myGender'};
+        localStorage.setItem('user', JSON.stringify(data));
+        // var item = JSON.parse(localStorage.getItem('itemKey'));
+        console.log('1')
+        // var data = {
+        //   id: id,
+        //   status: true,
+        //   firstName: fname,
+        //   lastName: lname,
+        //   telephone: telephone,
+        //   email: email,
+        //   status: status,
+        // }
+        // axios.put(url + "/m/update", data).then((res) => {
+        //   console.log(res);
+        //   window.location.href = '/mechanic';
+        // });
+    }
 
     function testNotify() {
         console.log('test')
+        // localStorage.setItem('itemKey', JSON.stringify(yourObject));
+        // var item = JSON.parse(localStorage.getItem('itemKey'));
         axios({
             method: 'post',
             url: 'https://notify-api.line.me/api/notify',
@@ -44,90 +79,96 @@ export default function Account() {
                 <Card>
                     <CardHeader title="Account" />
                     <CardContent>
-                        <Grid container direction={"column"} >
-                            <Grid item spacing={2}>
-                                <Stack
-                                    direction={{ xs: "column", sm: "row" }}
-                                    spacing={2}
-                                    pb={2}>
-                                    <Grid>
-                                        <TextField
-                                            id="standard-multiline-flexible"
-                                            label="First Name"
-                                            value={firstName}
-                                            onChange={(e) => setFirstName(e.target.value)}
-                                            maxRows={4}
-                                        // value={value}
-                                        // onChange={(e) => setFname(e.target.value)}
-                                        />
-                                    </Grid>
-                                    <Grid>
-                                        <TextField
-                                            //  error ={isEmpty}
-                                            //  helperText={ isEmpty === true ? "please fill the form":''}
-                                            id="standard-multiline-flexible"
-                                            label="Last Name"
-                                            maxRows={4}
-                                            value={lastName}
-                                            onChange={(e) => setLastName(e.target.value)}
-                                        // onChange={(e) => setLname(e.target.value)}
-                                        // value={value}
-                                        // onChange={handleChange}
-                                        />
-                                    </Grid>
-                                </Stack>
-                            </Grid>
-                            <Grid item spacing={2}>
-                                <Stack
-                                    direction={{ xs: "column", sm: "row" }}
-                                    spacing={2}
-                                    pb={2}>
-                                    <Grid>
-                                        <TextField
-                                            autoComplete="fname"
-                                            name="Email"
-                                            variant="outlined"
-                                            required
-                                            id="Email"
-                                            label="Email"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            autoFocus
-                                        //   disabled={disableEditButton}
-                                        />
-                                    </Grid>
-                                    <Grid>
-                                        <TextField
-                                            autoComplete="fname"
-                                            name="Telephone"
-                                            variant="outlined"
-                                            required
-                                            id="Telephone"
-                                            label="Telephone"
-                                            value={telephone}
-                                            onChange={(e) => setTelephone(e.target.value)}
-                                            autoFocus
-                                        //   disabled={disableEditButton}
-                                        />
-                                    </Grid>
-                                </Stack>
-                                <Grid sx={{ justifyContent: 'center', display: 'flex' }} item>
-                                    <Stack direction={'row'} spacing={2}>
-                                        <Button
-                                            variant="contained"
-                                            onClick={testNotify}
-                                        >
-                                            Confirm
-                                        </Button>
-                                        <Button
-                                            sx={{ color: 'blue' }}
-                                        >
-                                            Cancel
-                                        </Button>
+                        <form onSubmit={handleSubmit}>
+                            <Grid container direction={"column"} >
+                                <Grid item spacing={2}>
+                                    <Stack
+                                        direction={{ xs: "column", sm: "row" }}
+                                        spacing={2}
+                                        pb={2}>
+                                        <Grid>
+                                            <TextField
+                                                id="standard-multiline-flexible"
+                                                label="First Name"
+                                                required
+                                                value={firstName}
+                                                onChange={(e) => setFirstName(e.target.value)}
+                                                maxRows={4}
+                                            // value={value}
+                                            // onChange={(e) => setFname(e.target.value)}
+                                            />
+                                        </Grid>
+                                        <Grid>
+                                            <TextField
+                                                //  error ={isEmpty}
+                                                //  helperText={ isEmpty === true ? "please fill the form":''}
+                                                id="standard-multiline-flexible"
+                                                label="Last Name"
+                                                maxRows={4}
+                                                required
+                                                value={lastName}
+                                                onChange={(e) => setLastName(e.target.value)}
+                                            // onChange={(e) => setLname(e.target.value)}
+                                            // value={value}
+                                            // onChange={handleChange}
+                                            />
+                                        </Grid>
                                     </Stack>
                                 </Grid>
+                                <Grid item spacing={2}>
+                                    <Stack
+                                        direction={{ xs: "column", sm: "row" }}
+                                        spacing={2}
+                                        pb={2}>
+                                        <Grid>
+                                            <TextField
+                                                autoComplete="fname"
+                                                name="Email"
+                                                variant="outlined"
+                                                required
+                                                id="Email"
+                                                label="Email"
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}
+                                                autoFocus
+                                            //   disabled={disableEditButton}
+                                            />
+                                        </Grid>
+                                        <Grid>
+                                            <TextField
+                                                autoComplete="fname"
+                                                name="Telephone"
+                                                variant="outlined"
+                                                required
+                                                id="Telephone"
+                                                label="Telephone"
+                                                value={telephone}
+                                                onChange={(e) => setTelephone(e.target.value)}
+                                                autoFocus
+                                            //   disabled={disableEditButton}
+                                            />
+                                        </Grid>
+                                    </Stack>
+                                    <Grid sx={{ justifyContent: 'center', display: 'flex' }} item>
+                                        <Stack direction={'row'} spacing={2}>
+                                            <Button
+                                                variant="contained"
+                                                // onClick={testNotify}
+                                                type="submit"
+                                            >
+                                                Confirm
+                                            </Button>
+                                            <Button
+                                                sx={{ color: 'blue' }}
+                                                onClick={ (e) => {window.location.href = '/Home';}}
+                                            >
+                                                Cancel
+                                            </Button>
+                                        </Stack>
+                                    </Grid>
+                                </Grid>
                             </Grid>
-                        </Grid>
+                        </form>
                     </CardContent>
                 </Card>
             </MainLayout>

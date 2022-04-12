@@ -9,14 +9,10 @@ import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
+import { withStyles } from '@mui/styles';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import { Table, InputAdornment, } from '@mui/material';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
+import { Table, InputAdornment, Chip, TableBody, TableCell, TableContainer, TablePagination, TableHead } from '@mui/material';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from "@mui/material/Button";
 import TableRow from '@mui/material/TableRow';
@@ -72,13 +68,14 @@ function stableSort(array, comparator) {
   });
   return stabilizedThis.map((el) => el[0]);
 }
+const a =[1,2,3]
 
 const headCells = [
   {
-    id: 'appointment_id',
-    numeric: false,
+    id: 'status',
+    numeric: null,
     disablePadding: false,
-    label: 'appointment_id',
+    label: 'Status',
   },
   {
     id: 'name',
@@ -87,17 +84,23 @@ const headCells = [
     label: 'ClientName',
   },
   {
-    id: 'starts_at.seconds',
+    id:'startAt',
     numeric: true,
     disablePadding: false,
     label: 'Booking Date',
   },
   {
-    id: 'plate_no',
+    id:'createAt',
     numeric: true,
     disablePadding: false,
-    label: 'Plate Number',
+    label: 'Create At',
   },
+  // {
+  //   id: 'plate_no',
+  //   numeric: true,
+  //   disablePadding: false,
+  //   label: 'Plate Number',
+  // },
   {
     id: 'description',
     numeric: true,
@@ -119,7 +122,7 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort ,sorttime} =
     props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
@@ -128,21 +131,13 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          {/* <Checkbox
-              color="primary"
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={rowCount > 0 && numSelected === rowCount}
-              onChange={onSelectAllClick}
-              inputProps={{
-                'aria-label': 'select all desserts',
-              }}
-            /> */}
+        <TableCell>
+    
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
+            align={headCell.numeric === null ? 'center':headCell.numeric === true ? 'right' : 'left'}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -368,16 +363,21 @@ export default function EnhancedTable() {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [users, setUsers] = useState([]);
   const [filterName, setFilterName] = React.useState("");
   const [mechanics, setMechanics] = React.useState([]);
   const axios = require("axios");
   const [isLoading, setIsLoading] = React.useState(true);
+  const [sorttime, setSortTime] = React.useState([]);
 
+  const StyleChip = withStyles({
+    root: {
+      backgroundColor: 'grey'
+    }
+  })(Chip);
 
   const handleFilterByName = (event) => {
-    console.log(event.target.value)
     setFilterName(event.target.value);
   };
 
@@ -393,6 +393,8 @@ export default function EnhancedTable() {
 
   function applySortFilter(array, comparator, query) {
     console.log("applySortFilter");
+
+
     const stabilizedThis = array.map((el, index) => [el, index]);
     stabilizedThis.sort((a, b) => {
       const order = comparator(a[0], b[0]);
@@ -432,14 +434,18 @@ export default function EnhancedTable() {
     await axios.get(url + "/a/appointments").then((res) => {
       console.log(res.data);
       const list = res.data.map((d) => d);
+      list.forEach(element => sorttime.push(formatDate(element.starts_at.seconds)));
+      // console.log(list)
       setUsers(list);
+      // setSortTime(res.data.starts_at.seconds)
       setIsLoading(false)
     });
+    console.log(sorttime)
   }
   const formatDate = (d) => {
     if (d !== null) {
       const date = new Date(d * 1000).toLocaleString('fr-FR')
-      return date
+      return date.slice(0,17)
     } return 0
   }
   const UsersGet = () => {
@@ -569,6 +575,7 @@ export default function EnhancedTable() {
           >
 
             <EnhancedTableHead
+              sorttime={sorttime}
               numSelected={selected.length}
               order={order}
               orderBy={orderBy}
@@ -609,7 +616,16 @@ export default function EnhancedTable() {
                           }}
                         /> */}
                       </TableCell>
-                      <TableCell>{row.appointment_id}</TableCell>
+                      <TableCell
+                         align="left"
+                         >
+                        {/* {row.appointment_id} */}
+                        {row.status === 'booking' ? <StyleChip color='primary' label={'booking'} /> :
+                          <Chip label={row.status}
+                            color={row.status === 'completed' ? "success" : row.status === 'on-track' ? "primary" : row.status === 'pending' ? 'secondary' : 'error'}
+                          />
+                        }
+                      </TableCell>
                       <TableCell
                         component="th"
                         id={labelId}
@@ -619,7 +635,9 @@ export default function EnhancedTable() {
                         {row.name}
                       </TableCell>
                       <TableCell align="right">{formatDate(row.starts_at.seconds)}</TableCell>
-                      <TableCell align="right">{row.plate_no}</TableCell>
+                      <TableCell align="right">{formatDate(row.create_at.seconds)}</TableCell>
+                      {/* <TableCell align="right">{row.starts_at}</TableCell> */}
+                      {/* <TableCell align="right">{row.plate_no}</TableCell> */}
                       <TableCell
                         className="textContainer"
                         // sx={{display:'flex'}}

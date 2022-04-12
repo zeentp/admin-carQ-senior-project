@@ -30,6 +30,7 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
+import EventNoteIcon from '@mui/icons-material/EventNote';
 import "../Css/Button.css";
 import { URL as url } from '../Constant';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -181,7 +182,8 @@ export default function UserUpdate() {
     }, [id])
 
     const handleChangeSelect = (event) => {
-        setStatus(event.target.value);
+        setNewStatus(event.target.value)
+        // setStatus(event.target.value);
     };
     const handleSubmit = event => {
         setAlertOpen(true)
@@ -210,7 +212,7 @@ export default function UserUpdate() {
             note: note,
             pic: pic,
             removeMechanic: removeMechanic,
-            status: isCheck1 === true && isCheck2 === false ? 'pending' : isCheck2 === true && isCheck1 === false ? 'rejected' : status,
+            status: isCheck1 === true && isCheck2 === false ? 'pending' : isCheck2 === true && isCheck1 === false ? 'rejected' : newStatus,
             //  ends_at:,
             //note:,
             //status:,
@@ -251,6 +253,7 @@ export default function UserUpdate() {
     const [dateTime, setDateTime] = useState('');
     const [appointmentId, setAppointmentId] = useState('');
     const [status, setStatus] = useState('');
+    const [newStatus, setNewStatus] = useState('');
     const [note, setNote] = useState('');
     const [pic, setPic] = useState([]);
     const produce = [...mechanics, ...pic];
@@ -442,12 +445,18 @@ export default function UserUpdate() {
                         :
                         <div>
                             <Box sx={{ py: 2, px: 1 }} >
-
+                                <Box
+                                    sx={{ display: 'flex', bgcolor: 'background.paper', borderRadius: 1 }}
+                                >
+                                    <Typography textAlign={'left'} sx={{ flexGrow: 1, fontWeight: 'bold' }}>Booking Date</Typography>
+                                    <Typography sx={{fontWeight: 'bold'}} >Status</Typography>
+                                </Box>
                                 <Box
                                     sx={{ display: 'flex' }}
                                 >
-                                    <Typography textAlign={'left'} sx={{ flexGrow: 1, fontWeight: 'bold', pb: 2 }}>
-
+                                    <EventNoteIcon />
+                                    <Typography textAlign={'left'} sx={{ flexGrow: 1, pb: 2 }}>
+                                        {formatDate(dateTime)}
                                     </Typography>
                                     {status === 'booking' ? <StyleChip color='primary' label={'booking'} /> :
                                         <Chip label={status}
@@ -656,6 +665,7 @@ export default function UserUpdate() {
                                     </Grid> */}
                                     <Grid item xs={12}>
                                         {status === 'booking' ?
+                                        <Box>
                                             <FormGroup>
                                                 <Grid container spacing={2}>
                                                     <Grid item xs={6}>
@@ -666,6 +676,16 @@ export default function UserUpdate() {
                                                     </Grid>
                                                 </Grid>
                                             </FormGroup>
+                                            {isCheck1 === true ?  
+                                              <TextField
+                                            variant="outlined"
+                                            fullWidth
+                                            id="note"
+                                            label="note"
+                                            multiline
+                                            onChange={(e) => setNote(e.target.value)}
+                                        /> : null}
+                                            </Box>
                                             : <Box>
                                                 <FormControl sx={{ width: "100%" }}>
                                                     <Box >
@@ -678,7 +698,8 @@ export default function UserUpdate() {
                                                             sx={{ textAlign: 'start' }}
                                                             labelId="demo-simple-select-label"
                                                             id="demo-simple-select"
-                                                            value={status}
+                                                            value={newStatus}
+                                                            // defaultValue={status}
                                                             label="Status"
                                                             // label="Status"
                                                             onChange={handleChangeSelect}
@@ -688,9 +709,11 @@ export default function UserUpdate() {
                                                             <MenuItem value={'on-track'}>on-track</MenuItem>
                                                             <MenuItem value={'completed'}>completed</MenuItem>
                                                         </Select>
+                                                   
                                                     </Box>
                                                 </FormControl>
                                             </Box>}
+                                            
                                     </Grid>
                                     <Grid item xs={12}>
                                         <div>
@@ -767,6 +790,7 @@ export default function UserUpdate() {
                                         />
                                     </Grid>
                                 </Grid>
+                                <Stack direction='column' spacing={2}>
                                 <Button
                                     type="submit"
                                     fullWidth
@@ -777,6 +801,16 @@ export default function UserUpdate() {
                                 >
                                     Submit
                                 </Button>
+                                <Button
+                                    fullWidth
+                                    // variant="contained"
+                                    color="primary"
+                                    // className={classes.submit}
+                                    className="setHomebtn"
+                                >
+                                    Cancel
+                                </Button>
+                                </Stack>
                                 {/* <button type="submit" id = "setHomebtn">Calculate</button> */}
                             </form>
                         </div>

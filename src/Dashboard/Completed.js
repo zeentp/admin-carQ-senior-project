@@ -32,6 +32,7 @@ import UserUpdate from '../Page/UserUpdate';
 import { URL as url } from '../Constant';
 import LinearProgress from '@mui/material/LinearProgress';
 import { filter } from "lodash";
+import '../Css/Card.css'
 
 
 function descendingComparator(a, b, orderBy) {
@@ -66,7 +67,7 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'fname',
+    id: 'name',
     numeric: false,
     disablePadding: true,
     label: 'ClientName',
@@ -230,7 +231,7 @@ const EnhancedTableToolbar = (props) => {
         onChange={onFilterName}
         // label="ค้นหา"
         size="small"
-        placeholder="ค้นหา"
+        placeholder="Search"
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -553,7 +554,14 @@ export default function Completed() {
                       </TableCell>
                       {/* <TableCell align="right">{row.lname}</TableCell> */}
                       <TableCell align="right">{formatDate(row.starts_at.seconds)}</TableCell>
-                      <TableCell align="right">{row.description}</TableCell>
+                      <TableCell
+                        className="textContainer"
+                        // sx={{display:'flex'}}
+                        align="right"
+                      // sx={{ display: 'block',width: '200px',white-space: 'nowrap',overflow: 'hidden',textOverflow: "ellipsis",}}
+                      >
+                      <div className="textContainer2">{row.description}</div>
+                      </TableCell>
                       <TableCell align="right">{formatPhone(row.telephone)}</TableCell>
                       <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">
                         <Button disable={true}

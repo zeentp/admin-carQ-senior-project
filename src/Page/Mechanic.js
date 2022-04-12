@@ -266,7 +266,7 @@ const EnhancedTableToolbar = (props) => {
         onChange={onFilterName}
         // label="ค้นหา"
         size="small"
-        placeholder="ค้นหา"
+        placeholder="Search"
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -545,7 +545,7 @@ export default function EnhancedTable() {
                       >
                         {row.firstName + '\t' + row.lastName}
                       </TableCell>
-                      <TableCell align="right">{row.status === true ? "avaliable" : "unavaliable"}</TableCell>
+                      <TableCell align="right">{row.status === true ? "available" : "unavailable"}</TableCell>
                       <TableCell align="right">{row.email}</TableCell>
                       <TableCell align="right">{row.telephone}</TableCell>
                       <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">

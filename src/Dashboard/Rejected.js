@@ -67,7 +67,7 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'fname',
+    id: 'name',
     numeric: false,
     disablePadding: true,
     label: 'ClientName',
@@ -231,7 +231,7 @@ const EnhancedTableToolbar = (props) => {
         onChange={onFilterName}
         // label="ค้นหา"
         size="small"
-        placeholder="ค้นหา"
+        placeholder="Search"
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -553,7 +553,12 @@ export default function Rejected() {
                       </TableCell>
                       {/* <TableCell align="right">{row.lname}</TableCell> */}
                       <TableCell align="right">{formatDate(row.starts_at.seconds)}</TableCell>
-                      <TableCell align="right">{row.description}</TableCell>
+                      <TableCell
+                        className="textContainer"
+                        align="right"
+                      >
+                      <div className="textContainer2">{row.description}</div>
+                      </TableCell>
                       <TableCell align="right">{formatPhone(row.telephone)}</TableCell>
                       <TableCell align="right"> <ButtonGroup color="primary" aria-label="outlined primary button group">
                         <Button disable={true}

@@ -24,3 +24,13 @@
     text-overflow: ellipsis;
     text-align:right;
   }
+  .textContainer2 {
+    display: block;
+    width: 200px;
+    justify-items: center;
+    /* margin-bottom: 16.4px; */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align:right;
+  }

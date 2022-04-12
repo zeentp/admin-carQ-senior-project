@@ -251,7 +251,7 @@ const EnhancedTableToolbar = (props) => {
         onChange={onFilterName}
         // label="ค้นหา"
         size="small" 
-        placeholder="ค้นหา"
+        placeholder="Search"
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
