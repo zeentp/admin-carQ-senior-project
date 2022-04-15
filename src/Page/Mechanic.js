@@ -488,7 +488,7 @@ export default function EnhancedTable() {
   }
 
   return (
-    <Box sx={{ width: '95%', pl: 30, }}>
+    <Box sx={{ width: '95%', pl: 22,pb:6.5 }}>
       <Paper elevation={6} sx={{ width: '100%', mb: 2, }}>
         {isLoading && <LinearProgress />}
         <EnhancedTableToolbar

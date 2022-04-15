@@ -550,7 +550,7 @@ export default function EnhancedTable() {
     return val
   };
   return (
-    <Box sx={{ width: '95%', pl: 30 }}>
+    <Box sx={{ width: '95%', pl: 22,pb:6.5 }}>
       <Stack direction={'row'} pb={2} spacing={2}>
         <Grid item xs={6}>
           <NotifyBox isLoading={isLoading} title={'Appointments'} notification={users.length}></NotifyBox>

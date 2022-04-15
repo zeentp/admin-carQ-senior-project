@@ -169,6 +169,7 @@ export default function UserUpdate() {
                     setPlateNumber(result.data.plate_no)
                     setDateTime(result.data.starts_at.seconds)
                     setStatus(result.data.status)
+                    setNewStatus(result.data.status)
                     setAppointmentId(result.data.appointment_id)
                     // console.log(status)
                     // console.log(result.data.status)
@@ -207,6 +208,8 @@ export default function UserUpdate() {
 
 
         var data = {
+            email:email,
+            name:fname,
             appointment_id: appointmentId,
             mechanic_id: state.selectedOptions,
             note: note,
@@ -422,7 +425,7 @@ export default function UserUpdate() {
 
 
     return (
-        <Box sx={{ pl: 80, pb: 5 }} >
+        <Box sx={{ pl: 50, pb: 5 }} >
             <Paper sx={{ pt: 10, p: 5, width: '666px' }}>
                 <div className={classes.paper}>
                     <Box sx={{ py: 2, px: 4, bgcolor: '#2c344c', color: 'white' }} >
@@ -449,7 +452,7 @@ export default function UserUpdate() {
                                     sx={{ display: 'flex', bgcolor: 'background.paper', borderRadius: 1 }}
                                 >
                                     <Typography textAlign={'left'} sx={{ flexGrow: 1, fontWeight: 'bold' }}>Booking Date</Typography>
-                                    <Typography sx={{fontWeight: 'bold'}} >Status</Typography>
+                                    <Typography sx={{ fontWeight: 'bold' }} >Status</Typography>
                                 </Box>
                                 <Box
                                     sx={{ display: 'flex' }}
@@ -665,18 +668,18 @@ export default function UserUpdate() {
                                     </Grid> */}
                                     <Grid item xs={12}>
                                         {status === 'booking' ?
-                                        <Box>
-                                            <FormGroup>
-                                                <Grid container spacing={2}>
-                                                    <Grid item xs={6}>
-                                                        <FormControlLabel onChange={check1} checked={isCheck1} control={<Checkbox defaultChecked />} label="Accept" />
+                                            <Box>
+                                                <FormGroup>
+                                                    <Grid container spacing={2}>
+                                                        <Grid item xs={6}>
+                                                            <FormControlLabel onChange={check1} checked={isCheck1} control={<Checkbox defaultChecked />} label="Accept" />
+                                                        </Grid>
+                                                        <Grid item xs={6}>
+                                                            <FormControlLabel onChange={check2} checked={isCheck2} control={<Checkbox />} label="Decline" />
+                                                        </Grid>
                                                     </Grid>
-                                                    <Grid item xs={6}>
-                                                        <FormControlLabel onChange={check2} checked={isCheck2} control={<Checkbox />} label="Decline" />
-                                                    </Grid>
-                                                </Grid>
-                                            </FormGroup>
-                                            {isCheck1 === true ?  
+                                                </FormGroup>
+                                                {/* {isCheck1 === true ?  
                                               <TextField
                                             variant="outlined"
                                             fullWidth
@@ -684,9 +687,10 @@ export default function UserUpdate() {
                                             label="note"
                                             multiline
                                             onChange={(e) => setNote(e.target.value)}
-                                        /> : null}
+                                        /> : null} */}
                                             </Box>
-                                            : <Box>
+                                            :
+                                            <Box>
                                                 <FormControl sx={{ width: "100%" }}>
                                                     <Box >
                                                         <InputLabel id="demo-simple-select-label">
@@ -694,6 +698,7 @@ export default function UserUpdate() {
                                                         </InputLabel>
                                                         <Select
                                                             fullWidth
+                                                            disabled={status === 'completed' || status === 'rejected' ? true : false}
                                                             autoFocus
                                                             sx={{ textAlign: 'start' }}
                                                             labelId="demo-simple-select-label"
@@ -709,53 +714,54 @@ export default function UserUpdate() {
                                                             <MenuItem value={'on-track'}>on-track</MenuItem>
                                                             <MenuItem value={'completed'}>completed</MenuItem>
                                                         </Select>
-                                                   
+
                                                     </Box>
                                                 </FormControl>
                                             </Box>}
-                                            
+
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <div>
-                                            <FormControl sx={{ width: "100%" }}>
-                                                <Autocomplete
-                                                    disabled={isCheck2 === true ? true : false}
-                                                    multiple
-                                                    onChange={handleChange}
-                                                    // onChange={(event, newValue) => {
+                                        {status !== 'completed' && status !== 'rejected' ?
+                                            <div>
+                                                <FormControl sx={{ width: "100%" }}>
+                                                    <Autocomplete
+                                                        disabled={isCheck2 === true ? true : false}
+                                                        multiple
+                                                        onChange={handleChange}
+                                                        // onChange={(event, newValue) => {
 
-                                                    //     setPersonName(newValue);
-                                                    //     // setPic(newValue);
-                                                    //     console.log(newValue)
-                                                    // }}
-                                                    id="tags-outlined"
-                                                    options={produce}
-                                                    disableCloseOnSelect
-                                                    // getOptionLabel={(option) => option.title}
-                                                    defaultValue={pic}
-                                                    // value={state.selectedOptions}
-                                                    // value={pic}
-                                                    filterSelectedOptions
-                                                    // renderTags={(values) =>
-                                                    //     values.map((value) => (
-                                                    //         <Chip
-                                                    //             key={value}
-                                                    //             label={value}
-                                                    //             onDelete={() => {
-                                                    //                 removeOption(value);
-                                                    //             }}
-                                                    //         />
-                                                    //     ))
-                                                    // }
-                                                    renderInput={(params) => (
-                                                        <TextField
-                                                            {...params}
-                                                            label="Mechanics"
-                                                            placeholder="Mechanics"
-                                                        />
-                                                    )}
-                                                />
-                                                {/* <InputLabel id="demo-multiple-name-label">Mechanic</InputLabel>
+                                                        //     setPersonName(newValue);
+                                                        //     // setPic(newValue);
+                                                        //     console.log(newValue)
+                                                        // }}
+                                                        id="tags-outlined"
+                                                        options={produce}
+                                                        disableCloseOnSelect
+                                                        // getOptionLabel={(option) => option.title}
+                                                        defaultValue={pic}
+                                                        // value={state.selectedOptions}
+                                                        // value={pic}
+                                                        filterSelectedOptions
+                                                        // renderTags={(values) =>
+                                                        //     values.map((value) => (
+                                                        //         <Chip
+                                                        //             key={value}
+                                                        //             label={value}
+                                                        //             onDelete={() => {
+                                                        //                 removeOption(value);
+                                                        //             }}
+                                                        //         />
+                                                        //     ))
+                                                        // }
+                                                        renderInput={(params) => (
+                                                            <TextField
+                                                                {...params}
+                                                                label="Mechanics"
+                                                                placeholder="Mechanics"
+                                                            />
+                                                        )}
+                                                    />
+                                                    {/* <InputLabel id="demo-multiple-name-label">Mechanic</InputLabel>
                                         <Select
                                             sx={{ textAlign: 'start' }}
                                             labelId="demo-multiple-name-label"
@@ -776,40 +782,72 @@ export default function UserUpdate() {
                                                 </MenuItem>
                                             ))}
                                         </Select> */}
-                                            </FormControl>
-                                        </div>
+                                                </FormControl>
+                                            </div>
+                                            : null}
                                     </Grid>
                                     <Grid sx={{ pb: 2 }} item xs={12}>
-                                        <TextField
-                                            variant="outlined"
-                                            fullWidth
-                                            id="note"
-                                            label="note"
-                                            multiline
-                                            onChange={(e) => setNote(e.target.value)}
-                                        />
+                                        {status === 'booking' ?
+
+                                            <TextField
+                                                variant="outlined"
+                                                fullWidth
+                                                id="note"
+                                                label="note"
+                                                multiline
+                                                onChange={(e) => setNote(e.target.value)}
+                                            />
+                                            : null}
+
                                     </Grid>
+                                    {/* <Grid sx={{ pb: 2 }} item xs={12}>
+
+                                    {status === 'booking' ?
+                                            <form noValidate autoComplete="off">
+                                                <TextField
+                                                fullWidth
+                                                    defaultValue={new Date().toISOString().slice(0, 16)}
+                                                    inputProps={{
+                                                        // min: "2021-02-20T00:00",
+                                                        min: new Date().toISOString().slice(0, 16)
+                                                    }}
+                                                    variant="outlined"
+                                                    label="Select Date and Time"
+                                                    placeholder="Select Date and Time"
+                                                    type="datetime-local"
+                                                    onChange={(e) =>{
+                                                    }}
+                                                    InputLabelProps={{
+                                                        shrink: true
+                                                    }}
+                                                />
+                                            </form>
+                                            : null}
+                                    </Grid> */}
+
                                 </Grid>
                                 <Stack direction='column' spacing={2}>
-                                <Button
-                                    type="submit"
-                                    fullWidth
-                                    variant="contained"
-                                    color="primary"
-                                    // className={classes.submit}
-                                    className="setHomebtn"
-                                >
-                                    Submit
-                                </Button>
-                                <Button
-                                    fullWidth
-                                    // variant="contained"
-                                    color="primary"
-                                    // className={classes.submit}
-                                    className="setHomebtn"
-                                >
-                                    Cancel
-                                </Button>
+                                    <Button
+                                        type="submit"
+                                        fullWidth
+                                        variant="contained"
+                                        color="primary"
+                                        disabled={status === 'completed' || status === 'rejected' ? true : false}
+                                        // className={classes.submit}
+                                        className="setHomebtn"
+                                    >
+                                        Submit
+                                    </Button>
+                                    <Button
+                                        fullWidth
+                                        // variant="contained"
+                                        color="primary"
+                                        // className={classes.submit}
+                                        className="setHomebtn"
+                                        onClick={(e) => { window.location.href = '/dashboardPage'; }}
+                                    >
+                                        Cancel
+                                    </Button>
                                 </Stack>
                                 {/* <button type="submit" id = "setHomebtn">Calculate</button> */}
                             </form>

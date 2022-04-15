@@ -183,7 +183,7 @@ export default function Navbar() {
             </Drawer>
             <Box
                 component="main"
-                sx={{ flexGrow: 1, bgcolor: 'background.default', p: 6.5 }}
+                sx={{ flexGrow: 1, bgcolor: 'background.default', p: 4.5 }}
             >
                 <Toolbar />
             </Box>

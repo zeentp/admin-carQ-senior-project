@@ -169,12 +169,12 @@ export default function UserUpdate() {
   }
 
   return (
-    <Box sx={{ pl: 10 }}>
+    <Box sx={{ pl: 12 }}>
       <Container>
         <Paper>
           <div className={classes.paper}>
-            <Typography component="h1" variant="h5">
-              Crew
+            <Typography sx={{pt:2}} component="h1" variant="h5">
+              Edit
             </Typography>
             {/* {editFlag === false ? <Fab
               color=""

@@ -559,7 +559,7 @@ export default function Ontrack() {
                         <Button disable={true}
                           onClick={() => handleDetailClick(row.appointment_id)}
                         >View</Button>
-                        <Button color='error' onClick={() => UserDelete(row.id)}>Del</Button>
+                        {/* <Button color='error' onClick={() => UserDelete(row.id)}>Del</Button> */}
                       </ButtonGroup>
                       </TableCell>
 
